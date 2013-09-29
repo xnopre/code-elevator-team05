@@ -5,11 +5,13 @@ import play.mvc.Controller;
 import utils.CallStorer;
 import utils.Direction;
 import utils.ElevatorCommandGenerator;
+import utils.ElevatorState;
 import utils.StateResetter;
 
 public class Application extends Controller {
 
-	private static final StateResetter stateResetter = new StateResetter();
+	private static final ElevatorState elevatorState = new ElevatorState();
+	private static final StateResetter stateResetter = new StateResetter(elevatorState);
 	private static final CallStorer callStorer = new CallStorer();
 	private static final ElevatorCommandGenerator elevatorCommandGenerator = new ElevatorCommandGenerator();
 
