@@ -11,6 +11,10 @@ public class Application extends Controller {
 	private static final StateManager stateManager = new StateManager();
 	private static final ElevatorCommandGenerator elevatorCommandGenerator = new ElevatorCommandGenerator();
 
+	public static void index() {
+		render();
+	}
+
 	public static void reset(String cause) {
 		Logger.info("Request received 'reset' with cause : " + cause);
 		stateManager.reset();

@@ -1,0 +1,14 @@
+body {
+	margin-top: 50px;
+	margin-left: 20px;
+	font-family: Nobile, sans-serif;
+	color: #777777;
+}
+
+#logo {
+	background-image: url('../images/code_story_logo.png');
+	background-repeat: no-repeat;
+	width: 800px;
+	height: 288px; 
+	margin-top: 20px;
+}
