@@ -27,4 +27,4 @@ public class Application extends Controller {
 		Logger.info("Request received 'nextCommand'");
 		renderText(elevatorCommandGenerator.nextCommand());
 	}
-} 
+}
