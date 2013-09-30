@@ -4,6 +4,7 @@ import play.Logger;
 import play.mvc.Controller;
 import utils.Direction;
 import utils.ElevatorCommandGenerator;
+import utils.ElevatorState;
 import utils.StateManager;
 
 public class Application extends Controller {
@@ -30,5 +31,10 @@ public class Application extends Controller {
 	public static void nextCommand() {
 		Logger.info("Request received 'nextCommand'");
 		renderText(elevatorCommandGenerator.nextCommand());
+	}
+
+	public static void state() {
+		final ElevatorState currentState = stateManager.getCurrentState();
+		render(currentState);
 	}
 }
