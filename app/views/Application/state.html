@@ -1,0 +1,12 @@
+#{extends 'main.html' /}
+#{set title:'State' /}
+
+Etat courant :
+<ul>
+	<li>Appels en attente (floor - direction):</li>
+	<ul>
+		#{list items:currentState.waitingCalls, as:'call' }
+		        <li>${call.floor} - ${call.direction}</li>
+		#{/list}
+	</ul>
+</ul>
