@@ -2,4 +2,5 @@
 
 require:
     - play
+    - com.google.guava -> guava 15.0
     - org.easytesting -> fest-assert 1.4

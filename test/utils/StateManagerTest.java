@@ -14,15 +14,37 @@ public class StateManagerTest {
 	private final StateManager stateManager = new StateManager();
 
 	@Test
-	public void call_must_store_specified_call() {
+	public void call_must_store_last_call() {
+
+		stateManager.storeCall(3, DOWN);
+
+		ElevatorState elevatorState = stateManager.getCurrentState();
+		Collection<ElevatorCall> calls = elevatorState.getWaitingCalls();
+		assertThat(calls).containsOnly(new ElevatorCall(3, DOWN));
+	}
+
+	@Test
+	public void call_must_remember_all_specified_calls() {
 
 		stateManager.storeCall(3, DOWN);
 		stateManager.storeCall(1, UP);
 
 		ElevatorState elevatorState = stateManager.getCurrentState();
 		Collection<ElevatorCall> calls = elevatorState.getWaitingCalls();
-		assertThat(calls).contains(new ElevatorCall(3, DOWN));
-		assertThat(calls).contains(new ElevatorCall(1, UP));
+		assertThat(calls).containsOnly(new ElevatorCall(3, DOWN),
+				new ElevatorCall(1, UP));
+	}
+
+	@Test(expected = OnlyOneCallPerFloorException.class)
+	public void ensure_that_only_one_call_per_floor_can_be_performed_even_if_for_other_direction() {
+		stateManager.storeCall(3, DOWN);
+		stateManager.storeCall(3, UP);
+	}
+
+	@Test(expected = OnlyOneCallPerFloorException.class)
+	public void ensure_that_only_one_call_per_floor_can_be_performed() {
+		stateManager.storeCall(3, DOWN);
+		stateManager.storeCall(3, DOWN);
 	}
 
 	@Test
