@@ -23,7 +23,6 @@ public class StateManagerTest {
 		Collection<ElevatorCall> calls = elevatorState.getWaitingCalls();
 		assertThat(calls).contains(new ElevatorCall(3, DOWN));
 		assertThat(calls).contains(new ElevatorCall(1, UP));
-
 	}
 
 	@Test
@@ -32,13 +31,21 @@ public class StateManagerTest {
 	}
 
 	@Test
-	public void getCurrentState_must_return_initial_state_adter_reset() {
-
+	public void ensure_that_storing_a_call_change_intial_state() {
 		stateManager.storeCall(3, DOWN);
-		stateManager.reset();
-		ElevatorState state = stateManager.getCurrentState();
 
-		assertThat(state).isSameAs(StateManager.INITIAL_STATE);
+		assertThat(stateManager.getCurrentState()).isNotEqualTo(
+				StateManager.INITIAL_STATE);
+	}
+
+	@Test
+	public void ensure_reset_command_restore_initial_state() {
+		stateManager.storeCall(3, DOWN);
+
+		stateManager.reset();
+
+		assertThat(stateManager.getCurrentState()).isSameAs(
+				StateManager.INITIAL_STATE);
 	}
 
 }
