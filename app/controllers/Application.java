@@ -2,18 +2,20 @@ package controllers;
 
 import play.Logger;
 import play.mvc.Controller;
+import utils.Command;
 import utils.CommandGenerator;
 import utils.Direction;
 import utils.ElevatorState;
 import utils.FloorBoundaries;
-import utils.OneWayOnlyOmnibusCommandGenerator;
+import utils.OmnibusCommandGenerator;
 import utils.StateManager;
 
 public class Application extends Controller {
 
 	private static final StateManager stateManager = new StateManager(
 			new FloorBoundaries(0, 5));
-	private static final CommandGenerator elevatorCommandGenerator = new OneWayOnlyOmnibusCommandGenerator();
+	private static final CommandGenerator elevatorCommandGenerator = new OmnibusCommandGenerator(
+			stateManager);
 
 	public static void index() {
 		render();
@@ -33,7 +35,9 @@ public class Application extends Controller {
 
 	public static void nextCommand() {
 		Logger.info("Request received 'nextCommand'");
-		renderText(elevatorCommandGenerator.nextCommand());
+		Command nextCommand = elevatorCommandGenerator.nextCommand();
+		Logger.info(nextCommand + ", " + stateManager.getCurrentState());
+		renderText(nextCommand);
 	}
 
 	public static void go(int floorToGo) {

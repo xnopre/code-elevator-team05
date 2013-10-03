@@ -1,16 +1,17 @@
 package utils;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static utils.Command.CLOSE;
 import static utils.Command.DOWN;
 import static utils.Command.OPEN;
 import static utils.Command.UP;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -36,11 +37,14 @@ public class OmnibusCommandGeneratorTest {
 	@Test
 	public void ensure_third_command_is_to_go_up() {
 		assertUpCycle();
+		verify(stateManager).incrementFloor();
+
 	}
 
 	@Test
 	public void ensure_fourth_command_is_to_go_open() {
 		assertUpCycle();
+		verify(stateManager).incrementFloor();
 		assertThat(omnibusCommandGenerator.nextCommand()).isEqualTo(OPEN);
 	}
 
@@ -48,15 +52,37 @@ public class OmnibusCommandGeneratorTest {
 	public void go_to_second_floor() {
 		assertUpCycle();
 		assertUpCycle();
+		verify(stateManager, Mockito.times(2)).incrementFloor();
 		assertThat(omnibusCommandGenerator.nextCommand()).isEqualTo(OPEN);
 	}
 
 	@Test
-	@Ignore("à Cédric!")
-	public void ensure_elevator_goes_to_the_last_floor_and_go_down() {
+	public void ensure_that_floor_has_been_incremented() {
 		assertUpCycle();
-		assertUpCycle();
-		assertDownCycle();
+		verify(stateManager).incrementFloor();
+	}
+
+	@Test
+	public void ensure_that_floor_has_been_decremented() {
+		givenAnElevatorAtLastFloorDoorClosed();
+
+		assertThat(omnibusCommandGenerator.nextCommand()).isEqualTo(DOWN);
+		verify(stateManager).decrementFloor();
+	}
+
+	private void givenAnElevatorAtLastFloorDoorClosed() {
+		Mockito.doReturn(true).when(stateManager).atLastFloor();
+		assertThat(omnibusCommandGenerator.nextCommand()).isEqualTo(OPEN);
+		assertThat(omnibusCommandGenerator.nextCommand()).isEqualTo(CLOSE);
+	}
+
+	@Test
+	public void ensure_that_next_command_after_down_is_open() {
+		givenAnElevatorAtLastFloorDoorClosed();
+
+		assertThat(omnibusCommandGenerator.nextCommand()).isEqualTo(DOWN);
+		verify(stateManager).decrementFloor();
+		assertThat(omnibusCommandGenerator.nextCommand()).isEqualTo(OPEN);
 	}
 
 	private void assertUpCycle() {

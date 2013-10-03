@@ -3,6 +3,8 @@ package utils;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import com.google.common.collect.Lists;
 
 public class ElevatorState {
@@ -59,6 +61,12 @@ public class ElevatorState {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
+
+	}
+
 	static class Builder {
 
 		private final ElevatorState initialState;
@@ -80,6 +88,11 @@ public class ElevatorState {
 
 		public Builder incrementFloor() {
 			incr += 1;
+			return this;
+		}
+
+		public Builder decrementFloor() {
+			incr -= 1;
 			return this;
 		}
 

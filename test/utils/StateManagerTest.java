@@ -58,4 +58,36 @@ public class StateManagerTest {
 				StateManager.INITIAL_STATE);
 	}
 
+	@Test
+	public void ensure_floor_is_Incremented() {
+		stateManager.incrementFloor();
+		assertThat(stateManager.getCurrentState().getCurrentFloor()).isEqualTo(
+				1);
+	}
+
+	@Test(expected = UnreachableFloorException.class)
+	public void ensure_cant_go_down_first_floor() {
+		stateManager.decrementFloor();
+	}
+
+	@Test(expected = UnreachableFloorException.class)
+	public void ensure_cant_go_up_last_floor() {
+		stateManager.incrementFloor();
+		stateManager.incrementFloor();
+		stateManager.incrementFloor();
+		stateManager.incrementFloor();
+		stateManager.incrementFloor();
+		stateManager.incrementFloor();
+
+	}
+
+	@Test
+	public void ensure_floor_is_Decremented() {
+		stateManager.incrementFloor();
+
+		stateManager.decrementFloor();
+		assertThat(stateManager.getCurrentState().getCurrentFloor()).isEqualTo(
+				0);
+	}
+
 }
