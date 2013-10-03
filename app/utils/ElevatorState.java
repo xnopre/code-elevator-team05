@@ -3,6 +3,8 @@ package utils;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.google.common.collect.Lists;
+
 public class ElevatorState {
 
 	private final int currentFloor;
@@ -22,11 +24,8 @@ public class ElevatorState {
 		return waitingCalls;
 	}
 
-	public ElevatorState addWaitingCall(int atFloor, Direction to) {
-		Collection<Call> waitingCalls = new ArrayList<Call>(
-				this.waitingCalls);
-		waitingCalls.add(new Call(atFloor, to));
-		return new ElevatorState(waitingCalls, currentFloor);
+	public int getCurrentFloor() {
+		return currentFloor;
 	}
 
 	@Override
@@ -60,4 +59,37 @@ public class ElevatorState {
 		return true;
 	}
 
+	static class Builder {
+
+		private final ElevatorState initialState;
+		private final Collection<Call> newCalls = new ArrayList<Call>();
+		private int incr = 0;
+
+		private Builder(ElevatorState state) {
+			this.initialState = state;
+		}
+
+		public static Builder from(ElevatorState state) {
+			return new Builder(state);
+		}
+
+		public Builder addWaitingCall(int atFloor, Direction to) {
+			newCalls.add(new Call(atFloor, to));
+			return this;
+		}
+
+		public Builder incrementFloor() {
+			incr += 1;
+			return this;
+		}
+
+		public ElevatorState get() {
+			final Collection newWaitingCalls = Lists.newArrayList(initialState
+					.getWaitingCalls());
+			newWaitingCalls.addAll(newCalls);
+			return new ElevatorState(newWaitingCalls,
+					initialState.getCurrentFloor() + incr);
+		}
+
+	}
 }

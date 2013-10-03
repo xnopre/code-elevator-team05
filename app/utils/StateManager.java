@@ -1,6 +1,5 @@
 package utils;
 
-
 public class StateManager {
 
 	public static final ElevatorState INITIAL_STATE = new ElevatorState();
@@ -18,11 +17,17 @@ public class StateManager {
 	}
 
 	public void storeCall(int atFloor, Direction to) {
-		currentState = currentState.addWaitingCall(atFloor, to);
+		currentState = ElevatorState.Builder.from(currentState)
+				.addWaitingCall(atFloor, to).get();
 	}
 
 	public ElevatorState getCurrentState() {
 		return currentState;
+	}
+
+	public void incrementFloor() {
+		currentState = ElevatorState.Builder.from(currentState)
+				.incrementFloor().get();
 	}
 
 }
