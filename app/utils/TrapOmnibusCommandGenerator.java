@@ -5,13 +5,13 @@ import static utils.Command.DOWN;
 import static utils.Command.OPEN;
 import static utils.Command.UP;
 
-public class OmnibusCommandGenerator implements CommandGenerator {
+public class TrapOmnibusCommandGenerator implements CommandGenerator {
 
 	private Command previousCommand = Command.NOTHING;
 
 	private final StateManager stateManager;
 
-	public OmnibusCommandGenerator(StateManager stateManager) {
+	public TrapOmnibusCommandGenerator(StateManager stateManager) {
 		this.stateManager = stateManager;
 	}
 

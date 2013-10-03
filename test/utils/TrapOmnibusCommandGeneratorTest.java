@@ -15,13 +15,13 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class OmnibusCommandGeneratorTest {
+public class TrapOmnibusCommandGeneratorTest {
 
 	@Mock
 	private StateManager stateManager;
 
 	@InjectMocks
-	private OmnibusCommandGenerator omnibusCommandGenerator;
+	private TrapOmnibusCommandGenerator omnibusCommandGenerator;
 
 	@Test
 	public void ensure_first_command_is_open_the_door() {
