@@ -2,15 +2,18 @@ package controllers;
 
 import play.Logger;
 import play.mvc.Controller;
+import utils.CommandGenerator;
 import utils.Direction;
-import utils.ElevatorCommandGenerator;
+import utils.NoOpCommandGenerator;
 import utils.ElevatorState;
+import utils.FloorBoundaries;
 import utils.StateManager;
 
 public class Application extends Controller {
 
-	private static final StateManager stateManager = new StateManager();
-	private static final ElevatorCommandGenerator elevatorCommandGenerator = new ElevatorCommandGenerator();
+	private static final StateManager stateManager = new StateManager(
+			new FloorBoundaries(0, 5));
+	private static final CommandGenerator elevatorCommandGenerator = new NoOpCommandGenerator();
 
 	public static void index() {
 		render();

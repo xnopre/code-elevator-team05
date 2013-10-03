@@ -5,31 +5,36 @@ import java.util.Collection;
 
 public class ElevatorState {
 
-	private final Collection<ElevatorCall> waitingCalls;
+	private final int currentFloor;
 
-	public ElevatorState(Collection<ElevatorCall> waitingCalls) {
+	private final Collection<Call> waitingCalls;
+
+	public ElevatorState(Collection<Call> waitingCalls, int currentFloor) {
 		this.waitingCalls = waitingCalls;
+		this.currentFloor = currentFloor;
 	}
 
 	public ElevatorState() {
-		this(new ArrayList<ElevatorCall>());
+		this(new ArrayList<Call>(), 0);
 	}
 
-	public Collection<ElevatorCall> getWaitingCalls() {
+	public Collection<Call> getWaitingCalls() {
 		return waitingCalls;
 	}
 
 	public ElevatorState addWaitingCall(int atFloor, Direction to) {
-		Collection<ElevatorCall> waitingCalls = new ArrayList<ElevatorCall>(this.waitingCalls);
-		waitingCalls.add(new ElevatorCall(atFloor, to));
-		return new ElevatorState(waitingCalls);
+		Collection<Call> waitingCalls = new ArrayList<Call>(
+				this.waitingCalls);
+		waitingCalls.add(new Call(atFloor, to));
+		return new ElevatorState(waitingCalls, currentFloor);
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((waitingCalls == null) ? 0 : waitingCalls.hashCode());
+		result = prime * result
+				+ ((waitingCalls == null) ? 0 : waitingCalls.hashCode());
 		return result;
 	}
 

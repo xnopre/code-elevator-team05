@@ -1,5 +1,5 @@
 package utils;
 
-public enum ElevatorCommand {
+public enum Command {
 	NOTHING, UP, DOWN, OPEN, CLOSE;
 }

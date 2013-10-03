@@ -11,7 +11,8 @@ import org.junit.Test;
 
 public class StateManagerTest {
 
-	private final StateManager stateManager = new StateManager();
+	private final StateManager stateManager = new StateManager(
+			new FloorBoundaries(0, 5));
 
 	@Test
 	public void call_must_store_last_call() {
@@ -19,8 +20,8 @@ public class StateManagerTest {
 		stateManager.storeCall(3, DOWN);
 
 		ElevatorState elevatorState = stateManager.getCurrentState();
-		Collection<ElevatorCall> calls = elevatorState.getWaitingCalls();
-		assertThat(calls).containsOnly(new ElevatorCall(3, DOWN));
+		Collection<Call> calls = elevatorState.getWaitingCalls();
+		assertThat(calls).containsOnly(new Call(3, DOWN));
 	}
 
 	@Test
@@ -30,9 +31,9 @@ public class StateManagerTest {
 		stateManager.storeCall(1, UP);
 
 		ElevatorState elevatorState = stateManager.getCurrentState();
-		Collection<ElevatorCall> calls = elevatorState.getWaitingCalls();
-		assertThat(calls).containsOnly(new ElevatorCall(3, DOWN),
-				new ElevatorCall(1, UP));
+		Collection<Call> calls = elevatorState.getWaitingCalls();
+		assertThat(calls).containsOnly(new Call(3, DOWN),
+				new Call(1, UP));
 	}
 
 	@Test(expected = OnlyOneCallPerFloorException.class)
