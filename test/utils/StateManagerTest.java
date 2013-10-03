@@ -32,20 +32,7 @@ public class StateManagerTest {
 
 		ElevatorState elevatorState = stateManager.getCurrentState();
 		Collection<Call> calls = elevatorState.getWaitingCalls();
-		assertThat(calls).containsOnly(new Call(3, DOWN),
-				new Call(1, UP));
-	}
-
-	@Test(expected = OnlyOneCallPerFloorException.class)
-	public void ensure_that_only_one_call_per_floor_can_be_performed_even_if_for_other_direction() {
-		stateManager.storeCall(3, DOWN);
-		stateManager.storeCall(3, UP);
-	}
-
-	@Test(expected = OnlyOneCallPerFloorException.class)
-	public void ensure_that_only_one_call_per_floor_can_be_performed() {
-		stateManager.storeCall(3, DOWN);
-		stateManager.storeCall(3, DOWN);
+		assertThat(calls).containsOnly(new Call(3, DOWN), new Call(1, UP));
 	}
 
 	@Test

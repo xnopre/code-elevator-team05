@@ -1,6 +1,5 @@
 package utils;
 
-import java.util.Collection;
 
 public class StateManager {
 
@@ -19,16 +18,7 @@ public class StateManager {
 	}
 
 	public void storeCall(int atFloor, Direction to) {
-		ensureNoPreviousCallAtThatFloorOrDie(atFloor);
 		currentState = currentState.addWaitingCall(atFloor, to);
-	}
-
-	private void ensureNoPreviousCallAtThatFloorOrDie(int floor) {
-		Collection<Call> waitingCalls = currentState.getWaitingCalls();
-		if (waitingCalls.contains(new Call(floor, Direction.DOWN)))
-			throw new OnlyOneCallPerFloorException(floor, waitingCalls);
-		if (waitingCalls.contains(new Call(floor, Direction.UP)))
-			throw new OnlyOneCallPerFloorException(floor, waitingCalls);
 	}
 
 	public ElevatorState getCurrentState() {
