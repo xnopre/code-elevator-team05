@@ -3,33 +3,39 @@ package utils;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
+import com.google.common.collect.Lists;
+
 public class ElevatorState {
 
-	private final Collection<ElevatorCall> waitingCalls;
+	private final int currentFloor;
 
-	public ElevatorState(Collection<ElevatorCall> waitingCalls) {
+	private final Collection<Call> waitingCalls;
+
+	public ElevatorState(Collection<Call> waitingCalls, int currentFloor) {
 		this.waitingCalls = waitingCalls;
+		this.currentFloor = currentFloor;
 	}
 
 	public ElevatorState() {
-		this(new ArrayList<ElevatorCall>());
+		this(new ArrayList<Call>(), 0);
 	}
 
-	public Collection<ElevatorCall> getWaitingCalls() {
+	public Collection<Call> getWaitingCalls() {
 		return waitingCalls;
 	}
 
-	public ElevatorState addWaitingCall(int atFloor, Direction to) {
-		Collection<ElevatorCall> waitingCalls = new ArrayList<ElevatorCall>(this.waitingCalls);
-		waitingCalls.add(new ElevatorCall(atFloor, to));
-		return new ElevatorState(waitingCalls);
+	public int getCurrentFloor() {
+		return currentFloor;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((waitingCalls == null) ? 0 : waitingCalls.hashCode());
+		result = prime * result
+				+ ((waitingCalls == null) ? 0 : waitingCalls.hashCode());
 		return result;
 	}
 
@@ -55,4 +61,48 @@ public class ElevatorState {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
+
+	}
+
+	static class Builder {
+
+		private final ElevatorState initialState;
+		private final Collection<Call> newCalls = new ArrayList<Call>();
+		private int incr = 0;
+
+		private Builder(ElevatorState state) {
+			this.initialState = state;
+		}
+
+		public static Builder from(ElevatorState state) {
+			return new Builder(state);
+		}
+
+		public Builder addWaitingCall(int atFloor, Direction to) {
+			newCalls.add(new Call(atFloor, to));
+			return this;
+		}
+
+		public Builder incrementFloor() {
+			incr += 1;
+			return this;
+		}
+
+		public Builder decrementFloor() {
+			incr -= 1;
+			return this;
+		}
+
+		public ElevatorState get() {
+			final Collection newWaitingCalls = Lists.newArrayList(initialState
+					.getWaitingCalls());
+			newWaitingCalls.addAll(newCalls);
+			return new ElevatorState(newWaitingCalls,
+					initialState.getCurrentFloor() + incr);
+		}
+
+	}
 }

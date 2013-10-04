@@ -1,11 +1,11 @@
 package utils;
 
-public class ElevatorCall {
+public class Call {
 
 	private final int floor;
 	private final Direction direction;
 
-	public ElevatorCall(int floor, Direction direction) {
+	public Call(int floor, Direction direction) {
 		this.floor = floor;
 		this.direction = direction;
 	}
@@ -35,7 +35,7 @@ public class ElevatorCall {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		ElevatorCall other = (ElevatorCall) obj;
+		Call other = (Call) obj;
 		if (direction != other.direction) {
 			return false;
 		}
