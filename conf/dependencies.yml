@@ -2,6 +2,7 @@
 
 require:
     - play
+    - junit -> junit 4.11
     - com.google.guava -> guava 15.0
     - org.easytesting -> fest-assert 1.4
     - org.mockito -> mockito-core 1.9.5
