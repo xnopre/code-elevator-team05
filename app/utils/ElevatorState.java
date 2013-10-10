@@ -13,13 +13,13 @@ public class ElevatorState {
 
 	private final Collection<Call> waitingCalls;
 
-	public ElevatorState(Collection<Call> waitingCalls, int currentFloor) {
-		this.waitingCalls = waitingCalls;
-		this.currentFloor = currentFloor;
+	public ElevatorState() {
+		this(0);
 	}
 
-	public ElevatorState() {
-		this(new ArrayList<Call>(), 0);
+	public ElevatorState(int floor, Call... calls) {
+		currentFloor = floor;
+		waitingCalls = Lists.newArrayList(calls);
 	}
 
 	public Collection<Call> getWaitingCalls() {
@@ -34,8 +34,7 @@ public class ElevatorState {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((waitingCalls == null) ? 0 : waitingCalls.hashCode());
+		result = prime * result + ((waitingCalls == null) ? 0 : waitingCalls.hashCode());
 		return result;
 	}
 
@@ -67,7 +66,7 @@ public class ElevatorState {
 
 	}
 
-	static class Builder {
+	public static class Builder {
 
 		private final ElevatorState initialState;
 		private final Collection<Call> newCalls = new ArrayList<Call>();
@@ -97,11 +96,9 @@ public class ElevatorState {
 		}
 
 		public ElevatorState get() {
-			final Collection newWaitingCalls = Lists.newArrayList(initialState
-					.getWaitingCalls());
+			final Collection<Call> newWaitingCalls = Lists.newArrayList(initialState.getWaitingCalls());
 			newWaitingCalls.addAll(newCalls);
-			return new ElevatorState(newWaitingCalls,
-					initialState.getCurrentFloor() + incr);
+			return new ElevatorState(initialState.getCurrentFloor() + incr, newWaitingCalls.toArray(new Call[0]));
 		}
 
 	}

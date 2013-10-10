@@ -93,10 +93,4 @@ public class TrapOmnibusCommandGeneratorTest {
 		assertThat(omnibusCommandGenerator.nextCommand()).isEqualTo(UP);
 	}
 
-	private void assertDownCycle() {
-		assertThat(omnibusCommandGenerator.nextCommand()).isEqualTo(OPEN);
-		assertThat(omnibusCommandGenerator.nextCommand()).isEqualTo(CLOSE);
-		assertThat(omnibusCommandGenerator.nextCommand()).isEqualTo(DOWN);
-	}
-
 }
