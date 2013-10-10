@@ -11,13 +11,12 @@ import org.junit.Test;
 
 public class StateManagerTest {
 
-	private final StateManager stateManager = new StateManager(
-			new FloorBoundaries(0, 5));
+	private final StateManager stateManager = new StateManager(new FloorBoundaries(0, 5));
 
 	@Test
 	public void call_must_store_last_call() {
 
-		stateManager.storeCall(3, DOWN);
+		stateManager.storeWaitingCall(3, DOWN);
 
 		ElevatorState elevatorState = stateManager.getCurrentState();
 		Collection<Call> calls = elevatorState.getWaitingCalls();
@@ -27,8 +26,8 @@ public class StateManagerTest {
 	@Test
 	public void call_must_remember_all_specified_calls() {
 
-		stateManager.storeCall(3, DOWN);
-		stateManager.storeCall(1, UP);
+		stateManager.storeWaitingCall(3, DOWN);
+		stateManager.storeWaitingCall(1, UP);
 
 		ElevatorState elevatorState = stateManager.getCurrentState();
 		Collection<Call> calls = elevatorState.getWaitingCalls();
@@ -42,27 +41,24 @@ public class StateManagerTest {
 
 	@Test
 	public void ensure_that_storing_a_call_change_intial_state() {
-		stateManager.storeCall(3, DOWN);
+		stateManager.storeWaitingCall(3, DOWN);
 
-		assertThat(stateManager.getCurrentState()).isNotEqualTo(
-				StateManager.INITIAL_STATE);
+		assertThat(stateManager.getCurrentState()).isNotEqualTo(StateManager.INITIAL_STATE);
 	}
 
 	@Test
 	public void ensure_reset_command_restore_initial_state() {
-		stateManager.storeCall(3, DOWN);
+		stateManager.storeWaitingCall(3, DOWN);
 
 		stateManager.reset();
 
-		assertThat(stateManager.getCurrentState()).isSameAs(
-				StateManager.INITIAL_STATE);
+		assertThat(stateManager.getCurrentState()).isSameAs(StateManager.INITIAL_STATE);
 	}
 
 	@Test
 	public void ensure_floor_is_Incremented() {
 		stateManager.incrementFloor();
-		assertThat(stateManager.getCurrentState().getCurrentFloor()).isEqualTo(
-				1);
+		assertThat(stateManager.getCurrentState().getCurrentFloor()).isEqualTo(1);
 	}
 
 	@Test(expected = UnreachableFloorException.class)
@@ -86,8 +82,34 @@ public class StateManagerTest {
 		stateManager.incrementFloor();
 
 		stateManager.decrementFloor();
-		assertThat(stateManager.getCurrentState().getCurrentFloor()).isEqualTo(
-				0);
+		assertThat(stateManager.getCurrentState().getCurrentFloor()).isEqualTo(0);
 	}
 
+	@Test
+	public void ensure_that_opened_state_is_stored() {
+		stateManager.setClosed();
+		stateManager.setOpened();
+		stateManager.storeWaitingCall(3, DOWN);
+		assertThat(stateManager.getCurrentState().isOpened()).isTrue();
+		assertThat(stateManager.getCurrentState().isClosed()).isFalse();
+	}
+
+	@Test
+	public void ensure_that_closed_state_is_stored() {
+		stateManager.setOpened();
+		stateManager.setClosed();
+		stateManager.storeWaitingCall(3, DOWN);
+		assertThat(stateManager.getCurrentState().isOpened()).isFalse();
+		assertThat(stateManager.getCurrentState().isClosed()).isTrue();
+	}
+
+	@Test
+	public void ensure_that_only_one_matching_call_is_removed() {
+		stateManager.storeWaitingCall(3, DOWN);
+		stateManager.storeWaitingCall(3, UP);
+
+		stateManager.removeWaitingCall(3, DOWN);
+		assertThat(stateManager.getCurrentState().getWaitingCalls()).containsOnly(new Call(3, UP));
+
+	}
 }

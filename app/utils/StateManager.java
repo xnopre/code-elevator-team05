@@ -16,9 +16,12 @@ public class StateManager {
 		currentState = INITIAL_STATE;
 	}
 
-	public void storeCall(int atFloor, Direction to) {
-		currentState = ElevatorState.Builder.from(currentState)
-				.addWaitingCall(atFloor, to).get();
+	public void storeWaitingCall(int atFloor, Direction to) {
+		currentState = ElevatorState.Builder.from(currentState).addWaitingCall(atFloor, to).get();
+	}
+
+	public void removeWaitingCall(int atFloor, Direction to) {
+		currentState = ElevatorState.Builder.from(currentState).removeWaitingCall(atFloor, to).get();
 	}
 
 	public ElevatorState getCurrentState() {
@@ -28,15 +31,13 @@ public class StateManager {
 	public void incrementFloor() {
 		if (atLastFloor())
 			throw new UnreachableFloorException();
-		currentState = ElevatorState.Builder.from(currentState)
-				.incrementFloor().get();
+		currentState = ElevatorState.Builder.from(currentState).incrementFloor().get();
 	}
 
 	public void decrementFloor() {
 		if (atFirstFloor())
 			throw new UnreachableFloorException();
-		currentState = ElevatorState.Builder.from(currentState)
-				.decrementFloor().get();
+		currentState = ElevatorState.Builder.from(currentState).decrementFloor().get();
 	}
 
 	public boolean atFirstFloor() {
@@ -45,6 +46,14 @@ public class StateManager {
 
 	public boolean atLastFloor() {
 		return floorBoundaries.atLastFloor(currentState.getCurrentFloor());
+	}
+
+	public void setOpened() {
+		currentState = ElevatorState.Builder.from(currentState).setOpened().get();
+	}
+
+	public void setClosed() {
+		currentState = ElevatorState.Builder.from(currentState).setClosed().get();
 	}
 
 }

@@ -1,7 +1,10 @@
 package utils;
 
+import static utils.StateBuilderFactory.call;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
@@ -13,12 +16,15 @@ public class ElevatorState {
 
 	private final Collection<Call> waitingCalls;
 
+	private final boolean opened;
+
 	public ElevatorState() {
-		this(0);
+		this(0, false);
 	}
 
-	public ElevatorState(int floor, Call... calls) {
+	public ElevatorState(int floor, boolean opened, Call... calls) {
 		currentFloor = floor;
+		this.opened = opened;
 		waitingCalls = Lists.newArrayList(calls);
 	}
 
@@ -28,6 +34,14 @@ public class ElevatorState {
 
 	public int getCurrentFloor() {
 		return currentFloor;
+	}
+
+	public boolean isOpened() {
+		return opened;
+	}
+
+	public boolean isClosed() {
+		return !opened;
 	}
 
 	@Override
@@ -71,9 +85,13 @@ public class ElevatorState {
 		private final ElevatorState initialState;
 		private final Collection<Call> newCalls = new ArrayList<Call>();
 		private int incr = 0;
+		private boolean opened;
+		private final List<Call> currentWaitingCalls;
 
 		private Builder(ElevatorState state) {
 			this.initialState = state;
+			this.opened = state.isOpened();
+			currentWaitingCalls = Lists.newArrayList(state.getWaitingCalls());
 		}
 
 		public static Builder from(ElevatorState state) {
@@ -81,7 +99,7 @@ public class ElevatorState {
 		}
 
 		public Builder addWaitingCall(int atFloor, Direction to) {
-			newCalls.add(new Call(atFloor, to));
+			currentWaitingCalls.add(new Call(atFloor, to));
 			return this;
 		}
 
@@ -95,11 +113,25 @@ public class ElevatorState {
 			return this;
 		}
 
+		public Builder setClosed() {
+			opened = false;
+			return this;
+		}
+
+		public Builder setOpened() {
+			opened = true;
+			return this;
+		}
+
 		public ElevatorState get() {
-			final Collection<Call> newWaitingCalls = Lists.newArrayList(initialState.getWaitingCalls());
-			newWaitingCalls.addAll(newCalls);
-			return new ElevatorState(initialState.getCurrentFloor() + incr, newWaitingCalls.toArray(new Call[0]));
+			return new ElevatorState(initialState.getCurrentFloor() + incr, opened, currentWaitingCalls.toArray(new Call[0]));
+		}
+
+		public Builder removeWaitingCall(int atFloor, Direction to) {
+			currentWaitingCalls.remove(call(atFloor, to));
+			return this;
 		}
 
 	}
+
 }
