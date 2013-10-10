@@ -2,8 +2,8 @@ package utils;
 
 public class Call {
 
-	final int floor;
-	final Direction direction;
+	public final int floor;
+	public final Direction direction;
 
 	public Call(int floor, Direction direction) {
 		this.floor = floor;

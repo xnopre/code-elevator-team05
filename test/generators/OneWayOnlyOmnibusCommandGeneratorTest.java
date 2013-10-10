@@ -1,9 +1,10 @@
-package utils;
+package generators;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static utils.Command.CLOSE;
 import static utils.Command.OPEN;
 import static utils.Command.UP;
+import generators.OneWayOnlyOmnibusCommandGenerator;
 
 import org.junit.Test;
 

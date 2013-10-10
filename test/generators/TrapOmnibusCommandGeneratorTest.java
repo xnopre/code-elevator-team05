@@ -1,4 +1,4 @@
-package utils;
+package generators;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
@@ -13,6 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import utils.StateManager;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TrapOmnibusCommandGeneratorTest {

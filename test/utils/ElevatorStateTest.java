@@ -13,8 +13,7 @@ public class ElevatorStateTest {
 		ElevatorState basement = new ElevatorState();
 		Assertions.assertThat(basement.getCurrentFloor()).isEqualTo(0);
 
-		ElevatorState secondFloor = ElevatorState.Builder.from(basement)
-				.incrementFloor().incrementFloor().get();
+		ElevatorState secondFloor = ElevatorState.Builder.from(basement).incrementFloor().incrementFloor().get();
 
 		Assertions.assertThat(secondFloor).isNotSameAs(basement);
 		Assertions.assertThat(secondFloor.getCurrentFloor()).isEqualTo(2);
@@ -25,14 +24,11 @@ public class ElevatorStateTest {
 		ElevatorState basement = new ElevatorState();
 		Assertions.assertThat(basement.getCurrentFloor()).isEqualTo(0);
 
-		ElevatorState firstFloor = ElevatorState.Builder.from(basement)
-				.addWaitingCall(5, Direction.DOWN)
-				.addWaitingCall(2, Direction.UP).get();
+		ElevatorState firstFloor = ElevatorState.Builder.from(basement).addWaitingCall(5, Direction.DOWN).addWaitingCall(2, Direction.UP).get();
 
 		Assertions.assertThat(firstFloor).isNotSameAs(basement);
 
-		Assertions.assertThat(firstFloor.getWaitingCalls()).containsOnly(
-				new Call(5, DOWN), new Call(2, UP));
+		Assertions.assertThat(firstFloor.getWaitingCalls()).containsOnly(new Call(5, DOWN), new Call(2, UP));
 	}
 
 	@Test
@@ -50,16 +46,13 @@ public class ElevatorStateTest {
 		ElevatorState basement = new ElevatorState();
 		Assertions.assertThat(basement.getCurrentFloor()).isEqualTo(0);
 
-		ElevatorState secondFloor = ElevatorState.Builder.from(basement)
-				.addWaitingCall(5, Direction.DOWN).incrementFloor()
-				.addWaitingCall(2, Direction.UP).incrementFloor().get();
+		ElevatorState secondFloor = ElevatorState.Builder.from(basement).addWaitingCall(5, Direction.DOWN).incrementFloor().addWaitingCall(2, Direction.UP)
+				.incrementFloor().get();
 
 		Assertions.assertThat(secondFloor).isNotSameAs(basement);
 
-		Assertions.assertThat(secondFloor.getWaitingCalls()).containsOnly(
-				new Call(5, DOWN), new Call(2, UP));
+		Assertions.assertThat(secondFloor.getWaitingCalls()).containsOnly(new Call(5, DOWN), new Call(2, UP));
 		Assertions.assertThat(secondFloor.getCurrentFloor()).isEqualTo(2);
 
 	}
-
 }

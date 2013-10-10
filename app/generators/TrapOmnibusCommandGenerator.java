@@ -1,9 +1,11 @@
-package utils;
+package generators;
 
 import static utils.Command.CLOSE;
 import static utils.Command.DOWN;
 import static utils.Command.OPEN;
 import static utils.Command.UP;
+import utils.Command;
+import utils.StateManager;
 
 public class TrapOmnibusCommandGenerator implements CommandGenerator {
 

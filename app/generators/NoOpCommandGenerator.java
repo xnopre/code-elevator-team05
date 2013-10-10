@@ -1,4 +1,6 @@
-package utils;
+package generators;
+
+import utils.Command;
 
 public class NoOpCommandGenerator implements CommandGenerator {
 

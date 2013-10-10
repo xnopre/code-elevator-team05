@@ -1,9 +1,13 @@
-package utils;
+package generators;
 
 import static utils.Command.NOTHING;
 import static utils.Command.OPEN;
 
 import java.util.Collection;
+
+import utils.Call;
+import utils.Command;
+import utils.StateManager;
 
 public class XavierCommandGenerator implements CommandGenerator {
 

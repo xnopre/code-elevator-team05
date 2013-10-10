@@ -1,14 +1,14 @@
 package controllers;
 
+import generators.CommandGenerator;
+import generators.TrapOmnibusCommandGenerator;
 import play.Logger;
 import play.mvc.Controller;
 import utils.Command;
-import utils.CommandGenerator;
 import utils.Direction;
 import utils.ElevatorState;
 import utils.FloorBoundaries;
 import utils.StateManager;
-import utils.TrapOmnibusCommandGenerator;
 
 public class Application extends Controller {
 

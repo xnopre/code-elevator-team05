@@ -1,12 +1,17 @@
-package utils;
+package generators;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static utils.Command.NOTHING;
 import static utils.Command.OPEN;
+import generators.XavierCommandGenerator;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import utils.Direction;
+import utils.FloorBoundaries;
+import utils.StateManager;
 
 @RunWith(MockitoJUnitRunner.class)
 public class XavierCommandGeneratorTest {
