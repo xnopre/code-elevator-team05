@@ -1,6 +1,7 @@
 package utils;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static utils.Direction.DOWN;
 import static utils.Direction.UP;
@@ -34,6 +35,16 @@ public class WaitingCallRemoverTest {
 		waitingCallRemover.removeOneCallFromCurrentFloorToGoAtFloor(2);
 
 		verify(mockStateManager).removeWaitingCall(3, DOWN);
+	}
+
+	@Test
+	public void dont_crash_if_there_is_no_matching_call() {
+
+		stateBuilderFactory.givenAnElevatorOpenedAtFloor(3).andWaitingCalls(call(3, UP), call(4, UP), call(1, UP));
+
+		waitingCallRemover.removeOneCallFromCurrentFloorToGoAtFloor(2);
+
+		verify(mockStateManager, times(0)).removeWaitingCall(3, DOWN);
 	}
 
 }

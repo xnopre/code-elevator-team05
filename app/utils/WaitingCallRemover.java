@@ -4,6 +4,7 @@ import static utils.Direction.DOWN;
 import static utils.Direction.UP;
 
 import java.util.Collection;
+import java.util.Iterator;
 
 import javax.annotation.Nullable;
 
@@ -40,7 +41,10 @@ public class WaitingCallRemover {
 			}
 		});
 
-		final Call call = matchedCalls.iterator().next();
-		statemanager.removeWaitingCall(call.floor, call.direction);
+		final Iterator<Call> iterator = matchedCalls.iterator();
+		if (iterator.hasNext()) {
+			final Call call = iterator.next();
+			statemanager.removeWaitingCall(call.floor, call.direction);
+		}
 	}
 }

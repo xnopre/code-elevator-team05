@@ -135,7 +135,10 @@ public class ElevatorState {
 		}
 
 		public Builder removeGoRequest(int floorToGo) {
-			currentGoRequests.remove(currentGoRequests.indexOf(floorToGo));
+			final int index = currentGoRequests.indexOf(floorToGo);
+			if (index != -1) {
+				currentGoRequests.remove(index);
+			}
 			return this;
 		}
 
