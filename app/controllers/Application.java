@@ -17,30 +17,30 @@ public class Application extends Controller {
 	private static final CommandGenerator elevatorCommandGenerator = new BetterWaitingForTheBestCommandGenerator(stateManager);
 	private static final WaitingCallRemover waitingCallRemover = new WaitingCallRemover(stateManager);
 
-	public static void index() {
+	public static synchronized void index() {
 		render();
 	}
 
-	public static void reset(String cause) {
+	public static synchronized void reset(String cause) {
 		Logger.info("Request received 'reset' with cause : " + cause);
 		stateManager.reset();
 		ok();
 	}
 
-	public static void call(int atFloor, Direction to) {
+	public static synchronized void call(int atFloor, Direction to) {
 		Logger.info("Request received 'call' atFloor %d to %s", atFloor, to);
 		stateManager.storeWaitingCall(atFloor, to);
 		ok();
 	}
 
-	public static void nextCommand() {
+	public static synchronized void nextCommand() {
 		Logger.info("Request received 'nextCommand'");
 		Command nextCommand = elevatorCommandGenerator.nextCommand();
 		Logger.info(nextCommand + ", " + stateManager.getCurrentState());
 		renderText(nextCommand);
 	}
 
-	public static void go(int floorToGo) {
+	public static synchronized void go(int floorToGo) {
 		Logger.info("Request received go(" + floorToGo + ")");
 		waitingCallRemover.removeOneCallFromCurrentFloorToGoAtFloor(floorToGo);
 		stateManager.storeGoRequest(floorToGo);
@@ -48,12 +48,12 @@ public class Application extends Controller {
 		ok();
 	}
 
-	public static void userHasEntered() {
+	public static synchronized void userHasEntered() {
 		Logger.info("Request received 'userHasEntered'");
 		ok();
 	}
 
-	public static void userHasExited() {
+	public static synchronized void userHasExited() {
 		Logger.info("Request received 'userHasExited'");
 		stateManager.removeGoRequest(stateManager.getCurrentState().getCurrentFloor());
 		Logger.info("    After 'userHasExited' : " + stateManager.getCurrentState());
