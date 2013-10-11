@@ -9,11 +9,11 @@ import static utils.Command.NOTHING;
 import static utils.Command.OPEN;
 import static utils.Direction.UP;
 import static utils.StateBuilderFactory.call;
+import static utils.StateBuilderForTest.createStateAndDoReturnItByStateManager;
 
 import org.junit.Test;
 
 import utils.Command;
-import utils.StateBuilder;
 import utils.StateBuilderFactory;
 import utils.StateManager;
 
@@ -48,6 +48,13 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 	}
 
 	@Test
+	public void command_is_open_if_there_is_a_go_at_current_floor() {
+		stateBuilderFactory.givenAnElevatorClosedAtFloor(4).andGoRequests(4);
+		final Command nextCommand = commandGenerator.nextCommand();
+		assertThatNextCommandIs(nextCommand, OPEN);
+	}
+
+	@Test
 	public void command_is_nothing_if_is_open_and_receive_call_at_same_floor() {
 		stateBuilderFactory.givenAnElevatorOpenedAtFloor(1).andWaitingCalls(call(1, UP));
 		final Command nextCommand = commandGenerator.nextCommand();
@@ -62,6 +69,42 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 		assertThatElevatorIsClosed();
 	}
 
+	@Test
+	public void command_is_up_if_there_is_a_go_upstairs() {
+		// TODO : optimisation : garder la direction en cours
+		stateBuilderFactory.givenAnElevatorClosedAtFloor(2).andGoRequests(4);
+		final Command nextCommand = commandGenerator.nextCommand();
+		assertThatNextCommandIs(nextCommand, Command.UP);
+		assertThatCurrentFloorIsIncremented();
+	}
+
+	@Test
+	public void command_is_up_if_there_is_a_call_upstairs() {
+		// TODO : optimisation : garder la direction en cours
+		stateBuilderFactory.givenAnElevatorClosedAtFloor(2).andWaitingCalls(call(6, UP));
+		final Command nextCommand = commandGenerator.nextCommand();
+		assertThatNextCommandIs(nextCommand, Command.UP);
+		assertThatCurrentFloorIsIncremented();
+	}
+
+	@Test
+	public void command_is_down_if_there_is_a_go_downstairs() {
+		// TODO : optimisation : garder la direction en cours
+		stateBuilderFactory.givenAnElevatorClosedAtFloor(2).andGoRequests(0);
+		final Command nextCommand = commandGenerator.nextCommand();
+		assertThatNextCommandIs(nextCommand, Command.DOWN);
+		assertThatCurrentFloorIsDecremented();
+	}
+
+	@Test
+	public void command_is_down_if_there_is_a_call_downstairs() {
+		// TODO : optimisation : garder la direction en cours
+		stateBuilderFactory.givenAnElevatorClosedAtFloor(4).andWaitingCalls(call(1, UP));
+		final Command nextCommand = commandGenerator.nextCommand();
+		assertThatNextCommandIs(nextCommand, Command.DOWN);
+		assertThatCurrentFloorIsDecremented();
+	}
+
 	// privates -------------------------------
 
 	private void assertThatNextCommandIs(Command nextCommand, final Command expectedCommand) {
@@ -74,9 +117,19 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 	}
 
 	private void assertThatElevatorIsClosed() {
+		verify(mockStateManager, times(0)).setOpened();
+		verify(mockStateManager).setClosed();
 	}
 
 	private void givenAnElevatorOpened() {
-		StateBuilder.createStateAndDoReturnItByStateManager(mockStateManager, 0, true);
+		createStateAndDoReturnItByStateManager(mockStateManager, 0, true);
+	}
+
+	private void assertThatCurrentFloorIsIncremented() {
+		verify(mockStateManager).incrementFloor();
+	}
+
+	private void assertThatCurrentFloorIsDecremented() {
+		verify(mockStateManager).decrementFloor();
 	}
 }

@@ -21,23 +21,72 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 	@Override
 	public Command nextCommand() {
 		if (isOpened()) {
-			if (isThereACallAtCurrentFloor()) {
+			if (thereIsACallAtCurrentFloor()) {
 				return NOTHING;
 			}
+			stateManager.setClosed();
 			return CLOSE;
 		}
-		if (isThereACallAtCurrentFloor()) {
+		if (thereIsACallAtCurrentFloor() || thereIsAGoAtCurrentFloor()) {
 			stateManager.setOpened();
 			return OPEN;
 		}
+		if (thereIsAGoUpstairs() || thereIsACallUpstairs()) {
+			stateManager.incrementFloor();
+			return Command.UP;
+		}
+		if (thereIsAGoDownstairs() || thereIsACallDownstairs()) {
+			stateManager.decrementFloor();
+			return Command.DOWN;
+		}
 		return NOTHING;
+	}
+
+	private boolean thereIsAGoUpstairs() {
+		final int currentFloor = stateManager.getCurrentState().getCurrentFloor();
+		for (Integer goRequest : stateManager.getCurrentState().getGoRequests()) {
+			if (goRequest > currentFloor) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean thereIsACallUpstairs() {
+		final int currentFloor = stateManager.getCurrentState().getCurrentFloor();
+		for (Call call : stateManager.getCurrentState().getWaitingCalls()) {
+			if (call.floor > currentFloor) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean thereIsAGoDownstairs() {
+		final int currentFloor = stateManager.getCurrentState().getCurrentFloor();
+		for (Integer goRequest : stateManager.getCurrentState().getGoRequests()) {
+			if (goRequest < currentFloor) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean thereIsACallDownstairs() {
+		final int currentFloor = stateManager.getCurrentState().getCurrentFloor();
+		for (Call call : stateManager.getCurrentState().getWaitingCalls()) {
+			if (call.floor < currentFloor) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private boolean isOpened() {
 		return stateManager.getCurrentState().isOpened();
 	}
 
-	private boolean isThereACallAtCurrentFloor() {
+	private boolean thereIsACallAtCurrentFloor() {
 		final Collection<Call> waitingCalls = stateManager.getCurrentState().getWaitingCalls();
 		for (Call call : waitingCalls) {
 			if (call.floor == stateManager.getCurrentState().getCurrentFloor()) {
@@ -45,6 +94,10 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 			}
 		}
 		return false;
+	}
+
+	private boolean thereIsAGoAtCurrentFloor() {
+		return stateManager.getCurrentState().getGoRequests().contains(stateManager.getCurrentState().getCurrentFloor());
 	}
 
 }

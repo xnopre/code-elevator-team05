@@ -24,6 +24,14 @@ public class StateManager {
 		currentState = ElevatorState.Builder.from(currentState).removeWaitingCall(atFloor, to).get();
 	}
 
+	public void storeGoRequest(int floorToGo) {
+		currentState = ElevatorState.Builder.from(currentState).addGoRequest(floorToGo).get();
+	}
+
+	public void removeGoRequest(int floorToGo) {
+		currentState = ElevatorState.Builder.from(currentState).removeGoRequest(floorToGo).get();
+	}
+
 	public ElevatorState getCurrentState() {
 		return currentState;
 	}

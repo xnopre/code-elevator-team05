@@ -110,6 +110,28 @@ public class StateManagerTest {
 
 		stateManager.removeWaitingCall(3, DOWN);
 		assertThat(stateManager.getCurrentState().getWaitingCalls()).containsOnly(new Call(3, UP));
+	}
 
+	@Test
+	public void ensure_go_requests_are_stored() {
+
+		assertThat(stateManager.getCurrentState().getGoRequests()).isEmpty();
+
+		stateManager.storeGoRequest(3);
+		stateManager.storeGoRequest(5);
+
+		assertThat(stateManager.getCurrentState().getGoRequests()).containsOnly(3, 5);
+	}
+
+	@Test
+	public void ensure_go_request_is_removed() {
+		assertThat(stateManager.getCurrentState().getGoRequests()).isEmpty();
+
+		stateManager.storeGoRequest(7);
+		stateManager.storeGoRequest(3);
+		stateManager.storeGoRequest(5);
+		stateManager.removeGoRequest(3);
+
+		assertThat(stateManager.getCurrentState().getGoRequests()).containsOnly(7, 5);
 	}
 }

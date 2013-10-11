@@ -9,12 +9,12 @@ public class StateBuilderFactory {
 		this.mockStateManager = mockStateManager;
 	}
 
-	public StateBuilder givenAnElevatorClosedAtFloor(int floor) {
-		return new StateBuilder(mockStateManager, floor, false);
+	public StateBuilderForTest givenAnElevatorClosedAtFloor(int floor) {
+		return new StateBuilderForTest(mockStateManager, floor, false);
 	}
 
-	public StateBuilder givenAnElevatorOpenedAtFloor(int floor) {
-		return new StateBuilder(mockStateManager, floor, true);
+	public StateBuilderForTest givenAnElevatorOpenedAtFloor(int floor) {
+		return new StateBuilderForTest(mockStateManager, floor, true);
 	}
 
 	public static Call call(final int floor, final Direction direction) {

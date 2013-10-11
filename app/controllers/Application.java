@@ -43,6 +43,7 @@ public class Application extends Controller {
 	public static void go(int floorToGo) {
 		Logger.info("Request received 'go' with floorToGo=" + floorToGo);
 		waitingCallRemover.removeOneCallFromCurrentFloorToGoAtFloor(floorToGo);
+		stateManager.storeGoRequest(floorToGo);
 		ok();
 	}
 
@@ -53,6 +54,7 @@ public class Application extends Controller {
 
 	public static void userHasExited() {
 		Logger.info("Request received 'userHasExited'");
+		stateManager.removeGoRequest(stateManager.getCurrentState().getCurrentFloor());
 		ok();
 	}
 
