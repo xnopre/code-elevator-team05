@@ -126,6 +126,7 @@ public class StateManagerTest {
 	public void ensure_go_request_is_removed() {
 		assertThat(stateManager.getCurrentState().getGoRequests()).isEmpty();
 		stateManager.storeGoRequest(7);
+		stateManager.storeGoRequest(3);
 		stateManager.storeGoRequest(5);
 
 		stateManager.removeGoRequest(3);
@@ -134,14 +135,35 @@ public class StateManagerTest {
 	}
 
 	@Test
-	public void test() {
+	public void ensure_no_problem_if_request_to_remove_unstored_request_floor() {
 		assertThat(stateManager.getCurrentState().getGoRequests()).isEmpty();
-
 		stateManager.storeGoRequest(7);
-		stateManager.storeGoRequest(3);
 		stateManager.storeGoRequest(5);
+
 		stateManager.removeGoRequest(3);
 
 		assertThat(stateManager.getCurrentState().getGoRequests()).containsOnly(7, 5);
+	}
+
+	@Test
+	public void areThreeLastCommandEqualTo_return_false() {
+
+		stateManager.storeCommandInHistory(Command.NOTHING);
+		stateManager.storeCommandInHistory(Command.CLOSE);
+		stateManager.storeCommandInHistory(Command.NOTHING);
+		stateManager.storeCommandInHistory(Command.NOTHING);
+
+		assertThat(stateManager.areThreeLastCommandEqualTo(Command.NOTHING)).isFalse();
+	}
+
+	@Test
+	public void areThreeLastCommandEqualTo_return_true() {
+
+		stateManager.storeCommandInHistory(Command.CLOSE);
+		stateManager.storeCommandInHistory(Command.NOTHING);
+		stateManager.storeCommandInHistory(Command.NOTHING);
+		stateManager.storeCommandInHistory(Command.NOTHING);
+
+		assertThat(stateManager.areThreeLastCommandEqualTo(Command.NOTHING)).isTrue();
 	}
 }

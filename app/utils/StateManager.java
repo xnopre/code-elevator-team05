@@ -1,5 +1,7 @@
 package utils;
 
+import java.util.Arrays;
+
 public class StateManager {
 
 	public static final ElevatorState INITIAL_STATE = new ElevatorState();
@@ -7,6 +9,8 @@ public class StateManager {
 	private ElevatorState currentState = INITIAL_STATE;
 
 	private final FloorBoundaries floorBoundaries;
+
+	private final SizeLimitedArrayList lastCommands = new SizeLimitedArrayList(3);
 
 	public StateManager(FloorBoundaries floorBoundaries) {
 		this.floorBoundaries = floorBoundaries;
@@ -64,4 +68,12 @@ public class StateManager {
 		currentState = ElevatorState.Builder.from(currentState).setClosed().get();
 	}
 
+	public void storeCommandInHistory(Command command) {
+		lastCommands.add(command);
+	}
+
+	public boolean areThreeLastCommandEqualTo(Command command) {
+		Command[] commands = new Command[] { command, command, command };
+		return Arrays.equals(lastCommands.toArray(), commands);
+	}
 }
