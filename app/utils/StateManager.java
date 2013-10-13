@@ -80,5 +80,4 @@ public class StateManager {
 		Command[] commands = new Command[] { command, command, command };
 		return Arrays.equals(lastCommands.toArray(), commands);
 	}
-
 }
