@@ -20,7 +20,7 @@ public class WaitingCallRemoverTest {
 	@Test
 	public void ensure_remove_good_waiting_call_when_receiving_go_up() {
 
-		stateBuilderFactory.givenAnElevatorOpenedAtFloor(3).andWaitingCalls(call(3, DOWN), call(3, UP), call(4, UP), call(1, UP));
+		stateBuilderFactory.givenAnElevatorOpenedAtFloor(3).andWaitingCalls(call(3, DOWN), call(3, UP), call(4, UP), call(1, UP)).build();
 
 		waitingCallRemover.removeOneCallFromCurrentFloorToGoAtFloor(5);
 
@@ -30,7 +30,7 @@ public class WaitingCallRemoverTest {
 	@Test
 	public void ensure_remove_good_waiting_call_when_receiving_go_down() {
 
-		stateBuilderFactory.givenAnElevatorOpenedAtFloor(3).andWaitingCalls(call(3, DOWN), call(3, UP), call(4, UP), call(1, UP));
+		stateBuilderFactory.givenAnElevatorOpenedAtFloor(3).andWaitingCalls(call(3, DOWN), call(3, UP), call(4, UP), call(1, UP)).build();
 
 		waitingCallRemover.removeOneCallFromCurrentFloorToGoAtFloor(2);
 
@@ -40,7 +40,7 @@ public class WaitingCallRemoverTest {
 	@Test
 	public void dont_crash_if_there_is_no_matching_call() {
 
-		stateBuilderFactory.givenAnElevatorOpenedAtFloor(3).andWaitingCalls(call(3, UP), call(4, UP), call(1, UP));
+		stateBuilderFactory.givenAnElevatorOpenedAtFloor(3).andWaitingCalls(call(3, UP), call(4, UP), call(1, UP)).build();
 
 		waitingCallRemover.removeOneCallFromCurrentFloorToGoAtFloor(2);
 

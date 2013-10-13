@@ -1,6 +1,7 @@
 package utils;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static utils.Direction.UP;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,13 +19,16 @@ public class ElevatorState {
 
 	private final boolean opened;
 
+	private final Direction currentDirection;
+
 	public ElevatorState() {
-		this(0, false, new ArrayList<Call>(), new ArrayList<Integer>());
+		this(0, false, UP, new ArrayList<Call>(), new ArrayList<Integer>());
 	}
 
-	public ElevatorState(int floor, boolean opened, Collection<Call> waitingCalls, Collection<Integer> goRequests) {
+	public ElevatorState(int floor, boolean opened, Direction currentDirection, Collection<Call> waitingCalls, Collection<Integer> goRequests) {
 		currentFloor = floor;
 		this.opened = opened;
+		this.currentDirection = currentDirection;
 		this.waitingCalls = newArrayList(waitingCalls);
 		this.goRequests = newArrayList(goRequests);
 	}
@@ -47,6 +51,10 @@ public class ElevatorState {
 
 	public boolean isClosed() {
 		return !opened;
+	}
+
+	public Direction getCurrentDirection() {
+		return currentDirection;
 	}
 
 	@Override
@@ -107,10 +115,12 @@ public class ElevatorState {
 		private boolean opened;
 		private final List<Call> currentWaitingCalls;
 		private final List<Integer> currentGoRequests;
+		private Direction currentDirection;
 
 		private Builder(ElevatorState state) {
 			this.initialState = state;
 			this.opened = state.isOpened();
+			this.currentDirection = state.getCurrentDirection();
 			currentWaitingCalls = newArrayList(state.getWaitingCalls());
 			currentGoRequests = newArrayList(state.getGoRequests());
 		}
@@ -162,8 +172,13 @@ public class ElevatorState {
 			return this;
 		}
 
+		public Builder setCurrentDirection(Direction currentDirection) {
+			this.currentDirection = currentDirection;
+			return this;
+		}
+
 		public ElevatorState get() {
-			return new ElevatorState(initialState.getCurrentFloor() + incr, opened, currentWaitingCalls, currentGoRequests);
+			return new ElevatorState(initialState.getCurrentFloor() + incr, opened, currentDirection, currentWaitingCalls, currentGoRequests);
 		}
 
 	}

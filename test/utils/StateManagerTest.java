@@ -166,4 +166,18 @@ public class StateManagerTest {
 
 		assertThat(stateManager.areThreeLastCommandEqualTo(Command.NOTHING)).isTrue();
 	}
+
+	@Test
+	public void must_store_current_direction_up() {
+		stateManager.setCurrentDirection(DOWN);
+		stateManager.setCurrentDirection(UP);
+		assertThat(stateManager.getCurrentState().getCurrentDirection()).isEqualTo(UP);
+	}
+
+	@Test
+	public void must_store_current_direction_down() {
+		stateManager.setCurrentDirection(UP);
+		stateManager.setCurrentDirection(DOWN);
+		assertThat(stateManager.getCurrentState().getCurrentDirection()).isEqualTo(DOWN);
+	}
 }

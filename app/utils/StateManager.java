@@ -68,6 +68,10 @@ public class StateManager {
 		currentState = ElevatorState.Builder.from(currentState).setClosed().get();
 	}
 
+	public void setCurrentDirection(Direction currentDirection) {
+		currentState = ElevatorState.Builder.from(currentState).setCurrentDirection(currentDirection).get();
+	}
+
 	public void storeCommandInHistory(Command command) {
 		lastCommands.add(command);
 	}
@@ -76,4 +80,5 @@ public class StateManager {
 		Command[] commands = new Command[] { command, command, command };
 		return Arrays.equals(lastCommands.toArray(), commands);
 	}
+
 }
