@@ -6,6 +6,7 @@ import static utils.Command.OPEN;
 
 import java.util.Collection;
 
+import play.Logger;
 import utils.Call;
 import utils.Command;
 import utils.StateManager;
@@ -21,25 +22,33 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 	@Override
 	public Command nextCommand() {
 		if (isOpened()) {
-			if (thereIsACallAtCurrentFloor()) {
-				return NOTHING;
+			if (thereIsACallAtCurrentFloor() && !stateManager.areThreeLastCommandEqualTo(NOTHING)) {
+				return storeCommandInHistory(NOTHING);
+			}
+			if (thereIsACallAtCurrentFloor() && stateManager.areThreeLastCommandEqualTo(NOTHING)) {
+				Logger.warn("HACK to unlock strange situation ! ...");
 			}
 			stateManager.setClosed();
-			return CLOSE;
+			return storeCommandInHistory(CLOSE);
 		}
 		if (thereIsACallAtCurrentFloor() || thereIsAGoAtCurrentFloor()) {
 			stateManager.setOpened();
-			return OPEN;
+			return storeCommandInHistory(OPEN);
 		}
 		if (thereIsAGoUpstairs() || thereIsACallUpstairs()) {
 			stateManager.incrementFloor();
-			return Command.UP;
+			return storeCommandInHistory(Command.UP);
 		}
 		if (thereIsAGoDownstairs() || thereIsACallDownstairs()) {
 			stateManager.decrementFloor();
-			return Command.DOWN;
+			return storeCommandInHistory(Command.DOWN);
 		}
-		return NOTHING;
+		return storeCommandInHistory(NOTHING);
+	}
+
+	private Command storeCommandInHistory(Command command) {
+		stateManager.storeCommandInHistory(command);
+		return command;
 	}
 
 	private boolean thereIsAGoUpstairs() {
