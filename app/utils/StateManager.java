@@ -10,8 +10,6 @@ public class StateManager {
 
 	private final FloorBoundaries floorBoundaries;
 
-	private final SizeLimitedArrayList lastCommands = new SizeLimitedArrayList(3);
-
 	public StateManager(FloorBoundaries floorBoundaries) {
 		this.floorBoundaries = floorBoundaries;
 	}
@@ -73,11 +71,11 @@ public class StateManager {
 	}
 
 	public void storeCommandInHistory(Command command) {
-		lastCommands.add(command);
+		currentState = ElevatorState.Builder.from(currentState).storeCommandInHistory(command).get();
 	}
 
 	public boolean areThreeLastCommandEqualTo(Command command) {
 		Command[] commands = new Command[] { command, command, command };
-		return Arrays.equals(lastCommands.toArray(), commands);
+		return Arrays.equals(currentState.getLastCommandsAsArray(), commands);
 	}
 }

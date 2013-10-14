@@ -26,4 +26,21 @@ public class SizeLimitedArrayListTest {
 		assertThat(sizeLimitedArrayList.toArray()).containsOnly(2, 3, 4);
 	}
 
+	@Test
+	public void setContent_must_replace_current_content() {
+		SizeLimitedArrayList<Integer> sizeLimitedArrayList = new SizeLimitedArrayList<Integer>(3);
+		sizeLimitedArrayList.add(1);
+		sizeLimitedArrayList.add(2);
+		sizeLimitedArrayList.add(3);
+
+		SizeLimitedArrayList<Integer> sizeLimitedArrayListOther = new SizeLimitedArrayList<Integer>(3);
+		sizeLimitedArrayListOther.add(7);
+		sizeLimitedArrayListOther.add(8);
+		sizeLimitedArrayListOther.add(9);
+
+		sizeLimitedArrayList.setContent(sizeLimitedArrayListOther);
+
+		assertThat(sizeLimitedArrayList.toArray()).containsOnly(7, 8, 9);
+
+	}
 }

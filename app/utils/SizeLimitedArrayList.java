@@ -1,5 +1,7 @@
 package utils;
 
+import static java.util.Arrays.asList;
+
 import java.util.ArrayList;
 
 public class SizeLimitedArrayList<E> {
@@ -25,5 +27,10 @@ public class SizeLimitedArrayList<E> {
 
 	public E[] toArray() {
 		return (E[]) list.toArray();
+	}
+
+	public void setContent(SizeLimitedArrayList<E> lastCommands) {
+		list.clear();
+		list.addAll(asList(lastCommands.toArray()));
 	}
 }

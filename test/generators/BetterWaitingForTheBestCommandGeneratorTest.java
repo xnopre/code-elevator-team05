@@ -17,6 +17,7 @@ import org.junit.Test;
 
 import utils.Command;
 import utils.Direction;
+import utils.SizeLimitedArrayList;
 import utils.StateBuilderFactory;
 import utils.StateBuilderForTest;
 import utils.StateManager;
@@ -162,7 +163,7 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 	}
 
 	private void givenAnElevatorOpened() {
-		createStateAndDoReturnItByStateManager(mockStateManager, 0, true, UP, null, null);
+		createStateAndDoReturnItByStateManager(mockStateManager, 0, true, UP, null, null, new SizeLimitedArrayList<Command>(3));
 	}
 
 	private void assertThatElevatorIsOpened() {

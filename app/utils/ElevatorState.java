@@ -21,16 +21,20 @@ public class ElevatorState {
 
 	private final Direction currentDirection;
 
+	private final SizeLimitedArrayList lastCommands = new SizeLimitedArrayList(3);
+
 	public ElevatorState() {
-		this(0, false, UP, new ArrayList<Call>(), new ArrayList<Integer>());
+		this(0, false, UP, new ArrayList<Call>(), new ArrayList<Integer>(), new SizeLimitedArrayList(3));
 	}
 
-	public ElevatorState(int floor, boolean opened, Direction currentDirection, Collection<Call> waitingCalls, Collection<Integer> goRequests) {
+	public ElevatorState(int floor, boolean opened, Direction currentDirection, Collection<Call> waitingCalls, Collection<Integer> goRequests,
+			SizeLimitedArrayList lastCommands) {
 		currentFloor = floor;
 		this.opened = opened;
 		this.currentDirection = currentDirection;
 		this.waitingCalls = newArrayList(waitingCalls);
 		this.goRequests = newArrayList(goRequests);
+		this.lastCommands.setContent(lastCommands);
 	}
 
 	public Collection<Call> getWaitingCalls() {
@@ -57,12 +61,18 @@ public class ElevatorState {
 		return currentDirection;
 	}
 
+	public Object[] getLastCommandsAsArray() {
+		return lastCommands.toArray();
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((currentDirection == null) ? 0 : currentDirection.hashCode());
 		result = prime * result + currentFloor;
 		result = prime * result + ((goRequests == null) ? 0 : goRequests.hashCode());
+		result = prime * result + ((lastCommands == null) ? 0 : lastCommands.hashCode());
 		result = prime * result + (opened ? 1231 : 1237);
 		result = prime * result + ((waitingCalls == null) ? 0 : waitingCalls.hashCode());
 		return result;
@@ -80,6 +90,9 @@ public class ElevatorState {
 			return false;
 		}
 		ElevatorState other = (ElevatorState) obj;
+		if (currentDirection != other.currentDirection) {
+			return false;
+		}
 		if (currentFloor != other.currentFloor) {
 			return false;
 		}
@@ -88,6 +101,13 @@ public class ElevatorState {
 				return false;
 			}
 		} else if (!goRequests.equals(other.goRequests)) {
+			return false;
+		}
+		if (lastCommands == null) {
+			if (other.lastCommands != null) {
+				return false;
+			}
+		} else if (!lastCommands.equals(other.lastCommands)) {
 			return false;
 		}
 		if (opened != other.opened) {
@@ -116,6 +136,7 @@ public class ElevatorState {
 		private final List<Call> currentWaitingCalls;
 		private final List<Integer> currentGoRequests;
 		private Direction currentDirection;
+		private final SizeLimitedArrayList lastCommands = new SizeLimitedArrayList(3);
 
 		private Builder(ElevatorState state) {
 			this.initialState = state;
@@ -123,6 +144,7 @@ public class ElevatorState {
 			this.currentDirection = state.getCurrentDirection();
 			currentWaitingCalls = newArrayList(state.getWaitingCalls());
 			currentGoRequests = newArrayList(state.getGoRequests());
+			lastCommands.setContent(state.lastCommands);
 		}
 
 		public static Builder from(ElevatorState state) {
@@ -177,8 +199,13 @@ public class ElevatorState {
 			return this;
 		}
 
+		public Builder storeCommandInHistory(Command command) {
+			lastCommands.add(command);
+			return this;
+		}
+
 		public ElevatorState get() {
-			return new ElevatorState(initialState.getCurrentFloor() + incr, opened, currentDirection, currentWaitingCalls, currentGoRequests);
+			return new ElevatorState(initialState.getCurrentFloor() + incr, opened, currentDirection, currentWaitingCalls, currentGoRequests, lastCommands);
 		}
 
 	}

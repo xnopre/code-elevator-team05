@@ -20,6 +20,8 @@ public class StateBuilderForTest {
 
 	private Integer[] floorsToGo;
 
+	private final SizeLimitedArrayList<Command> lastCommands = new SizeLimitedArrayList<Command>(3);
+
 	public StateBuilderForTest(StateManager mockStateManager, int floor, boolean opened) {
 		this.mockStateManager = mockStateManager;
 		this.floor = floor;
@@ -46,13 +48,13 @@ public class StateBuilderForTest {
 	}
 
 	public void build() {
-		createStateAndDoReturnItByStateManager(mockStateManager, floor, opened, direction, calls, floorsToGo);
+		createStateAndDoReturnItByStateManager(mockStateManager, floor, opened, direction, calls, floorsToGo, lastCommands);
 	}
 
 	public static void createStateAndDoReturnItByStateManager(StateManager mockStateManager, int floor, boolean opened, Direction direction, Call[] calls,
-			Integer[] floorsToGo) {
+			Integer[] floorsToGo, SizeLimitedArrayList lastCommands) {
 		final ElevatorState state = new ElevatorState(floor, opened, direction, calls != null ? newArrayList(calls) : new ArrayList<Call>(),
-				floorsToGo != null ? newArrayList(floorsToGo) : new ArrayList<Integer>());
+				floorsToGo != null ? newArrayList(floorsToGo) : new ArrayList<Integer>(), lastCommands);
 		when(mockStateManager.getCurrentState()).thenReturn(state);
 
 	}
