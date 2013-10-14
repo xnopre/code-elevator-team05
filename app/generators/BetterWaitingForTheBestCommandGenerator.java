@@ -34,7 +34,8 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 			stateManager.setClosed();
 			return storeCommandInHistory(CLOSE);
 		}
-		if (thereIsACallAtCurrentFloorMatchingCurrentDirection() || thereIsAGoAtCurrentFloor()) {
+		if (thereIsACallAtCurrentFloorMatchingCurrentDirection() || thereIsACallAtCurrentFloorAndNoOtherCallsOrGoMatchingCurrentDirection()
+				|| thereIsAGoAtCurrentFloor()) {
 			stateManager.setOpened();
 			return storeCommandInHistory(OPEN);
 		}
@@ -134,8 +135,43 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 		return false;
 	}
 
+	private boolean thereIsACallAtCurrentFloorAndNoOtherCallsOrGoMatchingCurrentDirection() {
+		boolean thereIsACallAtCurrentFloor = false;
+		boolean thereIsACallAtAnotherFloorMatchingCurrentDirection = false;
+		boolean thereIsAGoAtAnotherFloorMatchingCurrentDirection = false;
+		for (Call call : stateManager.getCurrentState().getWaitingCalls()) {
+			if (isSameFloorThantCurrentFloor(call)) {
+				thereIsACallAtCurrentFloor = true;
+			} else if (needSameDirectionThanCurrentDirection(call)) {
+				thereIsACallAtAnotherFloorMatchingCurrentDirection = true;
+			}
+		}
+		for (Integer goRequest : stateManager.getCurrentState().getGoRequests()) {
+			if (isNotSameFloorThantCurrentFloor(goRequest) && needSameDirectionThanCurrentDirection(goRequest)) {
+				thereIsAGoAtAnotherFloorMatchingCurrentDirection = true;
+			}
+		}
+		return thereIsACallAtCurrentFloor && !thereIsACallAtAnotherFloorMatchingCurrentDirection && !thereIsAGoAtAnotherFloorMatchingCurrentDirection;
+	}
+
+	private boolean needSameDirectionThanCurrentDirection(Integer goRequest) {
+		return evaluateDirectionFromCurrentFloorTo(goRequest) == stateManager.getCurrentState().getCurrentDirection();
+	}
+
+	private boolean needSameDirectionThanCurrentDirection(Call call) {
+		return evaluateDirectionFromCurrentFloorTo(call.floor) == stateManager.getCurrentState().getCurrentDirection();
+	}
+
+	private Direction evaluateDirectionFromCurrentFloorTo(int floor) {
+		return floor > stateManager.getCurrentState().getCurrentFloor() ? UP : DOWN;
+	}
+
 	private boolean isSameDirectionThanCurrentDirection(Call call) {
 		return call.direction == stateManager.getCurrentState().getCurrentDirection();
+	}
+
+	private boolean isNotSameFloorThantCurrentFloor(Integer goRequest) {
+		return goRequest != stateManager.getCurrentState().getCurrentFloor();
 	}
 
 	private boolean isSameFloorThantCurrentFloor(Call call) {
