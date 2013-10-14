@@ -33,4 +33,9 @@ public class SizeLimitedArrayList<E> {
 		list.clear();
 		list.addAll(asList(lastCommands.toArray()));
 	}
+
+	@Override
+	public String toString() {
+		return "SizeLimitedArrayList[" + list.toString() + "]";
+	}
 }

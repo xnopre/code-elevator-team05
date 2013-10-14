@@ -5,6 +5,7 @@ Etat courant :
 <ul>
 	<li>Etage courant : ${currentState.currentFloor}</li>
 	<li>${currentState.opened ? "Ouvert" : "Fermé"}</li>
+	<li>Direction courante : ${currentState.currentDirection}</li>
 	<li>Appels en attente (floor - direction):</li>
 	<ul>
 		#{list items:currentState.waitingCalls, as:'call' }
@@ -17,4 +18,11 @@ Etat courant :
 		        <li>${go}</li>
 		#{/list}
 	</ul>
+	<li>Dernières commandes : </li>
+	<ul>
+		#{list items:currentState.lastCommands.toArray(), as:'lastCommand' }
+		        <li>${lastCommand}</li>
+		#{/list}
+	</ul>
 </ul>
+<i>${currentState.toString()}</i>
