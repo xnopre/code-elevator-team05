@@ -6,6 +6,7 @@ import play.Logger;
 import play.mvc.Controller;
 import utils.Command;
 import utils.Direction;
+import utils.ElevatorException;
 import utils.ElevatorState;
 import utils.FloorBoundaries;
 import utils.StateManager;
@@ -53,7 +54,11 @@ public class Application extends Controller {
 	public static void go(int floorToGo) {
 		synchronized (monitor) {
 			Logger.info("Request received go(" + floorToGo + ")");
-			waitingCallRemover.removeOneCallFromCurrentFloorToGoAtFloor(floorToGo);
+			try {
+				waitingCallRemover.removeOneCallFromCurrentFloorToGoAtFloor(floorToGo);
+			} catch (ElevatorException e) {
+				Logger.warn("Error processing 'go' : " + e.getMessage());
+			}
 			stateManager.storeGoRequest(floorToGo);
 			Logger.info("    After go(" + floorToGo + ") : " + stateManager.getCurrentState());
 			ok();

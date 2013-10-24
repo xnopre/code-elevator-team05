@@ -19,7 +19,7 @@ public class WaitingCallRemover {
 		this.statemanager = statemanager;
 	}
 
-	public void removeOneCallFromCurrentFloorToGoAtFloor(final int floorToGo) {
+	public void removeOneCallFromCurrentFloorToGoAtFloor(final int floorToGo) throws ElevatorException {
 
 		final Collection<Call> matchedCalls = Collections2.filter(statemanager.getCurrentState().getWaitingCalls(), new Predicate<Call>() {
 
@@ -45,6 +45,8 @@ public class WaitingCallRemover {
 		if (iterator.hasNext()) {
 			final Call call = iterator.next();
 			statemanager.removeWaitingCall(call.floor, call.direction);
+		} else {
+			throw new ElevatorException("No call found for floor " + floorToGo);
 		}
 	}
 }
