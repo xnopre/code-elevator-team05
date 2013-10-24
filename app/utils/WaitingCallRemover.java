@@ -31,13 +31,9 @@ public class WaitingCallRemover {
 		});
 
 		final Iterator<Call> iterator = matchedCalls.iterator();
-		if (iterator.hasNext()) {
-			while (iterator.hasNext()) {
-				final Call call = iterator.next();
-				statemanager.removeWaitingCall(call.floor, call.direction);
-			}
-		} else {
-			throw new ElevatorException("No call found for current floor");
+		while (iterator.hasNext()) {
+			final Call call = iterator.next();
+			statemanager.removeWaitingCall(call.floor, call.direction);
 		}
 	}
 }
