@@ -1,8 +1,5 @@
 package utils;
 
-import static utils.Direction.DOWN;
-import static utils.Direction.UP;
-
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -19,34 +16,28 @@ public class WaitingCallRemover {
 		this.statemanager = statemanager;
 	}
 
-	public void removeOneCallFromCurrentFloorToGoAtFloor(final int floorToGo) throws ElevatorException {
+	public void removeAllCallsFromTheCurrentFloor() {
 
 		final Collection<Call> matchedCalls = Collections2.filter(statemanager.getCurrentState().getWaitingCalls(), new Predicate<Call>() {
 
 			@Override
 			public boolean apply(@Nullable Call call) {
-				return callWasMadeFromCurrentFloor(call) && callMatchesDirectionWithFloorToGo(call);
-			}
-
-			private boolean callMatchesDirectionWithFloorToGo(Call call) {
-				return call.direction == calculateDirectionForFloorToGo();
+				return callWasMadeFromCurrentFloor(call);
 			}
 
 			private boolean callWasMadeFromCurrentFloor(Call call) {
 				return call.floor == statemanager.getCurrentState().getCurrentFloor();
 			}
-
-			private Direction calculateDirectionForFloorToGo() {
-				return floorToGo < statemanager.getCurrentState().getCurrentFloor() ? DOWN : UP;
-			}
 		});
 
 		final Iterator<Call> iterator = matchedCalls.iterator();
 		if (iterator.hasNext()) {
-			final Call call = iterator.next();
-			statemanager.removeWaitingCall(call.floor, call.direction);
+			while (iterator.hasNext()) {
+				final Call call = iterator.next();
+				statemanager.removeWaitingCall(call.floor, call.direction);
+			}
 		} else {
-			throw new ElevatorException("No call found for floor " + floorToGo);
+			throw new ElevatorException("No call found for current floor");
 		}
 	}
 }

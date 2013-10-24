@@ -106,10 +106,11 @@ public class StateManagerTest {
 	@Test
 	public void ensure_that_only_one_matching_call_is_removed() {
 		stateManager.storeWaitingCall(3, DOWN);
+		stateManager.storeWaitingCall(3, DOWN);
 		stateManager.storeWaitingCall(3, UP);
 
 		stateManager.removeWaitingCall(3, DOWN);
-		assertThat(stateManager.getCurrentState().getWaitingCalls()).containsOnly(new Call(3, UP));
+		assertThat(stateManager.getCurrentState().getWaitingCalls()).containsOnly(new Call(3, DOWN), new Call(3, UP));
 	}
 
 	@Test

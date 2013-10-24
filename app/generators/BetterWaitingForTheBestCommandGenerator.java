@@ -13,13 +13,16 @@ import utils.Call;
 import utils.Command;
 import utils.Direction;
 import utils.StateManager;
+import utils.WaitingCallRemover;
 
 public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator {
 
 	private final StateManager stateManager;
+	private final WaitingCallRemover waitingCallRemover;
 
-	public BetterWaitingForTheBestCommandGenerator(StateManager stateManager) {
+	public BetterWaitingForTheBestCommandGenerator(StateManager stateManager, WaitingCallRemover waitingCallRemover) {
 		this.stateManager = stateManager;
+		this.waitingCallRemover = waitingCallRemover;
 	}
 
 	@Override
@@ -37,6 +40,7 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 		if (thereIsACallAtCurrentFloorMatchingCurrentDirection() || thereIsACallAtCurrentFloorAndNoOtherCallsOrGoMatchingCurrentDirection()
 				|| thereIsAGoAtCurrentFloor()) {
 			stateManager.setOpened();
+			waitingCallRemover.removeAllCallsFromTheCurrentFloor();
 			return storeCommandInHistory(OPEN);
 		}
 		if (isCurrentDirectionIs(UP)) {
@@ -62,6 +66,10 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 			}
 		}
 		return storeCommandInHistory(NOTHING);
+	}
+
+	private int getCurrentFloor() {
+		return stateManager.getCurrentState().getCurrentFloor();
 	}
 
 	private boolean isCurrentDirectionIs(Direction direction) {

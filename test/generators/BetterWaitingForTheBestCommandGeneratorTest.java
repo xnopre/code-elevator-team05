@@ -21,12 +21,16 @@ import utils.SizeLimitedArrayList;
 import utils.StateBuilderFactory;
 import utils.StateBuilderForTest;
 import utils.StateManager;
+import utils.WaitingCallRemover;
 
 public class BetterWaitingForTheBestCommandGeneratorTest {
 
 	private final StateManager mockStateManager = mock(StateManager.class);
 
-	private final BetterWaitingForTheBestCommandGenerator commandGenerator = new BetterWaitingForTheBestCommandGenerator(mockStateManager);
+	private final WaitingCallRemover mockWaitingCallRemover = mock(WaitingCallRemover.class);
+
+	private final BetterWaitingForTheBestCommandGenerator commandGenerator = new BetterWaitingForTheBestCommandGenerator(mockStateManager,
+			mockWaitingCallRemover);
 
 	private final StateBuilderFactory stateBuilderFactory = new StateBuilderFactory(mockStateManager);
 
@@ -50,6 +54,7 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 		final Command nextCommand = commandGenerator.nextCommand();
 		assertThat(nextCommand).is(OPEN).andIsStoredInHistory();
 		assertThatElevatorIsOpened();
+		assertThatAllTheCallsForTheCurrentFloorAreRemoved(1);
 	}
 
 	@Test
@@ -58,6 +63,7 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 		final Command nextCommand = commandGenerator.nextCommand();
 		assertThat(nextCommand).is(OPEN).andIsStoredInHistory();
 		assertThatElevatorIsOpened();
+		assertThatAllTheCallsForTheCurrentFloorAreRemoved(4);
 	}
 
 	@Test
@@ -65,6 +71,7 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 		givenAnElevatorClosedAtFloor(1).andWaitingCalls(call(2, UP), call(1, UP)).build();
 		final Command nextCommand = commandGenerator.nextCommand();
 		assertThat(nextCommand).is(OPEN).andIsStoredInHistory();
+		assertThatAllTheCallsForTheCurrentFloorAreRemoved(1);
 	}
 
 	@Test
@@ -72,6 +79,7 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 		givenAnElevatorClosedAtFloor(4).andGoRequests(4).build();
 		final Command nextCommand = commandGenerator.nextCommand();
 		assertThat(nextCommand).is(OPEN).andIsStoredInHistory();
+		assertThatAllTheCallsForTheCurrentFloorAreRemoved(4);
 	}
 
 	@Test
@@ -194,6 +202,10 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 
 	private void assertThatCurrentDirectionIsSetTo(Direction direction) {
 		verify(mockStateManager).setCurrentDirection(direction);
+	}
+
+	private void assertThatAllTheCallsForTheCurrentFloorAreRemoved(int currentFloor) {
+		verify(mockWaitingCallRemover).removeAllCallsFromTheCurrentFloor();
 	}
 
 	private MyAssert assertThat(Command command) {
