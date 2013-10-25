@@ -9,15 +9,15 @@ import utils.Direction;
 import utils.ElevatorState;
 import utils.FloorBoundaries;
 import utils.StateManager;
-import utils.WaitingCallRemover;
+import utils.WaitingCallAndGoRemover;
 
 public class Application extends Controller {
 
 	private static final Object monitor = new Object();
 
 	private static final StateManager stateManager = new StateManager(new FloorBoundaries(0, 5));
-	private static final WaitingCallRemover waitingCallRemover = new WaitingCallRemover(stateManager);
-	private static final CommandGenerator elevatorCommandGenerator = new BetterWaitingForTheBestCommandGenerator(stateManager, waitingCallRemover);
+	private static final WaitingCallAndGoRemover waitingCallAndGoRemover = new WaitingCallAndGoRemover(stateManager);
+	private static final CommandGenerator elevatorCommandGenerator = new BetterWaitingForTheBestCommandGenerator(stateManager, waitingCallAndGoRemover);
 
 	public static void index() {
 		synchronized (monitor) {
@@ -74,7 +74,7 @@ public class Application extends Controller {
 	public static void userHasExited() {
 		synchronized (monitor) {
 			Logger.info("Request received 'userHasExited'");
-			stateManager.removeGoRequest(stateManager.getCurrentState().getCurrentFloor());
+			// stateManager.removeGoRequest(stateManager.getCurrentState().getCurrentFloor());
 			Logger.info("    After 'userHasExited' : " + stateManager.getCurrentState());
 			ok();
 		}

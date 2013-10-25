@@ -13,16 +13,16 @@ import utils.Call;
 import utils.Command;
 import utils.Direction;
 import utils.StateManager;
-import utils.WaitingCallRemover;
+import utils.WaitingCallAndGoRemover;
 
 public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator {
 
 	private final StateManager stateManager;
-	private final WaitingCallRemover waitingCallRemover;
+	private final WaitingCallAndGoRemover waitingCallAndGoRemover;
 
-	public BetterWaitingForTheBestCommandGenerator(StateManager stateManager, WaitingCallRemover waitingCallRemover) {
+	public BetterWaitingForTheBestCommandGenerator(StateManager stateManager, WaitingCallAndGoRemover waitingCallAndGoRemover) {
 		this.stateManager = stateManager;
-		this.waitingCallRemover = waitingCallRemover;
+		this.waitingCallAndGoRemover = waitingCallAndGoRemover;
 	}
 
 	@Override
@@ -40,7 +40,8 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 		if (thereIsACallAtCurrentFloorMatchingCurrentDirection() || thereIsACallAtCurrentFloorAndNoOtherCallsOrGoMatchingCurrentDirection()
 				|| thereIsAGoAtCurrentFloor()) {
 			stateManager.setOpened();
-			waitingCallRemover.removeAllCallsFromTheCurrentFloor();
+			waitingCallAndGoRemover.removeAllCallsFromTheCurrentFloor();
+			waitingCallAndGoRemover.removeAllGosFromTheCurrentFloor();
 			return storeCommandInHistory(OPEN);
 		}
 		if (isCurrentDirectionIs(UP)) {

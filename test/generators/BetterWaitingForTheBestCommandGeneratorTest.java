@@ -21,16 +21,16 @@ import utils.SizeLimitedArrayList;
 import utils.StateBuilderFactory;
 import utils.StateBuilderForTest;
 import utils.StateManager;
-import utils.WaitingCallRemover;
+import utils.WaitingCallAndGoRemover;
 
 public class BetterWaitingForTheBestCommandGeneratorTest {
 
 	private final StateManager mockStateManager = mock(StateManager.class);
 
-	private final WaitingCallRemover mockWaitingCallRemover = mock(WaitingCallRemover.class);
+	private final WaitingCallAndGoRemover mockWaitingCallAndGoRemover = mock(WaitingCallAndGoRemover.class);
 
 	private final BetterWaitingForTheBestCommandGenerator commandGenerator = new BetterWaitingForTheBestCommandGenerator(mockStateManager,
-			mockWaitingCallRemover);
+			mockWaitingCallAndGoRemover);
 
 	private final StateBuilderFactory stateBuilderFactory = new StateBuilderFactory(mockStateManager);
 
@@ -54,7 +54,7 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 		final Command nextCommand = commandGenerator.nextCommand();
 		assertThat(nextCommand).is(OPEN).andIsStoredInHistory();
 		assertThatElevatorIsOpened();
-		assertThatAllTheCallsForTheCurrentFloorAreRemoved(1);
+		assertThatAllTheCallsAndGosForTheCurrentFloorAreRemoved(1);
 	}
 
 	@Test
@@ -63,7 +63,7 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 		final Command nextCommand = commandGenerator.nextCommand();
 		assertThat(nextCommand).is(OPEN).andIsStoredInHistory();
 		assertThatElevatorIsOpened();
-		assertThatAllTheCallsForTheCurrentFloorAreRemoved(4);
+		assertThatAllTheCallsAndGosForTheCurrentFloorAreRemoved(4);
 	}
 
 	@Test
@@ -71,7 +71,7 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 		givenAnElevatorClosedAtFloor(1).andWaitingCalls(call(2, UP), call(1, UP)).build();
 		final Command nextCommand = commandGenerator.nextCommand();
 		assertThat(nextCommand).is(OPEN).andIsStoredInHistory();
-		assertThatAllTheCallsForTheCurrentFloorAreRemoved(1);
+		assertThatAllTheCallsAndGosForTheCurrentFloorAreRemoved(1);
 	}
 
 	@Test
@@ -79,7 +79,7 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 		givenAnElevatorClosedAtFloor(4).andGoRequests(4).build();
 		final Command nextCommand = commandGenerator.nextCommand();
 		assertThat(nextCommand).is(OPEN).andIsStoredInHistory();
-		assertThatAllTheCallsForTheCurrentFloorAreRemoved(4);
+		assertThatAllTheCallsAndGosForTheCurrentFloorAreRemoved(4);
 	}
 
 	@Test
@@ -204,8 +204,9 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 		verify(mockStateManager).setCurrentDirection(direction);
 	}
 
-	private void assertThatAllTheCallsForTheCurrentFloorAreRemoved(int currentFloor) {
-		verify(mockWaitingCallRemover).removeAllCallsFromTheCurrentFloor();
+	private void assertThatAllTheCallsAndGosForTheCurrentFloorAreRemoved(int currentFloor) {
+		verify(mockWaitingCallAndGoRemover).removeAllCallsFromTheCurrentFloor();
+		verify(mockWaitingCallAndGoRemover).removeAllGosFromTheCurrentFloor();
 	}
 
 	private MyAssert assertThat(Command command) {

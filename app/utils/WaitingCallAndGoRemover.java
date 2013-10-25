@@ -8,11 +8,11 @@ import javax.annotation.Nullable;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
-public class WaitingCallRemover {
+public class WaitingCallAndGoRemover {
 
 	private final StateManager statemanager;
 
-	public WaitingCallRemover(StateManager statemanager) {
+	public WaitingCallAndGoRemover(StateManager statemanager) {
 		this.statemanager = statemanager;
 	}
 
@@ -34,6 +34,26 @@ public class WaitingCallRemover {
 		while (iterator.hasNext()) {
 			final Call call = iterator.next();
 			statemanager.removeWaitingCall(call.floor, call.direction);
+		}
+	}
+
+	public void removeAllGosFromTheCurrentFloor() {
+		final Collection<Integer> matchedGos = Collections2.filter(statemanager.getCurrentState().getGoRequests(), new Predicate<Integer>() {
+
+			@Override
+			public boolean apply(@Nullable Integer go) {
+				return goWasMadeForCurrentFloor(go);
+			}
+
+			private boolean goWasMadeForCurrentFloor(Integer go) {
+				return go == statemanager.getCurrentState().getCurrentFloor();
+			}
+		});
+
+		final Iterator<Integer> iterator = matchedGos.iterator();
+		while (iterator.hasNext()) {
+			final Integer go = iterator.next();
+			statemanager.removeGoRequest(go);
 		}
 	}
 }
