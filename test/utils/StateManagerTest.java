@@ -68,13 +68,10 @@ public class StateManagerTest {
 
 	@Test(expected = UnreachableFloorException.class)
 	public void ensure_cant_go_up_last_floor() {
+		for (int i = 0; i < 19; i++) {
+			stateManager.incrementFloor();
+		}
 		stateManager.incrementFloor();
-		stateManager.incrementFloor();
-		stateManager.incrementFloor();
-		stateManager.incrementFloor();
-		stateManager.incrementFloor();
-		stateManager.incrementFloor();
-
 	}
 
 	@Test

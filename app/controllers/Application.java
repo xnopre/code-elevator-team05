@@ -15,7 +15,7 @@ public class Application extends Controller {
 
 	private static final Object monitor = new Object();
 
-	private static final StateManager stateManager = new StateManager(new FloorBoundaries(0, 5));
+	private static final StateManager stateManager = new StateManager(new FloorBoundaries(0, 19));
 	private static final WaitingCallAndGoRemover waitingCallAndGoRemover = new WaitingCallAndGoRemover(stateManager);
 	private static final CommandGenerator elevatorCommandGenerator = new BetterWaitingForTheBestCommandGenerator(stateManager, waitingCallAndGoRemover);
 
