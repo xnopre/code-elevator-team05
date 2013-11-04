@@ -11,7 +11,7 @@ import org.junit.Test;
 
 public class StateManagerTest {
 
-	private final StateManager stateManager = new StateManager(new FloorBoundaries(0, 5));
+	private final StateManager stateManager = new StateManager(new FloorBoundaries(0, 19));
 
 	@Test
 	public void call_must_store_last_call() {
