@@ -11,7 +11,7 @@ import org.junit.Test;
 
 public class StateManagerTest {
 
-	private final StateManager stateManager = new StateManager(new FloorBoundaries(0, 5));
+	private final StateManager stateManager = new StateManager(new FloorBoundaries(0, 19));
 
 	@Test
 	public void call_must_store_last_call() {
@@ -68,13 +68,10 @@ public class StateManagerTest {
 
 	@Test(expected = UnreachableFloorException.class)
 	public void ensure_cant_go_up_last_floor() {
+		for (int i = 0; i < 19; i++) {
+			stateManager.incrementFloor();
+		}
 		stateManager.incrementFloor();
-		stateManager.incrementFloor();
-		stateManager.incrementFloor();
-		stateManager.incrementFloor();
-		stateManager.incrementFloor();
-		stateManager.incrementFloor();
-
 	}
 
 	@Test
