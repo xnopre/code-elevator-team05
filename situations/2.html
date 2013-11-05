@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)http://code-elevator-team05.herokuapp.com/state -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>State</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" media="screen" href="http://code-elevator-team05.herokuapp.com/public/stylesheets/main.css">
+                <link rel="shortcut icon" type="image/png" href="http://code-elevator-team05.herokuapp.com/public/images/favicon.png">
+        <script src="./2_files/jquery-1.6.4.min.js" type="text/javascript" charset="utf-8"></script>
+            </head>
+    <body>
+        
+Etat courant :
+<ul>
+	<li>Etage courant : 2</li>
+	<li>Fermé</li>
+	<li>Direction courante : DOWN</li>
+	<li>Appels en attente (floor - direction):</li>
+	<ul>
+				        <li>1 - DOWN</li>
+				        <li>1 - UP</li>
+				        <li>0 - UP</li>
+				        <li>1 - DOWN</li>
+				        <li>1 - UP</li>
+				        <li>1 - UP</li>
+				        <li>1 - UP</li>
+				        <li>0 - UP</li>
+				        <li>0 - UP</li>
+				        <li>0 - UP</li>
+				        <li>0 - UP</li>
+				        <li>0 - UP</li>
+				        <li>1 - UP</li>
+				        <li>0 - UP</li>
+				        <li>1 - UP</li>
+				        <li>0 - UP</li>
+				        <li>1 - UP</li>
+				        <li>1 - UP</li>
+				        <li>1 - UP</li>
+				        <li>1 - UP</li>
+				        <li>18 - DOWN</li>
+				        <li>19 - DOWN</li>
+				        <li>1 - UP</li>
+				        <li>0 - UP</li>
+				        <li>19 - DOWN</li>
+				        <li>19 - DOWN</li>
+				        <li>18 - DOWN</li>
+				        <li>18 - DOWN</li>
+				        <li>15 - DOWN</li>
+				        <li>15 - DOWN</li>
+				        <li>1 - UP</li>
+				        <li>14 - DOWN</li>
+				        <li>16 - DOWN</li>
+				        <li>14 - UP</li>
+				        <li>19 - DOWN</li>
+				        <li>19 - DOWN</li>
+				        <li>15 - UP</li>
+				        <li>1 - UP</li>
+				        <li>18 - DOWN</li>
+				        <li>19 - DOWN</li>
+				        <li>15 - DOWN</li>
+				        <li>1 - UP</li>
+				        <li>0 - UP</li>
+				        <li>19 - DOWN</li>
+				        <li>16 - DOWN</li>
+				        <li>19 - DOWN</li>
+				        <li>17 - DOWN</li>
+				        <li>13 - DOWN</li>
+				        <li>18 - DOWN</li>
+				        <li>19 - DOWN</li>
+				        <li>18 - DOWN</li>
+				        <li>16 - DOWN</li>
+				        <li>19 - DOWN</li>
+				        <li>19 - DOWN</li>
+				        <li>16 - DOWN</li>
+				        <li>19 - DOWN</li>
+				        <li>0 - UP</li>
+				        <li>15 - DOWN</li>
+				        <li>0 - UP</li>
+				        <li>12 - DOWN</li>
+				        <li>1 - UP</li>
+				        <li>19 - DOWN</li>
+				        <li>16 - DOWN</li>
+				        <li>15 - DOWN</li>
+				        <li>16 - DOWN</li>
+				        <li>13 - DOWN</li>
+				        <li>17 - DOWN</li>
+				        <li>17 - DOWN</li>
+				        <li>18 - DOWN</li>
+				        <li>1 - UP</li>
+				        <li>14 - DOWN</li>
+				        <li>13 - DOWN</li>
+				        <li>18 - DOWN</li>
+				        <li>11 - UP</li>
+				        <li>1 - UP</li>
+				        <li>12 - DOWN</li>
+				        <li>1 - UP</li>
+				        <li>16 - DOWN</li>
+				        <li>18 - DOWN</li>
+				        <li>0 - UP</li>
+				        <li>9 - UP</li>
+				        <li>18 - DOWN</li>
+				        <li>14 - UP</li>
+				        <li>0 - UP</li>
+				        <li>0 - UP</li>
+				        <li>16 - UP</li>
+				        <li>0 - UP</li>
+				        <li>12 - UP</li>
+				        <li>11 - UP</li>
+				        <li>12 - DOWN</li>
+				        <li>13 - DOWN</li>
+				        <li>0 - UP</li>
+				        <li>12 - UP</li>
+				        <li>7 - DOWN</li>
+				        <li>13 - UP</li>
+				        <li>12 - DOWN</li>
+				        <li>0 - UP</li>
+				        <li>11 - UP</li>
+				        <li>9 - UP</li>
+				        <li>19 - DOWN</li>
+				        <li>17 - DOWN</li>
+				        <li>17 - DOWN</li>
+				        <li>19 - DOWN</li>
+				        <li>13 - DOWN</li>
+				        <li>6 - UP</li>
+				        <li>13 - UP</li>
+				        <li>14 - DOWN</li>
+				        <li>5 - DOWN</li>
+				        <li>10 - UP</li>
+				        <li>18 - DOWN</li>
+				        <li>13 - DOWN</li>
+				        <li>6 - UP</li>
+				        <li>14 - DOWN</li>
+				        <li>6 - UP</li>
+				        <li>18 - DOWN</li>
+				        <li>18 - DOWN</li>
+				        <li>4 - UP</li>
+				        <li>8 - DOWN</li>
+				        <li>6 - UP</li>
+				        <li>10 - UP</li>
+				        <li>9 - DOWN</li>
+				        <li>6 - UP</li>
+				        <li>17 - DOWN</li>
+				        <li>11 - UP</li>
+				        <li>17 - DOWN</li>
+				        <li>19 - DOWN</li>
+				        <li>15 - DOWN</li>
+				        <li>17 - DOWN</li>
+				        <li>14 - UP</li>
+				        <li>6 - DOWN</li>
+				        <li>17 - DOWN</li>
+				        <li>2 - UP</li>
+			</ul>
+	<li>Go en cours (floor):</li>
+	<ul>
+				        <li>1</li>
+				        <li>0</li>
+				        <li>0</li>
+				        <li>1</li>
+				        <li>1</li>
+				        <li>1</li>
+				        <li>1</li>
+				        <li>0</li>
+				        <li>1</li>
+				        <li>0</li>
+				        <li>1</li>
+				        <li>0</li>
+				        <li>1</li>
+				        <li>0</li>
+				        <li>1</li>
+				        <li>0</li>
+				        <li>1</li>
+				        <li>16</li>
+				        <li>18</li>
+				        <li>0</li>
+				        <li>15</li>
+				        <li>19</li>
+				        <li>18</li>
+				        <li>18</li>
+				        <li>17</li>
+				        <li>16</li>
+				        <li>17</li>
+				        <li>19</li>
+				        <li>14</li>
+				        <li>11</li>
+				        <li>16</li>
+				        <li>15</li>
+				        <li>14</li>
+				        <li>0</li>
+				        <li>15</li>
+				        <li>16</li>
+				        <li>0</li>
+				        <li>13</li>
+				        <li>1</li>
+				        <li>19</li>
+				        <li>18</li>
+				        <li>16</li>
+				        <li>1</li>
+				        <li>16</li>
+				        <li>15</li>
+				        <li>19</li>
+				        <li>19</li>
+				        <li>18</li>
+				        <li>0</li>
+				        <li>16</li>
+				        <li>9</li>
+				        <li>14</li>
+				        <li>14</li>
+				        <li>13</li>
+				        <li>10</li>
+				        <li>18</li>
+				        <li>1</li>
+				        <li>1</li>
+				        <li>0</li>
+				        <li>8</li>
+				        <li>0</li>
+				        <li>12</li>
+				        <li>14</li>
+				        <li>10</li>
+				        <li>18</li>
+				        <li>10</li>
+				        <li>17</li>
+				        <li>11</li>
+				        <li>12</li>
+				        <li>7</li>
+				        <li>13</li>
+				        <li>16</li>
+				        <li>8</li>
+				        <li>12</li>
+				        <li>14</li>
+				        <li>0</li>
+				        <li>8</li>
+				        <li>18</li>
+				        <li>11</li>
+				        <li>16</li>
+				        <li>17</li>
+				        <li>19</li>
+				        <li>10</li>
+				        <li>19</li>
+				        <li>6</li>
+				        <li>17</li>
+				        <li>1</li>
+				        <li>14</li>
+				        <li>10</li>
+				        <li>0</li>
+				        <li>1</li>
+				        <li>7</li>
+				        <li>11</li>
+				        <li>13</li>
+				        <li>6</li>
+				        <li>6</li>
+				        <li>19</li>
+				        <li>8</li>
+				        <li>14</li>
+				        <li>5</li>
+				        <li>1</li>
+				        <li>14</li>
+				        <li>15</li>
+				        <li>1</li>
+				        <li>19</li>
+				        <li>14</li>
+				        <li>0</li>
+				        <li>17</li>
+				        <li>16</li>
+				        <li>18</li>
+				        <li>9</li>
+				        <li>13</li>
+				        <li>10</li>
+				        <li>5</li>
+				        <li>18</li>
+				        <li>7</li>
+				        <li>17</li>
+				        <li>11</li>
+				        <li>6</li>
+				        <li>1</li>
+				        <li>14</li>
+				        <li>5</li>
+				        <li>17</li>
+				        <li>6</li>
+				        <li>6</li>
+				        <li>6</li>
+				        <li>16</li>
+				        <li>11</li>
+				        <li>16</li>
+				        <li>1</li>
+				        <li>7</li>
+				        <li>10</li>
+				        <li>16</li>
+				        <li>11</li>
+				        <li>19</li>
+				        <li>3</li>
+				        <li>6</li>
+			</ul>
+	<li>Dernières commandes : </li>
+	<ul>
+				        <li>DOWN</li>
+				        <li>OPEN</li>
+				        <li>CLOSE</li>
+			</ul>
+</ul>
+<i>utils.ElevatorState@6cf29b5c[currentFloor=2,waitingCalls=[ElevatorCall[floor=1, direction=DOWN], ElevatorCall[floor=1, direction=UP], ElevatorCall[floor=0, direction=UP], ElevatorCall[floor=1, direction=DOWN], ElevatorCall[floor=1, direction=UP], ElevatorCall[floor=1, direction=UP], ElevatorCall[floor=1, direction=UP], ElevatorCall[floor=0, direction=UP], ElevatorCall[floor=0, direction=UP], ElevatorCall[floor=0, direction=UP], ElevatorCall[floor=0, direction=UP], ElevatorCall[floor=0, direction=UP], ElevatorCall[floor=1, direction=UP], ElevatorCall[floor=0, direction=UP], ElevatorCall[floor=1, direction=UP], ElevatorCall[floor=0, direction=UP], ElevatorCall[floor=1, direction=UP], ElevatorCall[floor=1, direction=UP], ElevatorCall[floor=1, direction=UP], ElevatorCall[floor=1, direction=UP], ElevatorCall[floor=18, direction=DOWN], ElevatorCall[floor=19, direction=DOWN], ElevatorCall[floor=1, direction=UP], ElevatorCall[floor=0, direction=UP], ElevatorCall[floor=19, direction=DOWN], ElevatorCall[floor=19, direction=DOWN], ElevatorCall[floor=18, direction=DOWN], ElevatorCall[floor=18, direction=DOWN], ElevatorCall[floor=15, direction=DOWN], ElevatorCall[floor=15, direction=DOWN], ElevatorCall[floor=1, direction=UP], ElevatorCall[floor=14, direction=DOWN], ElevatorCall[floor=16, direction=DOWN], ElevatorCall[floor=14, direction=UP], ElevatorCall[floor=19, direction=DOWN], ElevatorCall[floor=19, direction=DOWN], ElevatorCall[floor=15, direction=UP], ElevatorCall[floor=1, direction=UP], ElevatorCall[floor=18, direction=DOWN], ElevatorCall[floor=19, direction=DOWN], ElevatorCall[floor=15, direction=DOWN], ElevatorCall[floor=1, direction=UP], ElevatorCall[floor=0, direction=UP], ElevatorCall[floor=19, direction=DOWN], ElevatorCall[floor=16, direction=DOWN], ElevatorCall[floor=19, direction=DOWN], ElevatorCall[floor=17, direction=DOWN], ElevatorCall[floor=13, direction=DOWN], ElevatorCall[floor=18, direction=DOWN], ElevatorCall[floor=19, direction=DOWN], ElevatorCall[floor=18, direction=DOWN], ElevatorCall[floor=16, direction=DOWN], ElevatorCall[floor=19, direction=DOWN], ElevatorCall[floor=19, direction=DOWN], ElevatorCall[floor=16, direction=DOWN], ElevatorCall[floor=19, direction=DOWN], ElevatorCall[floor=0, direction=UP], ElevatorCall[floor=15, direction=DOWN], ElevatorCall[floor=0, direction=UP], ElevatorCall[floor=12, direction=DOWN], ElevatorCall[floor=1, direction=UP], ElevatorCall[floor=19, direction=DOWN], ElevatorCall[floor=16, direction=DOWN], ElevatorCall[floor=15, direction=DOWN], ElevatorCall[floor=16, direction=DOWN], ElevatorCall[floor=13, direction=DOWN], ElevatorCall[floor=17, direction=DOWN], ElevatorCall[floor=17, direction=DOWN], ElevatorCall[floor=18, direction=DOWN], ElevatorCall[floor=1, direction=UP], ElevatorCall[floor=14, direction=DOWN], ElevatorCall[floor=13, direction=DOWN], ElevatorCall[floor=18, direction=DOWN], ElevatorCall[floor=11, direction=UP], ElevatorCall[floor=1, direction=UP], ElevatorCall[floor=12, direction=DOWN], ElevatorCall[floor=1, direction=UP], ElevatorCall[floor=16, direction=DOWN], ElevatorCall[floor=18, direction=DOWN], ElevatorCall[floor=0, direction=UP], ElevatorCall[floor=9, direction=UP], ElevatorCall[floor=18, direction=DOWN], ElevatorCall[floor=14, direction=UP], ElevatorCall[floor=0, direction=UP], ElevatorCall[floor=0, direction=UP], ElevatorCall[floor=16, direction=UP], ElevatorCall[floor=0, direction=UP], ElevatorCall[floor=12, direction=UP], ElevatorCall[floor=11, direction=UP], ElevatorCall[floor=12, direction=DOWN], ElevatorCall[floor=13, direction=DOWN], ElevatorCall[floor=0, direction=UP], ElevatorCall[floor=12, direction=UP], ElevatorCall[floor=7, direction=DOWN], ElevatorCall[floor=13, direction=UP], ElevatorCall[floor=12, direction=DOWN], ElevatorCall[floor=0, direction=UP], ElevatorCall[floor=11, direction=UP], ElevatorCall[floor=9, direction=UP], ElevatorCall[floor=19, direction=DOWN], ElevatorCall[floor=17, direction=DOWN], ElevatorCall[floor=17, direction=DOWN], ElevatorCall[floor=19, direction=DOWN], ElevatorCall[floor=13, direction=DOWN], ElevatorCall[floor=6, direction=UP], ElevatorCall[floor=13, direction=UP], ElevatorCall[floor=14, direction=DOWN], ElevatorCall[floor=5, direction=DOWN], ElevatorCall[floor=10, direction=UP], ElevatorCall[floor=18, direction=DOWN], ElevatorCall[floor=13, direction=DOWN], ElevatorCall[floor=6, direction=UP], ElevatorCall[floor=14, direction=DOWN], ElevatorCall[floor=6, direction=UP], ElevatorCall[floor=18, direction=DOWN], ElevatorCall[floor=18, direction=DOWN], ElevatorCall[floor=4, direction=UP], ElevatorCall[floor=8, direction=DOWN], ElevatorCall[floor=6, direction=UP], ElevatorCall[floor=10, direction=UP], ElevatorCall[floor=9, direction=DOWN], ElevatorCall[floor=6, direction=UP], ElevatorCall[floor=17, direction=DOWN], ElevatorCall[floor=11, direction=UP], ElevatorCall[floor=17, direction=DOWN], ElevatorCall[floor=19, direction=DOWN], ElevatorCall[floor=15, direction=DOWN], ElevatorCall[floor=17, direction=DOWN], ElevatorCall[floor=14, direction=UP], ElevatorCall[floor=6, direction=DOWN], ElevatorCall[floor=17, direction=DOWN], ElevatorCall[floor=2, direction=UP]],goRequests=[1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 16, 18, 0, 15, 19, 18, 18, 17, 16, 17, 19, 14, 11, 16, 15, 14, 0, 15, 16, 0, 13, 1, 19, 18, 16, 1, 16, 15, 19, 19, 18, 0, 16, 9, 14, 14, 13, 10, 18, 1, 1, 0, 8, 0, 12, 14, 10, 18, 10, 17, 11, 12, 7, 13, 16, 8, 12, 14, 0, 8, 18, 11, 16, 17, 19, 10, 19, 6, 17, 1, 14, 10, 0, 1, 7, 11, 13, 6, 6, 19, 8, 14, 5, 1, 14, 15, 1, 19, 14, 0, 17, 16, 18, 9, 13, 10, 5, 18, 7, 17, 11, 6, 1, 14, 5, 17, 6, 6, 6, 16, 11, 16, 1, 7, 10, 16, 11, 19, 3, 6],opened=false,currentDirection=DOWN,lastCommands=SizeLimitedArrayList[[DOWN, OPEN, CLOSE]]]</i>    
+</body></html>
