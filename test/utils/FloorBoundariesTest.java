@@ -1,5 +1,6 @@
 package utils;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -41,18 +42,8 @@ public class FloorBoundariesTest {
 	}
 
 	@Test
-	public void isAtMiddleFloor_must_return_false() {
-		assertFalse(boundaries.isAtMiddelFloor(0));
-		assertFalse(boundaries.isAtMiddelFloor(1));
-		assertFalse(boundaries.isAtMiddelFloor(2));
-		assertFalse(boundaries.isAtMiddelFloor(4));
-		assertFalse(boundaries.isAtMiddelFloor(5));
-		assertFalse(boundaries.isAtMiddelFloor(6));
-	}
-
-	@Test
-	public void isAtMiddleFloor_must_return_true() {
-		assertTrue(boundaries.isAtMiddelFloor(3));
+	public void getMiddelFloor_must_return_middle() {
+		assertEquals(3, boundaries.getMiddelFloor());
 	}
 
 	@Test(expected = IllegalArgumentException.class)

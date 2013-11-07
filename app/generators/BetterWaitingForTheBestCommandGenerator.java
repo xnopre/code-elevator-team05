@@ -57,6 +57,9 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 			}
 		}
 		if (isNotAtMiddleFloor()) {
+			if (isAboveMiddleFloor()) {
+				return down();
+			}
 			return up();
 		}
 		return storeCommandInHistory(NOTHING);
@@ -86,12 +89,16 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 		return storeCommandInHistory(CLOSE);
 	}
 
-	private boolean isNotAtMiddleFloor() {
-		return !isAtMiddleFloor();
+	private boolean isAboveMiddleFloor() {
+		return getCurrentFloor() > getMiddelFloor();
 	}
 
-	private boolean isAtMiddleFloor() {
-		return stateManager.getFloorBoundaries().isAtMiddelFloor(getCurrentFloor());
+	private boolean isNotAtMiddleFloor() {
+		return getCurrentFloor() != getMiddelFloor();
+	}
+
+	private int getMiddelFloor() {
+		return stateManager.getFloorBoundaries().getMiddelFloor();
 	}
 
 	private int getCurrentFloor() {

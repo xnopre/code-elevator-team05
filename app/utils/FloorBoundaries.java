@@ -27,9 +27,8 @@ public class FloorBoundaries {
 		return _isAtLastFloor(floor);
 	}
 
-	public boolean isAtMiddelFloor(int floor) {
-		verifyIsInBoundariesOrDie(floor);
-		return _isAtMiddelFloor(floor);
+	public int getMiddelFloor() {
+		return (floorRange.upperEndpoint() - floorRange.lowerEndpoint()) / 2;
 	}
 
 	@Override
@@ -75,10 +74,6 @@ public class FloorBoundaries {
 
 	private boolean _isAtLastFloor(int floor) {
 		return floorRange.upperEndpoint() == floor;
-	}
-
-	private boolean _isAtMiddelFloor(int floor) {
-		return (floorRange.upperEndpoint() - floorRange.lowerEndpoint()) / 2 == floor;
 	}
 
 	private void verifyIsInBoundariesOrDie(int floor) {
