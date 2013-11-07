@@ -3,7 +3,6 @@ package utils;
 import static org.fest.assertions.Assertions.assertThat;
 import static utils.Direction.DOWN;
 import static utils.Direction.UP;
-import static utils.StateManager.INITIAL_STATE;
 
 import java.util.Collection;
 
@@ -36,23 +35,26 @@ public class StateManagerTest {
 
 	@Test
 	public void initial_state_must_be_initial_state() {
-		assertThat(stateManager.getCurrentState()).isSameAs(INITIAL_STATE);
+		assertThat(stateManager.getCurrentState()).isEqualTo(new ElevatorState());
 	}
 
 	@Test
 	public void ensure_that_storing_a_call_change_intial_state() {
+		ElevatorState initialState = stateManager.getCurrentState();
 		stateManager.storeWaitingCall(3, DOWN);
 
-		assertThat(stateManager.getCurrentState()).isNotEqualTo(StateManager.INITIAL_STATE);
+		assertThat(stateManager.getCurrentState()).isNotEqualTo(initialState);
 	}
 
 	@Test
 	public void ensure_reset_command_restore_initial_state() {
 		stateManager.storeWaitingCall(3, DOWN);
 
-		stateManager.reset();
+		stateManager.reset(4, 8);
 
-		assertThat(stateManager.getCurrentState()).isSameAs(StateManager.INITIAL_STATE);
+		final ElevatorState expectedState = new ElevatorState(4);
+		assertThat(stateManager.getCurrentState()).isEqualTo(expectedState);
+		assertThat(stateManager.getFloorBoundaries()).isEqualTo(new FloorBoundaries(4, 8));
 	}
 
 	@Test

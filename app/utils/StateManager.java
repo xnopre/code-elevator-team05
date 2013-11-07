@@ -4,9 +4,7 @@ import java.util.Arrays;
 
 public class StateManager {
 
-	public static final ElevatorState INITIAL_STATE = new ElevatorState();
-
-	private ElevatorState currentState = INITIAL_STATE;
+	private ElevatorState currentState = new ElevatorState();
 
 	private final FloorBoundaries floorBoundaries;
 
@@ -14,8 +12,9 @@ public class StateManager {
 		this.floorBoundaries = floorBoundaries;
 	}
 
-	public void reset() {
-		currentState = INITIAL_STATE;
+	public void reset(int lowerFloor, int higherFloor) {
+		currentState = new ElevatorState(lowerFloor);
+		floorBoundaries.setRange(lowerFloor, higherFloor);
 	}
 
 	public void storeWaitingCall(int atFloor, Direction to) {
@@ -77,5 +76,9 @@ public class StateManager {
 	public boolean areThreeLastCommandEqualTo(Command command) {
 		Command[] commands = new Command[] { command, command, command };
 		return Arrays.equals(currentState.getLastCommandsAsArray(), commands);
+	}
+
+	public FloorBoundaries getFloorBoundaries() {
+		return floorBoundaries;
 	}
 }

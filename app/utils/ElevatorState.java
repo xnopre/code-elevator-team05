@@ -24,12 +24,16 @@ public class ElevatorState {
 	private final SizeLimitedArrayList lastCommands = new SizeLimitedArrayList(3);
 
 	public ElevatorState() {
-		this(0, false, UP, new ArrayList<Call>(), new ArrayList<Integer>(), new SizeLimitedArrayList(3));
+		this(0);
 	}
 
-	public ElevatorState(int floor, boolean opened, Direction currentDirection, Collection<Call> waitingCalls, Collection<Integer> goRequests,
+	public ElevatorState(int currentFloor) {
+		this(currentFloor, false, UP, new ArrayList<Call>(), new ArrayList<Integer>(), new SizeLimitedArrayList(3));
+	}
+
+	public ElevatorState(int currentFloor, boolean opened, Direction currentDirection, Collection<Call> waitingCalls, Collection<Integer> goRequests,
 			SizeLimitedArrayList lastCommands) {
-		currentFloor = floor;
+		this.currentFloor = currentFloor;
 		this.opened = opened;
 		this.currentDirection = currentDirection;
 		this.waitingCalls = newArrayList(waitingCalls);
