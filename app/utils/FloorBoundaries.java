@@ -1,5 +1,7 @@
 package utils;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import com.google.common.collect.Range;
 
 public class FloorBoundaries {
@@ -58,6 +60,11 @@ public class FloorBoundaries {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
 	}
 
 	// privates ------------------------------

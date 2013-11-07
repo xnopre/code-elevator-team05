@@ -83,7 +83,8 @@ public class Application extends Controller {
 	public static void state() {
 		synchronized (monitor) {
 			final ElevatorState currentState = stateManager.getCurrentState();
-			render(currentState);
+			final FloorBoundaries currentFloorBoundaries = stateManager.getFloorBoundaries();
+			render(currentState, currentFloorBoundaries);
 		}
 	}
 }
