@@ -15,14 +15,19 @@ public class FloorBoundaries {
 		this.floorRange = Range.closed(firstFloor, lastFloor);
 	}
 
-	public boolean atFirstFloor(int floor) {
+	public boolean isAtFirstFloor(int floor) {
 		verifyIsInBoundariesOrDie(floor);
-		return atFirst(floor);
+		return _isAtFirstFloor(floor);
 	}
 
-	public boolean atLastFloor(int floor) {
+	public boolean isAtLastFloor(int floor) {
 		verifyIsInBoundariesOrDie(floor);
-		return atLast(floor);
+		return _isAtLastFloor(floor);
+	}
+
+	public boolean isAtMiddelFloor(int floor) {
+		verifyIsInBoundariesOrDie(floor);
+		return _isAtMiddelFloor(floor);
 	}
 
 	@Override
@@ -57,12 +62,16 @@ public class FloorBoundaries {
 
 	// privates ------------------------------
 
-	private boolean atFirst(int floor) {
+	private boolean _isAtFirstFloor(int floor) {
 		return floorRange.lowerEndpoint() == floor;
 	}
 
-	private boolean atLast(int floor) {
+	private boolean _isAtLastFloor(int floor) {
 		return floorRange.upperEndpoint() == floor;
+	}
+
+	private boolean _isAtMiddelFloor(int floor) {
+		return (floorRange.upperEndpoint() - floorRange.lowerEndpoint()) / 2 == floor;
 	}
 
 	private void verifyIsInBoundariesOrDie(int floor) {
@@ -75,4 +84,5 @@ public class FloorBoundaries {
 		if (firstFloor == lastFloor)
 			throw new IllegalArgumentException("At least 2 floors are required");
 	}
+
 }

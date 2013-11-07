@@ -34,39 +34,64 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 			if (thereIsACallAtCurrentFloorMatchingCurrentDirection() && threeLastCommandAreNothing()) {
 				Logger.warn("HACK to unlock strange situation ! ...");
 			}
-			stateManager.setClosed();
-			return storeCommandInHistory(CLOSE);
+			return close();
 		}
 		if (thereIsACallAtCurrentFloorMatchingCurrentDirection() || thereIsACallAtCurrentFloorAndNoOtherCallsOrGoMatchingCurrentDirection()
 				|| thereIsAGoAtCurrentFloor()) {
-			stateManager.setOpened();
-			waitingCallAndGoRemover.removeAllCallsFromTheCurrentFloor();
-			waitingCallAndGoRemover.removeAllGosFromTheCurrentFloor();
-			return storeCommandInHistory(OPEN);
+			return open();
 		}
 		if (isCurrentDirectionIs(UP)) {
 			if (thereIsAGoUpstairs() || thereIsACallUpstairs()) {
-				stateManager.incrementFloor();
-				return storeCommandInHistory(Command.UP);
+				return up();
 			}
 			if (thereIsAGoDownstairs() || thereIsACallDownstairs()) {
-				stateManager.decrementFloor();
-				stateManager.setCurrentDirection(DOWN);
-				return storeCommandInHistory(Command.DOWN);
+				return down();
 			}
 		}
 		if (isCurrentDirectionIs(DOWN)) {
 			if (thereIsAGoDownstairs() || thereIsACallDownstairs()) {
-				stateManager.decrementFloor();
-				return storeCommandInHistory(Command.DOWN);
+				return down();
 			}
 			if (thereIsAGoUpstairs() || thereIsACallUpstairs()) {
-				stateManager.incrementFloor();
-				stateManager.setCurrentDirection(UP);
-				return storeCommandInHistory(Command.UP);
+				return up();
 			}
 		}
+		if (isNotAtMiddleFloor()) {
+			return up();
+		}
 		return storeCommandInHistory(NOTHING);
+	}
+
+	private Command down() {
+		stateManager.decrementFloor();
+		stateManager.setCurrentDirection(DOWN);
+		return storeCommandInHistory(Command.DOWN);
+	}
+
+	private Command up() {
+		stateManager.incrementFloor();
+		stateManager.setCurrentDirection(UP);
+		return storeCommandInHistory(Command.UP);
+	}
+
+	private Command open() {
+		stateManager.setOpened();
+		waitingCallAndGoRemover.removeAllCallsFromTheCurrentFloor();
+		waitingCallAndGoRemover.removeAllGosFromTheCurrentFloor();
+		return storeCommandInHistory(OPEN);
+	}
+
+	private Command close() {
+		stateManager.setClosed();
+		return storeCommandInHistory(CLOSE);
+	}
+
+	private boolean isNotAtMiddleFloor() {
+		return !isAtMiddleFloor();
+	}
+
+	private boolean isAtMiddleFloor() {
+		return stateManager.getFloorBoundaries().isAtMiddelFloor(getCurrentFloor());
 	}
 
 	private int getCurrentFloor() {

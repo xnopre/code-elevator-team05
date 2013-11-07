@@ -58,6 +58,6 @@ public class TrapOmnibusCommandGenerator implements CommandGenerator {
 	}
 
 	private boolean atLastFloor() {
-		return stateManager.atLastFloor();
+		return stateManager.isAtLastFloor();
 	}
 }

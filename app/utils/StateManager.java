@@ -38,23 +38,23 @@ public class StateManager {
 	}
 
 	public void incrementFloor() {
-		if (atLastFloor())
+		if (isAtLastFloor())
 			throw new UnreachableFloorException();
 		currentState = ElevatorState.Builder.from(currentState).incrementFloor().get();
 	}
 
 	public void decrementFloor() {
-		if (atFirstFloor())
+		if (isAtFirstFloor())
 			throw new UnreachableFloorException();
 		currentState = ElevatorState.Builder.from(currentState).decrementFloor().get();
 	}
 
-	public boolean atFirstFloor() {
-		return floorBoundaries.atFirstFloor(currentState.getCurrentFloor());
+	public boolean isAtFirstFloor() {
+		return floorBoundaries.isAtFirstFloor(currentState.getCurrentFloor());
 	}
 
-	public boolean atLastFloor() {
-		return floorBoundaries.atLastFloor(currentState.getCurrentFloor());
+	public boolean isAtLastFloor() {
+		return floorBoundaries.isAtLastFloor(currentState.getCurrentFloor());
 	}
 
 	public void setOpened() {

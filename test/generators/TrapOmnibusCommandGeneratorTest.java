@@ -73,7 +73,7 @@ public class TrapOmnibusCommandGeneratorTest {
 	}
 
 	private void givenAnElevatorAtLastFloorDoorClosed() {
-		Mockito.doReturn(true).when(stateManager).atLastFloor();
+		Mockito.doReturn(true).when(stateManager).isAtLastFloor();
 		assertThat(omnibusCommandGenerator.nextCommand()).isEqualTo(OPEN);
 		assertThat(omnibusCommandGenerator.nextCommand()).isEqualTo(CLOSE);
 	}

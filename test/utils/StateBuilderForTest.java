@@ -1,6 +1,8 @@
 package utils;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static utils.Direction.UP;
 
@@ -22,10 +24,15 @@ public class StateBuilderForTest {
 
 	private final SizeLimitedArrayList<Command> lastCommands = new SizeLimitedArrayList<Command>(3);
 
+	private boolean isAtMiddleFloor;
+
+	private final FloorBoundaries mockFloorBoundaries;
+
 	public StateBuilderForTest(StateManager mockStateManager, int floor, boolean opened) {
 		this.mockStateManager = mockStateManager;
 		this.floor = floor;
 		this.opened = opened;
+		this.mockFloorBoundaries = mock(FloorBoundaries.class);
 	}
 
 	public StateBuilderForTest withDirection(Direction direction) {
@@ -47,8 +54,20 @@ public class StateBuilderForTest {
 		return this;
 	}
 
+	public StateBuilderForTest andIsNotAtMiddleFloor() {
+		isAtMiddleFloor = false;
+		return this;
+	}
+
+	public StateBuilderForTest andIsAtMiddleFloor() {
+		isAtMiddleFloor = true;
+		return this;
+	}
+
 	public void build() {
 		createStateAndDoReturnItByStateManager(mockStateManager, floor, opened, direction, calls, floorsToGo, lastCommands);
+		when(mockStateManager.getFloorBoundaries()).thenReturn(mockFloorBoundaries);
+		when(mockFloorBoundaries.isAtMiddelFloor(anyInt())).thenReturn(isAtMiddleFloor);
 	}
 
 	public static void createStateAndDoReturnItByStateManager(StateManager mockStateManager, int floor, boolean opened, Direction direction, Call[] calls,
