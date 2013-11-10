@@ -9,7 +9,7 @@ import org.junit.Test;
 
 public class FloorBoundariesTest {
 
-	private final FloorBoundaries boundaries = new FloorBoundaries(0, 6);
+	private final FloorBoundaries boundaries = new FloorBoundaries(2, 8);
 
 	@Test(expected = IllegalArgumentException.class)
 	public void test_first_floor_with_a_floor_out_of_boundary() {
@@ -23,7 +23,7 @@ public class FloorBoundariesTest {
 
 	@Test
 	public void test_first_floor_at_first_floor() {
-		Assert.assertTrue(boundaries.isAtFirstFloor(0));
+		Assert.assertTrue(boundaries.isAtFirstFloor(2));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -38,12 +38,17 @@ public class FloorBoundariesTest {
 
 	@Test
 	public void test_current_floor_is_the_last_floor() {
-		assertTrue(boundaries.isAtLastFloor(6));
+		assertTrue(boundaries.isAtLastFloor(8));
 	}
 
 	@Test
 	public void getMiddelFloor_must_return_middle() {
-		assertEquals(3, boundaries.getMiddelFloor());
+		assertEquals(5, boundaries.getMiddelFloor());
+	}
+
+	@Test
+	public void calculateFloorsNumber_must_return_good_floor_number() {
+		assertEquals(7, boundaries.calculateFloorsNumber());
 	}
 
 	@Test(expected = IllegalArgumentException.class)

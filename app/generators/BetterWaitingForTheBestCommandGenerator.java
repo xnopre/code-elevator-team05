@@ -36,9 +36,13 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 			}
 			return close();
 		}
-		if (thereIsACallAtCurrentFloorMatchingCurrentDirection() || thereIsACallAtCurrentFloorAndNoOtherCallsOrGoMatchingCurrentDirection()
-				|| thereIsAGoAtCurrentFloor()) {
+		if (thereIsAGoAtCurrentFloor()) {
 			return open();
+		}
+		if (thereIsACallAtCurrentFloorMatchingCurrentDirection() || thereIsACallAtCurrentFloorAndNoOtherCallsOrGoMatchingCurrentDirection()) {
+			if (dontSkipExtraWaitingCalls()) {
+				return open();
+			}
 		}
 		if (isCurrentDirectionIs(UP)) {
 			if (thereIsAGoUpstairs() || thereIsACallUpstairs()) {
@@ -221,6 +225,10 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 
 	private boolean thereIsAGoAtCurrentFloor() {
 		return stateManager.getCurrentState().getGoRequests().contains(stateManager.getCurrentState().getCurrentFloor());
+	}
+
+	private boolean dontSkipExtraWaitingCalls() {
+		return !stateManager.mustSkipExtraWaitingCalls();
 	}
 
 }

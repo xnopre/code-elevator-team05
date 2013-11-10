@@ -27,6 +27,8 @@ public class StateBuilderForTest {
 
 	private int middleFloor;
 
+	private boolean mustSkipExtraWaitingCalls;
+
 	public StateBuilderForTest(StateManager mockStateManager, int floor, boolean opened) {
 		this.mockStateManager = mockStateManager;
 		this.floor = floor;
@@ -58,9 +60,15 @@ public class StateBuilderForTest {
 		return this;
 	}
 
+	public StateBuilderForTest andMustSkipExtraWaitingCalls() {
+		mustSkipExtraWaitingCalls = true;
+		return this;
+	}
+
 	public void build() {
 		createStateAndDoReturnItByStateManager(mockStateManager, floor, opened, direction, calls, floorsToGo, lastCommands);
 		when(mockStateManager.getFloorBoundaries()).thenReturn(mockFloorBoundaries);
+		when(mockStateManager.mustSkipExtraWaitingCalls()).thenReturn(mustSkipExtraWaitingCalls);
 		when(mockFloorBoundaries.getMiddelFloor()).thenReturn(middleFloor);
 	}
 

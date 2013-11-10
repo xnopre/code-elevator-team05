@@ -1,6 +1,8 @@
 package utils;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static utils.Direction.DOWN;
 import static utils.Direction.UP;
 
@@ -10,7 +12,8 @@ import org.junit.Test;
 
 public class StateManagerTest {
 
-	private final StateManager stateManager = new StateManager(new FloorBoundaries(0, 5));
+	private final FloorBoundaries floorBoundaries = new FloorBoundaries(0, 5);
+	private final StateManager stateManager = new StateManager(floorBoundaries);
 
 	@Test
 	public void call_must_store_last_call() {
@@ -179,5 +182,26 @@ public class StateManagerTest {
 		stateManager.setCurrentDirection(UP);
 		stateManager.setCurrentDirection(DOWN);
 		assertThat(stateManager.getCurrentState().getCurrentDirection()).isEqualTo(DOWN);
+	}
+
+	@Test
+	public void mustSkipExtraWaitingCalls_must_return_false_if_go_request_number_less_than_floors_numbers_devided_by_2() {
+		final int floorsNumber = floorBoundaries.calculateFloorsNumber();
+		final int floorsNumberThreshold = floorsNumber / 2;
+		for (int i = 0; i < floorsNumberThreshold + 1; i++) {
+			stateManager.storeGoRequest(3);
+			stateManager.storeGoRequest(5);
+		}
+		assertFalse(stateManager.mustSkipExtraWaitingCalls());
+	}
+
+	@Test
+	public void mustSkipExtraWaitingCalls_must_return_true_if_go_request_number_more_than_floors_numbers_devided_by_2() {
+		final int floorsNumber = floorBoundaries.calculateFloorsNumber();
+		final int floorsNumberThreshold = floorsNumber / 2;
+		for (int i = 0; i < floorsNumberThreshold + 1; i++) {
+			stateManager.storeGoRequest(3 + i);
+		}
+		assertTrue(stateManager.mustSkipExtraWaitingCalls());
 	}
 }

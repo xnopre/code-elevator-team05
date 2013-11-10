@@ -1,6 +1,8 @@
 package utils;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class StateManager {
 
@@ -80,5 +82,21 @@ public class StateManager {
 
 	public FloorBoundaries getFloorBoundaries() {
 		return floorBoundaries;
+	}
+
+	public boolean mustSkipExtraWaitingCalls() {
+		final int floorsNumber = floorBoundaries.calculateFloorsNumber();
+		final int floorsNumberThreshold = floorsNumber / 2;
+		return countUniqueGoRequests() > floorsNumberThreshold;
+	}
+
+	// privates ------------------------------------
+
+	private int countUniqueGoRequests() {
+		Set<Integer> uniqueGoRequests = new HashSet<Integer>();
+		for (Integer go : currentState.getGoRequests()) {
+			uniqueGoRequests.add(go);
+		}
+		return uniqueGoRequests.size();
 	}
 }

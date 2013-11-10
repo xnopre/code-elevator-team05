@@ -28,7 +28,11 @@ public class FloorBoundaries {
 	}
 
 	public int getMiddelFloor() {
-		return (floorRange.upperEndpoint() - floorRange.lowerEndpoint()) / 2;
+		return floorRange.lowerEndpoint() + (floorRange.upperEndpoint() - floorRange.lowerEndpoint()) / 2;
+	}
+
+	public int calculateFloorsNumber() {
+		return floorRange.upperEndpoint() - floorRange.lowerEndpoint() + 1;
 	}
 
 	@Override
