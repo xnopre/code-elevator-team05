@@ -84,7 +84,8 @@ public class Application extends Controller {
 		synchronized (monitor) {
 			final ElevatorState currentState = stateManager.getCurrentState();
 			final FloorBoundaries currentFloorBoundaries = stateManager.getFloorBoundaries();
-			render(currentState, currentFloorBoundaries);
+			final boolean mustSkipExtraWaitingCalls = stateManager.mustSkipExtraWaitingCalls();
+			render(currentState, currentFloorBoundaries, mustSkipExtraWaitingCalls);
 		}
 	}
 }

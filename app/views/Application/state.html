@@ -3,6 +3,8 @@
 
 currentFloorBoundaries=${currentFloorBoundaries.toString()}
 <br/>
+mustSkipExtraWaitingCalls=${mustSkipExtraWaitingCalls}
+<br/>
 
 Etat courant :
 <ul>
@@ -10,15 +12,15 @@ Etat courant :
 	<li>${currentState.opened ? "Ouvert" : "Fermé"}</li>
 	<li>Direction courante : ${currentState.currentDirection}</li>
 	<li>Appels en attente (floor - direction):</li>
-	<ul>
-		#{list items:currentState.waitingCalls, as:'call' }
-		        <li>${call.floor} - ${call.direction}</li>
-		#{/list}
-	</ul>
 	<li>Go en cours (floor):</li>
 	<ul>
 		#{list items:currentState.goRequests, as:'go' }
-		        <li>${go}</li>
+	        ${go}${go_isLast ? '' : ','}
+		#{/list}
+	</ul>
+	<ul>
+		#{list items:currentState.waitingCalls, as:'call' }
+	        <li>${call.floor} - ${call.direction}</li>
 		#{/list}
 	</ul>
 	<li>Dernières commandes : </li>
