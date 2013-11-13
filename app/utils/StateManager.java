@@ -101,6 +101,10 @@ public class StateManager {
 		return cabinSize;
 	}
 
+	public boolean isCabinFull() {
+		return thereIsAsManyPassengersAsCabinSize();
+	}
+
 	// privates ------------------------------------
 
 	private boolean thereIsAsManyPassengersAsCabinSize() {
