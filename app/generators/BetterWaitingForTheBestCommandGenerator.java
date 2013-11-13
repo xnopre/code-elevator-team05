@@ -28,10 +28,11 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 	@Override
 	public Command nextCommand() {
 
-		// Hack du jour
-		if (stateManager.isCabinFull()) {
-			throw new RuntimeException("Hey, the cabin is full, I'm the fucking hack of the day (13 november) ;-)");
-		}
+		// Hack du jour (13/11/2013)
+		// if (stateManager.isCabinFull()) {
+		// throw new
+		// RuntimeException("Hey, the cabin is full, I'm the fucking hack of the day (13 november) ;-)");
+		// }
 
 		if (isOpened()) {
 			if (thereIsACallAtCurrentFloorMatchingCurrentDirection() && threeLastCommandAreNotNothing()) {
