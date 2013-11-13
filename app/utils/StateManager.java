@@ -10,13 +10,16 @@ public class StateManager {
 
 	private final FloorBoundaries floorBoundaries;
 
+	private int cabinSize;
+
 	public StateManager(FloorBoundaries floorBoundaries) {
 		this.floorBoundaries = floorBoundaries;
 	}
 
-	public void reset(int lowerFloor, int higherFloor) {
+	public void reset(int lowerFloor, int higherFloor, int cabinSize) {
 		currentState = new ElevatorState(lowerFloor);
 		floorBoundaries.setRange(lowerFloor, higherFloor);
+		this.cabinSize = cabinSize;
 	}
 
 	public void storeWaitingCall(int atFloor, Direction to) {
@@ -90,6 +93,10 @@ public class StateManager {
 		return countUniqueGoRequests() > floorsNumberThreshold;
 	}
 
+	public int getCabinSize() {
+		return cabinSize;
+	}
+
 	// privates ------------------------------------
 
 	private int countUniqueGoRequests() {
@@ -99,4 +106,5 @@ public class StateManager {
 		}
 		return uniqueGoRequests.size();
 	}
+
 }

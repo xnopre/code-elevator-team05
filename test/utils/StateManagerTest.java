@@ -53,11 +53,12 @@ public class StateManagerTest {
 	public void ensure_reset_command_restore_initial_state() {
 		stateManager.storeWaitingCall(3, DOWN);
 
-		stateManager.reset(4, 8);
+		stateManager.reset(4, 8, 5);
 
 		final ElevatorState expectedState = new ElevatorState(4);
 		assertThat(stateManager.getCurrentState()).isEqualTo(expectedState);
 		assertThat(stateManager.getFloorBoundaries()).isEqualTo(new FloorBoundaries(4, 8));
+		assertThat(stateManager.getCabinSize()).isEqualTo(5);
 	}
 
 	@Test
