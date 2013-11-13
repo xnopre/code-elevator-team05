@@ -11,16 +11,16 @@ Etat courant :
 	<li>Etage courant : ${currentState.currentFloor}</li>
 	<li>${currentState.opened ? "Ouvert" : "Fermé"}</li>
 	<li>Direction courante : ${currentState.currentDirection}</li>
-	<li>Appels en attente (floor - direction):</li>
-	<li>Go en cours (floor):</li>
-	<ul>
-		#{list items:currentState.goRequests, as:'go' }
-	        ${go}${go_isLast ? '' : ','}
-		#{/list}
-	</ul>
+	<li>Appels en attente (floor - direction): ${currentState.waitingCalls.size()}</li>
 	<ul>
 		#{list items:currentState.waitingCalls, as:'call' }
 	        <li>${call.floor} - ${call.direction}</li>
+		#{/list}
+	</ul>
+	<li>Go en cours (floor): ${currentState.goRequests.size()}</li>
+	<ul>
+		#{list items:currentState.goRequests, as:'go' }
+	        ${go}${go_isLast ? '' : ','}
 		#{/list}
 	</ul>
 	<li>Dernières commandes : </li>
