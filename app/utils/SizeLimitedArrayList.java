@@ -36,7 +36,7 @@ public class SizeLimitedArrayList<E> {
 
 	@Override
 	public String toString() {
-		return "SizeLimitedArrayList[" + list.toString() + "]";
+		return "SizeLimitedArrayList[maxSize=" + maxSize + "," + list.toString() + "]";
 	}
 
 	@Override

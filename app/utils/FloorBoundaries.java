@@ -1,7 +1,5 @@
 package utils;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.google.common.collect.Range;
 
 public class FloorBoundaries {
@@ -67,7 +65,7 @@ public class FloorBoundaries {
 
 	@Override
 	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
+		return "FloorBoundaries[floorRange=" + floorRange.toString() + "]";
 	}
 
 	// privates ------------------------------

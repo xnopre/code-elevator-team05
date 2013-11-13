@@ -43,4 +43,12 @@ public class SizeLimitedArrayListTest {
 		assertThat(sizeLimitedArrayList.toArray()).containsOnly(7, 8, 9);
 
 	}
+
+	@Test
+	public void test_toString() {
+		final SizeLimitedArrayList<String> list = new SizeLimitedArrayList<String>(9);
+		list.add("a");
+		list.add("b");
+		assertThat(list.toString()).isEqualTo("SizeLimitedArrayList[maxSize=9,[a, b]]");
+	}
 }

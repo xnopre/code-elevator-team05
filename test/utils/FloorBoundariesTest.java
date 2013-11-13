@@ -1,5 +1,6 @@
 package utils;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -55,4 +56,19 @@ public class FloorBoundariesTest {
 	public void ensure_need_at_least_two_floors() {
 		new FloorBoundaries(1, 1);
 	}
+
+	@Test
+	public void test_toString() {
+		assertEquals("FloorBoundaries[floorRange=[1‥9]]", new FloorBoundaries(1, 9).toString());
+	}
+
+	@Test
+	public void test_equals() {
+		final FloorBoundaries floorBoundaries = new FloorBoundaries(1, 9);
+		assertThat(floorBoundaries).isEqualTo(floorBoundaries);
+		assertThat(new FloorBoundaries(1, 9)).isEqualTo(new FloorBoundaries(1, 9));
+		assertThat(new FloorBoundaries(1, 9)).isNotEqualTo(new FloorBoundaries(0, 9));
+		assertThat(new FloorBoundaries(1, 9)).isNotEqualTo(new FloorBoundaries(1, 8));
+	}
+
 }
