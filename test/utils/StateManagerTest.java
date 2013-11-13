@@ -187,6 +187,7 @@ public class StateManagerTest {
 
 	@Test
 	public void mustSkipExtraWaitingCalls_must_return_false_if_go_request_number_less_than_floors_numbers_devided_by_2() {
+		stateManager.reset(0, 5, 99);
 		final int floorsNumber = floorBoundaries.calculateFloorsNumber();
 		final int floorsNumberThreshold = floorsNumber / 2;
 		for (int i = 0; i < floorsNumberThreshold + 1; i++) {
@@ -194,6 +195,15 @@ public class StateManagerTest {
 			stateManager.storeGoRequest(5);
 		}
 		assertFalse(stateManager.mustSkipExtraWaitingCalls());
+	}
+
+	@Test
+	public void mustSkipExtraWaitingCalls_must_return_true_if_cabin_is_full() {
+		stateManager.reset(0, 5, 3);
+		stateManager.storeGoRequest(1);
+		stateManager.storeGoRequest(1);
+		stateManager.storeGoRequest(0);
+		assertTrue(stateManager.mustSkipExtraWaitingCalls());
 	}
 
 	@Test

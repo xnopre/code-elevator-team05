@@ -88,9 +88,13 @@ public class StateManager {
 	}
 
 	public boolean mustSkipExtraWaitingCalls() {
-		final int floorsNumber = floorBoundaries.calculateFloorsNumber();
-		final int floorsNumberThreshold = floorsNumber / 2;
-		return countUniqueGoRequests() > floorsNumberThreshold;
+		if (thereIsAsManyPassengersAsCabinSize()) {
+			return true;
+		}
+		if (thereAreMoreUniqueGoRequestThanFloorNumberDividedBy2()) {
+			return true;
+		}
+		return false;
 	}
 
 	public int getCabinSize() {
@@ -98,6 +102,21 @@ public class StateManager {
 	}
 
 	// privates ------------------------------------
+
+	private boolean thereIsAsManyPassengersAsCabinSize() {
+		return countCurrentPassengers() >= cabinSize;
+	}
+
+	private int countCurrentPassengers() {
+		return currentState.getGoRequests().size();
+	}
+
+	private boolean thereAreMoreUniqueGoRequestThanFloorNumberDividedBy2() {
+		final int floorsNumber = floorBoundaries.calculateFloorsNumber();
+		final int floorsNumberThreshold = floorsNumber / 2;
+		final boolean test = countUniqueGoRequests() > floorsNumberThreshold;
+		return test;
+	}
 
 	private int countUniqueGoRequests() {
 		Set<Integer> uniqueGoRequests = new HashSet<Integer>();
