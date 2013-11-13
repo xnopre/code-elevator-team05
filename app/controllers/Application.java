@@ -45,8 +45,10 @@ public class Application extends Controller {
 	public static void nextCommand() {
 		synchronized (monitor) {
 			Logger.info("Request received 'nextCommand'");
+			final long time0 = System.currentTimeMillis();
 			Command nextCommand = elevatorCommandGenerator.nextCommand();
-			Logger.info(nextCommand + ", " + stateManager.getCurrentState());
+			final long duration = System.currentTimeMillis() - time0;
+			Logger.info("NextCommand " + nextCommand + " calculated in " + duration + " ms. New current state = " + stateManager.getCurrentState());
 			renderText(nextCommand);
 		}
 	}
