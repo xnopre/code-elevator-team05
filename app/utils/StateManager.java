@@ -17,7 +17,7 @@ public class StateManager {
 	}
 
 	public void reset(int lowerFloor, int higherFloor, int cabinSize) {
-		currentState = new ElevatorState(lowerFloor);
+		currentState = new ElevatorState(0);
 		floorBoundaries.setRange(lowerFloor, higherFloor);
 		this.cabinSize = cabinSize;
 	}
