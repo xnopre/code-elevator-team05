@@ -49,8 +49,8 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 	}
 
 	@Test
-	public void command_is_open_if_call_at_same_floor_with_other_direction_and_no_more_calls_in_current_direction_down() {
-		givenAnElevatorClosedAtFloor(1).withDirection(DOWN).andWaitingCalls(call(1, UP), call(2, UP)).build();
+	public void command_is_open_if_call_at_same_floor_with_other_direction_and_no_more_calls_or_go_in_current_direction_down() {
+		givenAnElevatorClosedAtFloor(1).withDirection(DOWN).andWaitingCalls(call(1, UP), call(2, UP)).andGoRequests(2).build();
 		final Command nextCommand = commandGenerator.nextCommand();
 		assertThat(nextCommand).is(OPEN).andIsStoredInHistory();
 		assertThatElevatorIsOpened();
@@ -59,7 +59,7 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 
 	@Test
 	public void command_is_open_if_call_at_same_floor_with_other_direction_and_no_more_calls_in_current_direction_up() {
-		givenAnElevatorClosedAtFloor(4).withDirection(UP).andWaitingCalls(call(4, DOWN), call(2, DOWN)).build();
+		givenAnElevatorClosedAtFloor(4).withDirection(UP).andWaitingCalls(call(4, DOWN), call(2, DOWN)).andGoRequests(3).build();
 		final Command nextCommand = commandGenerator.nextCommand();
 		assertThat(nextCommand).is(OPEN).andIsStoredInHistory();
 		assertThatElevatorIsOpened();
@@ -68,10 +68,19 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 
 	@Test
 	public void command_is_open_if_call_at_same_floor_1() {
-		givenAnElevatorClosedAtFloor(1).andWaitingCalls(call(2, UP), call(1, UP)).build();
+		givenAnElevatorClosedAtFloor(1).withDirection(DOWN).andWaitingCalls(call(2, UP), call(1, DOWN)).andGoRequests(0).build();
 		final Command nextCommand = commandGenerator.nextCommand();
 		assertThat(nextCommand).is(OPEN).andIsStoredInHistory();
 		assertThatAllTheCallsAndGosForTheCurrentFloorAreRemoved(1);
+	}
+
+	@Test
+	public void command_is_open_if_there_is_a_go_at_current_floor() {
+		givenAnElevatorClosedAtFloor(4).withDirection(DOWN).andWaitingCalls(call(2, UP), call(2, DOWN), call(5, UP), call(5, DOWN)).andGoRequests(3, 4, 5)
+				.build();
+		final Command nextCommand = commandGenerator.nextCommand();
+		assertThat(nextCommand).is(OPEN).andIsStoredInHistory();
+		assertThatAllTheCallsAndGosForTheCurrentFloorAreRemoved(4);
 	}
 
 	@Test
@@ -86,14 +95,6 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 		givenAnElevatorClosedAtFloor(7).withDirection(DOWN).andWaitingCalls(call(7, UP)).andGoRequests(5).andMustSkipExtraWaitingCalls().build();
 		final Command nextCommand = commandGenerator.nextCommand();
 		assertThat(nextCommand).is(Command.DOWN).andIsStoredInHistory();
-	}
-
-	@Test
-	public void command_is_open_if_there_is_a_go_at_current_floor() {
-		givenAnElevatorClosedAtFloor(4).andGoRequests(4).build();
-		final Command nextCommand = commandGenerator.nextCommand();
-		assertThat(nextCommand).is(OPEN).andIsStoredInHistory();
-		assertThatAllTheCallsAndGosForTheCurrentFloorAreRemoved(4);
 	}
 
 	@Test
