@@ -62,7 +62,7 @@ public class Application extends Controller {
 		synchronized (monitor) {
 			Command nextCommand = getNextCommand();
 			// String[] nextCommands = new String[] { nextCommand.toString() };
-			renderText("[" + nextCommand.toString() + "]");
+			renderText(nextCommand.toString());
 		}
 	}
 
