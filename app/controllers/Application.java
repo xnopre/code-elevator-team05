@@ -53,6 +53,14 @@ public class Application extends Controller {
 		}
 	}
 
+	public static void nextCommands() {
+		synchronized (monitor) {
+			Command nextCommand = elevatorCommandGenerator.nextCommand();
+			String[] nextCommands = new String[] { nextCommand.toString() };
+			renderJSON(nextCommands);
+		}
+	}
+
 	public static void go(int floorToGo) {
 		synchronized (monitor) {
 			Logger.info("Request received go(" + floorToGo + ")");
