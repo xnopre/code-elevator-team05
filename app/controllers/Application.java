@@ -45,19 +45,24 @@ public class Application extends Controller {
 	public static void nextCommand() {
 		synchronized (monitor) {
 			Logger.info("Request received 'nextCommand'");
-			final long time0 = System.currentTimeMillis();
-			Command nextCommand = elevatorCommandGenerator.nextCommand();
-			final long duration = System.currentTimeMillis() - time0;
-			Logger.info("NextCommand " + nextCommand + " calculated in " + duration + " ms. New current state = " + stateManager.getCurrentState());
+			Command nextCommand = getNextCommand();
 			renderText(nextCommand);
 		}
 	}
 
+	private static Command getNextCommand() {
+		final long time0 = System.currentTimeMillis();
+		Command nextCommand = elevatorCommandGenerator.nextCommand();
+		final long duration = System.currentTimeMillis() - time0;
+		Logger.info("NextCommand " + nextCommand + " calculated in " + duration + " ms. New current state = " + stateManager.getCurrentState());
+		return nextCommand;
+	}
+
 	public static void nextCommands() {
 		synchronized (monitor) {
-			Command nextCommand = elevatorCommandGenerator.nextCommand();
-			String[] nextCommands = new String[] { nextCommand.toString() };
-			renderText(nextCommand.toString());
+			Command nextCommand = getNextCommand();
+			// String[] nextCommands = new String[] { nextCommand.toString() };
+			renderText("[" + nextCommand.toString() + "]");
 		}
 	}
 
