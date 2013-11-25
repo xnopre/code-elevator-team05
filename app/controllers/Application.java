@@ -57,7 +57,7 @@ public class Application extends Controller {
 		synchronized (monitor) {
 			Command nextCommand = elevatorCommandGenerator.nextCommand();
 			String[] nextCommands = new String[] { nextCommand.toString() };
-			renderJSON(nextCommands);
+			renderText(nextCommand.toString());
 		}
 	}
 
