@@ -25,10 +25,10 @@ public class Application extends Controller {
 		}
 	}
 
-	public static void reset(int lowerFloor, int higherFloor, int cabinSize, String cause) {
+	public static void reset(int lowerFloor, int higherFloor, int cabinSize, int cabinCount, String cause) {
 		synchronized (monitor) {
-			Logger.info("Request received 'reset' : lowerFloor=" + lowerFloor + ", higherFloor=" + higherFloor + ", cabinSize=" + cabinSize + ", cause="
-					+ cause);
+			Logger.info("Request received 'reset' : lowerFloor=" + lowerFloor + ", higherFloor=" + higherFloor + ", cabinSize=" + cabinSize + ", cabinCount="
+					+ cabinCount + ", cause=" + cause);
 			stateManager.reset(lowerFloor, higherFloor, cabinSize);
 			ok();
 		}
