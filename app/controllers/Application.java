@@ -62,13 +62,14 @@ public class Application extends Controller {
 		synchronized (monitor) {
 			Command nextCommand = getNextCommand();
 			final String nextCommands = nextCommand + "\n" + Command.NOTHING + "\n";
+			System.out.println("'" + nextCommands + "'");
 			Logger.info("NextCommands :  " + encodeCr(nextCommands));
 			renderText(nextCommands);
 		}
 	}
 
 	private static String encodeCr(String cmd) {
-		return cmd.replaceAll("\n", "\\n");
+		return cmd.replaceAll("\n", "<CR>");
 	}
 
 	public static void go(int cabin, int floorToGo) {
