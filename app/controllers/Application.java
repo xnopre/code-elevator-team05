@@ -66,7 +66,7 @@ public class Application extends Controller {
 		}
 	}
 
-	public static void go(int floorToGo) {
+	public static void go(int cabin, int floorToGo) {
 		synchronized (monitor) {
 			Logger.info("Request received go(" + floorToGo + ")");
 			// try {
@@ -80,14 +80,14 @@ public class Application extends Controller {
 		}
 	}
 
-	public static void userHasEntered() {
+	public static void userHasEntered(int cabin) {
 		synchronized (monitor) {
 			Logger.info("Request received 'userHasEntered'");
 			ok();
 		}
 	}
 
-	public static void userHasExited() {
+	public static void userHasExited(int cabin) {
 		synchronized (monitor) {
 			Logger.info("Request received 'userHasExited'");
 			// stateManager.removeGoRequest(stateManager.getCurrentState().getCurrentFloor());
