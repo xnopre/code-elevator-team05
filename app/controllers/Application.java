@@ -61,8 +61,7 @@ public class Application extends Controller {
 	public static void nextCommands() {
 		synchronized (monitor) {
 			Command nextCommand = getNextCommand();
-			// String[] nextCommands = new String[] { nextCommand.toString() };
-			renderText(nextCommand.toString());
+			renderText(nextCommand + "\n" + Command.NOTHING + "\n");
 		}
 	}
 
