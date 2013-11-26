@@ -2,7 +2,8 @@ package generators;
 
 import static utils.Command.CLOSE;
 import static utils.Command.NOTHING;
-import static utils.Command.OPEN;
+import static utils.Command.OPEN_DOWN;
+import static utils.Command.OPEN_UP;
 import static utils.Direction.DOWN;
 import static utils.Direction.UP;
 
@@ -43,11 +44,14 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 			return close();
 		}
 		if (thereIsAGoAtCurrentFloor()) {
-			return open();
+			return open(getCurrentDirection());
 		}
-		if (thereIsACallAtCurrentFloorMatchingCurrentDirection() || thereIsACallAtCurrentFloorAndNoOtherCallsOrGoMatchingCurrentDirection()) {
-			if (dontSkipExtraWaitingCalls()) {
-				return open();
+		if (dontSkipExtraWaitingCalls()) {
+			if (thereIsACallAtCurrentFloorMatchingCurrentDirection()) {
+				return open(getCurrentDirection());
+			}
+			if (thereIsACallAtCurrentFloorAndNoOtherCallsOrGoMatchingCurrentDirection()) {
+				return open(invertCurrentDirection());
 			}
 		}
 		if (isCurrentDirectionIs(UP)) {
@@ -87,11 +91,11 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 		return storeCommandInHistory(Command.UP);
 	}
 
-	private Command open() {
+	private Command open(Direction direction) {
 		stateManager.setOpened();
 		waitingCallAndGoRemover.removeAllCallsFromTheCurrentFloor();
 		waitingCallAndGoRemover.removeAllGosFromTheCurrentFloor();
-		return storeCommandInHistory(OPEN);
+		return storeCommandInHistory(direction == UP ? OPEN_UP : OPEN_DOWN);
 	}
 
 	private Command close() {
@@ -116,7 +120,15 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 	}
 
 	private boolean isCurrentDirectionIs(Direction direction) {
-		return stateManager.getCurrentState().getCurrentDirection() == direction;
+		return getCurrentDirection() == direction;
+	}
+
+	private Direction getCurrentDirection() {
+		return stateManager.getCurrentState().getCurrentDirection();
+	}
+
+	private Direction invertCurrentDirection() {
+		return getCurrentDirection() == DOWN ? UP : DOWN;
 	}
 
 	private boolean threeLastCommandAreNothing() {
@@ -206,11 +218,11 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 	}
 
 	private boolean needSameDirectionThanCurrentDirection(Integer goRequest) {
-		return evaluateDirectionFromCurrentFloorTo(goRequest) == stateManager.getCurrentState().getCurrentDirection();
+		return evaluateDirectionFromCurrentFloorTo(goRequest) == getCurrentDirection();
 	}
 
 	private boolean needSameDirectionThanCurrentDirection(Call call) {
-		return evaluateDirectionFromCurrentFloorTo(call.floor) == stateManager.getCurrentState().getCurrentDirection();
+		return evaluateDirectionFromCurrentFloorTo(call.floor) == getCurrentDirection();
 	}
 
 	private Direction evaluateDirectionFromCurrentFloorTo(int floor) {
@@ -218,7 +230,7 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 	}
 
 	private boolean isSameDirectionThanCurrentDirection(Call call) {
-		return call.direction == stateManager.getCurrentState().getCurrentDirection();
+		return call.direction == getCurrentDirection();
 	}
 
 	private boolean isNotSameFloorThantCurrentFloor(Integer goRequest) {
