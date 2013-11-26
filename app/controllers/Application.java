@@ -61,8 +61,14 @@ public class Application extends Controller {
 	public static void nextCommands() {
 		synchronized (monitor) {
 			Command nextCommand = getNextCommand();
-			renderText(nextCommand + "\n" + Command.NOTHING + "\n");
+			final String nextCommands = nextCommand + "\n" + Command.NOTHING + "\n";
+			Logger.info("NextCommands :  " + encodeCr(nextCommands));
+			renderText(nextCommands);
 		}
+	}
+
+	private static String encodeCr(String cmd) {
+		return cmd.replaceAll("\n", "\\n");
 	}
 
 	public static void go(int cabin, int floorToGo) {
