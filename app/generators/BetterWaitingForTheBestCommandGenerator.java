@@ -93,7 +93,7 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 
 	private Command open(Direction direction) {
 		stateManager.setOpened();
-		waitingCallAndGoRemover.removeAllCallsFromTheCurrentFloor();
+		waitingCallAndGoRemover.removeAllCallsFromTheCurrentFloor(direction);
 		waitingCallAndGoRemover.removeAllGosFromTheCurrentFloor();
 		return storeCommandInHistory(direction == UP ? OPEN_UP : OPEN_DOWN);
 	}

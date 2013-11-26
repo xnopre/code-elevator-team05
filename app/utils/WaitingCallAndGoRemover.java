@@ -16,7 +16,7 @@ public class WaitingCallAndGoRemover {
 		this.statemanager = statemanager;
 	}
 
-	public void removeAllCallsFromTheCurrentFloor() {
+	public void removeAllCallsFromTheCurrentFloor(final Direction direction) {
 
 		final Collection<Call> matchedCalls = Collections2.filter(statemanager.getCurrentState().getWaitingCalls(), new Predicate<Call>() {
 
@@ -26,7 +26,7 @@ public class WaitingCallAndGoRemover {
 			}
 
 			private boolean callWasMadeFromCurrentFloor(Call call) {
-				return call.floor == statemanager.getCurrentState().getCurrentFloor();
+				return call.floor == statemanager.getCurrentState().getCurrentFloor() && call.direction == direction;
 			}
 		});
 
