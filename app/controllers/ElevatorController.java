@@ -11,7 +11,7 @@ import utils.FloorBoundaries;
 import utils.StateManager;
 import utils.WaitingCallAndGoRemover;
 
-public class Application extends Controller {
+public class ElevatorController extends Controller {
 
 	private static final Object monitor = new Object();
 
