@@ -1,6 +1,5 @@
 package utils;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,7 +15,7 @@ public class StateManager {
 		this.floorBoundaries = floorBoundaries;
 	}
 
-	public void reset(int lowerFloor, int higherFloor, int cabinSize) {
+	public void reset(int lowerFloor, int higherFloor, int cabinSize, int cabinCount) {
 		currentState = new ElevatorState(0);
 		floorBoundaries.setRange(lowerFloor, higherFloor);
 		this.cabinSize = cabinSize;
@@ -72,15 +71,6 @@ public class StateManager {
 
 	public void setCurrentDirection(Direction currentDirection) {
 		currentState = ElevatorState.Builder.from(currentState).setCurrentDirection(currentDirection).get();
-	}
-
-	public void storeCommandInHistory(Command command) {
-		currentState = ElevatorState.Builder.from(currentState).storeCommandInHistory(command).get();
-	}
-
-	public boolean areThreeLastCommandEqualTo(Command command) {
-		Command[] commands = new Command[] { command, command, command };
-		return Arrays.equals(currentState.getLastCommandsAsArray(), commands);
 	}
 
 	public FloorBoundaries getFloorBoundaries() {

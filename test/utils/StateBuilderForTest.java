@@ -75,7 +75,7 @@ public class StateBuilderForTest {
 	public static void createStateAndDoReturnItByStateManager(StateManager mockStateManager, int floor, boolean opened, Direction direction, Call[] calls,
 			Integer[] floorsToGo, SizeLimitedArrayList lastCommands) {
 		final ElevatorState state = new ElevatorState(floor, opened, direction, calls != null ? newArrayList(calls) : new ArrayList<Call>(),
-				floorsToGo != null ? newArrayList(floorsToGo) : new ArrayList<Integer>(), lastCommands);
+				floorsToGo != null ? newArrayList(floorsToGo) : new ArrayList<Integer>());
 		when(mockStateManager.getCurrentState()).thenReturn(state);
 
 	}

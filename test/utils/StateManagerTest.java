@@ -53,7 +53,7 @@ public class StateManagerTest {
 	public void ensure_reset_command_restore_initial_state() {
 		stateManager.storeWaitingCall(3, DOWN);
 
-		stateManager.reset(-4, 8, 5);
+		stateManager.reset(-4, 8, 5, 2);
 
 		final ElevatorState expectedState = new ElevatorState(0);
 		assertThat(stateManager.getCurrentState()).isEqualTo(expectedState);
@@ -150,28 +150,6 @@ public class StateManagerTest {
 	}
 
 	@Test
-	public void areThreeLastCommandEqualTo_return_false() {
-
-		stateManager.storeCommandInHistory(Command.NOTHING);
-		stateManager.storeCommandInHistory(Command.CLOSE);
-		stateManager.storeCommandInHistory(Command.NOTHING);
-		stateManager.storeCommandInHistory(Command.NOTHING);
-
-		assertThat(stateManager.areThreeLastCommandEqualTo(Command.NOTHING)).isFalse();
-	}
-
-	@Test
-	public void areThreeLastCommandEqualTo_return_true() {
-
-		stateManager.storeCommandInHistory(Command.CLOSE);
-		stateManager.storeCommandInHistory(Command.NOTHING);
-		stateManager.storeCommandInHistory(Command.NOTHING);
-		stateManager.storeCommandInHistory(Command.NOTHING);
-
-		assertThat(stateManager.areThreeLastCommandEqualTo(Command.NOTHING)).isTrue();
-	}
-
-	@Test
 	public void must_store_current_direction_up() {
 		stateManager.setCurrentDirection(DOWN);
 		stateManager.setCurrentDirection(UP);
@@ -187,7 +165,7 @@ public class StateManagerTest {
 
 	@Test
 	public void mustSkipExtraWaitingCalls_must_return_false_if_go_request_number_less_than_floors_numbers_devided_by_2() {
-		stateManager.reset(0, 5, 99);
+		stateManager.reset(0, 5, 99, 2);
 		final int floorsNumber = floorBoundaries.calculateFloorsNumber();
 		final int floorsNumberThreshold = floorsNumber / 2;
 		for (int i = 0; i < floorsNumberThreshold + 1; i++) {
@@ -199,7 +177,7 @@ public class StateManagerTest {
 
 	@Test
 	public void mustSkipExtraWaitingCalls_must_return_true_if_cabin_is_full() {
-		stateManager.reset(0, 5, 3);
+		stateManager.reset(0, 5, 3, 2);
 		stateManager.storeGoRequest(1);
 		stateManager.storeGoRequest(1);
 		stateManager.storeGoRequest(0);

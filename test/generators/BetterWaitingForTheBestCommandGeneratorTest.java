@@ -3,7 +3,6 @@ package generators;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static utils.Command.CLOSE;
 import static utils.Command.NOTHING;
 import static utils.Command.OPEN_DOWN;
@@ -39,21 +38,21 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 	public void command_is_nothing_without_state_command() {
 		givenAnElevatorClosedAtFloor(3).andNoWaitingCalls().andMiddleFloorIs(3).build();
 		final Command nextCommand = commandGenerator.nextCommand();
-		assertThat(nextCommand).is(NOTHING).andIsStoredInHistory();
+		assertThat(nextCommand).is(NOTHING);
 	}
 
 	@Test
 	public void command_is_nothing_if_is_open_and_receive_call_at_same_floor() {
 		givenAnElevatorOpenedAtFloor(1).andWaitingCalls(call(1, UP)).build();
 		final Command nextCommand = commandGenerator.nextCommand();
-		assertThat(nextCommand).is(NOTHING).andIsStoredInHistory();
+		assertThat(nextCommand).is(NOTHING);
 	}
 
 	@Test
 	public void command_is_open_if_call_at_same_floor_with_other_direction_and_no_more_calls_or_go_in_current_direction_down() {
 		givenAnElevatorClosedAtFloor(1).withDirection(DOWN).andWaitingCalls(call(1, UP), call(2, UP)).andGoRequests(2).build();
 		final Command nextCommand = commandGenerator.nextCommand();
-		assertThat(nextCommand).is(OPEN_UP).andIsStoredInHistory();
+		assertThat(nextCommand).is(OPEN_UP);
 		assertThatElevatorIsOpened();
 		assertThatAllTheCallsAndGosForTheCurrentFloorAreRemoved(1, UP);
 	}
@@ -62,7 +61,7 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 	public void command_is_open_if_call_at_same_floor_with_other_direction_and_no_more_calls_in_current_direction_up() {
 		givenAnElevatorClosedAtFloor(4).withDirection(UP).andWaitingCalls(call(4, DOWN), call(2, DOWN)).andGoRequests(3).build();
 		final Command nextCommand = commandGenerator.nextCommand();
-		assertThat(nextCommand).is(OPEN_DOWN).andIsStoredInHistory();
+		assertThat(nextCommand).is(OPEN_DOWN);
 		assertThatElevatorIsOpened();
 		assertThatAllTheCallsAndGosForTheCurrentFloorAreRemoved(4, DOWN);
 	}
@@ -71,7 +70,7 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 	public void command_is_open_if_call_at_same_floor_going_down() {
 		givenAnElevatorClosedAtFloor(1).withDirection(DOWN).andWaitingCalls(call(2, UP), call(1, DOWN)).andGoRequests(0).build();
 		final Command nextCommand = commandGenerator.nextCommand();
-		assertThat(nextCommand).is(OPEN_DOWN).andIsStoredInHistory();
+		assertThat(nextCommand).is(OPEN_DOWN);
 		assertThatAllTheCallsAndGosForTheCurrentFloorAreRemoved(1, DOWN);
 	}
 
@@ -80,7 +79,7 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 		givenAnElevatorClosedAtFloor(4).withDirection(DOWN).andWaitingCalls(call(2, UP), call(2, DOWN), call(5, UP), call(5, DOWN)).andGoRequests(3, 4, 5)
 				.build();
 		final Command nextCommand = commandGenerator.nextCommand();
-		assertThat(nextCommand).is(OPEN_DOWN).andIsStoredInHistory();
+		assertThat(nextCommand).is(OPEN_DOWN);
 		assertThatAllTheCallsAndGosForTheCurrentFloorAreRemoved(4, DOWN);
 	}
 
@@ -89,7 +88,7 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 	public void command_is_open_if_call_at_same_floor_going_up() {
 		givenAnElevatorClosedAtFloor(1).withDirection(UP).andWaitingCalls(call(0, UP), call(1, UP)).andGoRequests(2).build();
 		final Command nextCommand = commandGenerator.nextCommand();
-		assertThat(nextCommand).is(OPEN_UP).andIsStoredInHistory();
+		assertThat(nextCommand).is(OPEN_UP);
 		assertThatAllTheCallsAndGosForTheCurrentFloorAreRemoved(1, UP);
 	}
 
@@ -98,7 +97,7 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 		givenAnElevatorClosedAtFloor(4).withDirection(UP).andWaitingCalls(call(2, UP), call(2, DOWN), call(5, UP), call(5, DOWN)).andGoRequests(3, 4, 5)
 				.build();
 		final Command nextCommand = commandGenerator.nextCommand();
-		assertThat(nextCommand).is(OPEN_UP).andIsStoredInHistory();
+		assertThat(nextCommand).is(OPEN_UP);
 		assertThatAllTheCallsAndGosForTheCurrentFloorAreRemoved(4, UP);
 	}
 
@@ -106,39 +105,29 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 	public void command_is_up_even_if_there_is_a_call_at_current_floor_but_must_skip_waiting_calls() {
 		givenAnElevatorClosedAtFloor(7).withDirection(UP).andWaitingCalls(call(7, UP)).andGoRequests(8).andMustSkipExtraWaitingCalls().build();
 		final Command nextCommand = commandGenerator.nextCommand();
-		assertThat(nextCommand).is(Command.UP).andIsStoredInHistory();
+		assertThat(nextCommand).is(Command.UP);
 	}
 
 	@Test
 	public void command_is_down_even_if_there_is_a_call_at_current_floor_but_must_skip_waiting_calls() {
 		givenAnElevatorClosedAtFloor(7).withDirection(DOWN).andWaitingCalls(call(7, UP)).andGoRequests(5).andMustSkipExtraWaitingCalls().build();
 		final Command nextCommand = commandGenerator.nextCommand();
-		assertThat(nextCommand).is(Command.DOWN).andIsStoredInHistory();
+		assertThat(nextCommand).is(Command.DOWN);
 	}
 
 	@Test
 	public void command_is_close_if_elevator_is_opened() {
 		givenAnElevatorOpened();
 		final Command nextCommand = commandGenerator.nextCommand();
-		assertThat(nextCommand).is(CLOSE).andIsStoredInHistory();
+		assertThat(nextCommand).is(CLOSE);
 		assertThatElevatorIsClosed();
-	}
-
-	@Test
-	public void command_is_close_if_open_and_nothing_appends_after_3_nothing() {
-		// Hack pour éviter de rester parfois bloquer sans vraiement trouver
-		// d'explications ...
-		when(mockStateManager.areThreeLastCommandEqualTo(NOTHING)).thenReturn(true);
-		givenAnElevatorOpenedAtFloor(1).andWaitingCalls(call(1, UP)).build();
-		final Command nextCommand = commandGenerator.nextCommand();
-		assertThat(nextCommand).is(CLOSE).andIsStoredInHistory();
 	}
 
 	@Test
 	public void command_is_up_if_there_is_a_go_upstairs_and_current_direction_is_up() {
 		givenAnElevatorClosedAtFloor(2).withDirection(UP).andWaitingCalls(call(1, UP), call(2, DOWN)).andGoRequests(1, 4, 3).build();
 		final Command nextCommand = commandGenerator.nextCommand();
-		assertThat(nextCommand).is(Command.UP).andIsStoredInHistory();
+		assertThat(nextCommand).is(Command.UP);
 		assertThatCurrentFloorIsIncremented();
 	}
 
@@ -146,7 +135,7 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 	public void command_is_up_if_there_is_a_go_upstairs_and_current_direction_is_down() {
 		givenAnElevatorClosedAtFloor(2).withDirection(DOWN).andGoRequests(4).build();
 		final Command nextCommand = commandGenerator.nextCommand();
-		assertThat(nextCommand).is(Command.UP).andIsStoredInHistory();
+		assertThat(nextCommand).is(Command.UP);
 		assertThatCurrentFloorIsIncremented();
 		assertThatCurrentDirectionIsSetTo(UP);
 	}
@@ -155,7 +144,7 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 	public void command_is_up_if_there_is_a_call_upstairs_and_current_direction_is_up() {
 		givenAnElevatorClosedAtFloor(2).withDirection(UP).andWaitingCalls(call(6, UP), call(2, DOWN), call(1, UP), call(1, DOWN)).build();
 		final Command nextCommand = commandGenerator.nextCommand();
-		assertThat(nextCommand).is(Command.UP).andIsStoredInHistory();
+		assertThat(nextCommand).is(Command.UP);
 		assertThatCurrentFloorIsIncremented();
 	}
 
@@ -163,7 +152,7 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 	public void command_is_up_if_there_is_a_call_upstairs_and_current_direction_is_down() {
 		givenAnElevatorClosedAtFloor(2).withDirection(DOWN).andWaitingCalls(call(6, UP)).build();
 		final Command nextCommand = commandGenerator.nextCommand();
-		assertThat(nextCommand).is(Command.UP).andIsStoredInHistory();
+		assertThat(nextCommand).is(Command.UP);
 		assertThatCurrentFloorIsIncremented();
 		assertThatCurrentDirectionIsSetTo(UP);
 	}
@@ -172,7 +161,7 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 	public void command_is_up_if_no_waiting_calls_and_no_go_requests_and_is_not_at_middle_floor() {
 		givenAnElevatorClosedAtFloor(2).withDirection(DOWN).andNoWaitingCalls().andMiddleFloorIs(3).build();
 		final Command nextCommand = commandGenerator.nextCommand();
-		assertThat(nextCommand).is(Command.UP).andIsStoredInHistory();
+		assertThat(nextCommand).is(Command.UP);
 		assertThatCurrentFloorIsIncremented();
 		assertThatCurrentDirectionIsSetTo(UP);
 	}
@@ -181,7 +170,7 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 	public void command_is_down_if_no_waiting_calls_and_no_go_requests_and_is_not_at_middle_floor() {
 		givenAnElevatorClosedAtFloor(6).withDirection(DOWN).andNoWaitingCalls().andMiddleFloorIs(3).build();
 		final Command nextCommand = commandGenerator.nextCommand();
-		assertThat(nextCommand).is(Command.DOWN).andIsStoredInHistory();
+		assertThat(nextCommand).is(Command.DOWN);
 		assertThatCurrentFloorIsDecremented();
 		assertThatCurrentDirectionIsSetTo(DOWN);
 	}
@@ -190,7 +179,7 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 	public void command_is_down_if_there_is_a_go_downstairs_and_current_direction_is_down() {
 		givenAnElevatorClosedAtFloor(2).withDirection(DOWN).andWaitingCalls(call(5, DOWN), call(2, UP), call(1, DOWN)).andGoRequests(4, 0).build();
 		final Command nextCommand = commandGenerator.nextCommand();
-		assertThat(nextCommand).is(Command.DOWN).andIsStoredInHistory();
+		assertThat(nextCommand).is(Command.DOWN);
 		assertThatCurrentFloorIsDecremented();
 		assertThatCurrentDirectionIsSetTo(DOWN);
 	}
@@ -199,7 +188,7 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 	public void command_is_down_if_there_is_a_go_downstairs_and_current_direction_is_up() {
 		givenAnElevatorClosedAtFloor(2).withDirection(UP).andGoRequests(1).build();
 		final Command nextCommand = commandGenerator.nextCommand();
-		assertThat(nextCommand).is(Command.DOWN).andIsStoredInHistory();
+		assertThat(nextCommand).is(Command.DOWN);
 		assertThatCurrentFloorIsDecremented();
 		assertThatCurrentDirectionIsSetTo(DOWN);
 	}
@@ -208,7 +197,7 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 	public void command_is_down_if_there_is_a_call_downstairs_and_current_direction_is_down() {
 		givenAnElevatorClosedAtFloor(4).withDirection(DOWN).andWaitingCalls(call(5, UP), call(1, DOWN)).build();
 		final Command nextCommand = commandGenerator.nextCommand();
-		assertThat(nextCommand).is(Command.DOWN).andIsStoredInHistory();
+		assertThat(nextCommand).is(Command.DOWN);
 		assertThatCurrentFloorIsDecremented();
 	}
 
@@ -216,7 +205,7 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 	public void command_is_down_if_there_is_a_call_downstairs_and_current_direction_is_up() {
 		givenAnElevatorClosedAtFloor(2).withDirection(UP).andWaitingCalls(call(1, UP)).build();
 		final Command nextCommand = commandGenerator.nextCommand();
-		assertThat(nextCommand).is(Command.DOWN).andIsStoredInHistory();
+		assertThat(nextCommand).is(Command.DOWN);
 		assertThatCurrentFloorIsDecremented();
 		assertThatCurrentDirectionIsSetTo(DOWN);
 	}
@@ -272,10 +261,6 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 
 		public MyAssert(Command command) {
 			this.command = command;
-		}
-
-		public void andIsStoredInHistory() {
-			verify(mockStateManager).storeCommandInHistory(command);
 		}
 
 		public MyAssert is(Command expectedCommand) {

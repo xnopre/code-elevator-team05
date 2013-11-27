@@ -15,14 +15,13 @@ public class ElevatorStateTest {
 	public void test_toString() {
 		Collection<Call> waitingCalls = Arrays.asList(new Call(1, UP), new Call(9, DOWN));
 		Collection<Integer> goRequests = Arrays.asList(7, 8);
-		SizeLimitedArrayList lastCommands = new SizeLimitedArrayList<String>(5);
-		final ElevatorState elevatorState = new ElevatorState(0, true, UP, waitingCalls, goRequests, lastCommands);
+		final ElevatorState elevatorState = new ElevatorState(0, true, UP, waitingCalls, goRequests);
 		final String elevatorStateStr = elevatorState.toString();
 		Assertions.assertThat(elevatorStateStr).startsWith("utils.ElevatorState@");
 		Assertions
 				.assertThat(elevatorStateStr)
 				.endsWith(
-						"[currentFloor=0,waitingCalls=[ElevatorCall[floor=1, direction=UP], ElevatorCall[floor=9, direction=DOWN]],goRequests=[7, 8],opened=true,currentDirection=UP,lastCommands=SizeLimitedArrayList[maxSize=3,[]]]");
+						"[currentFloor=0,waitingCalls=[ElevatorCall[floor=1, direction=UP], ElevatorCall[floor=9, direction=DOWN]],goRequests=[7, 8],opened=true,currentDirection=UP]");
 	}
 
 }

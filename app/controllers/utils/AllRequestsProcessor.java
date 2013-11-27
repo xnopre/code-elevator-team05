@@ -20,7 +20,7 @@ public class AllRequestsProcessor {
 	}
 
 	public void reset(int lowerFloor, int higherFloor, int cabinSize, int cabinCount) {
-		stateManager.reset(lowerFloor, higherFloor, cabinSize);
+		stateManager.reset(lowerFloor, higherFloor, cabinSize, cabinCount);
 	}
 
 	public void call(int atFloor, Direction to) {

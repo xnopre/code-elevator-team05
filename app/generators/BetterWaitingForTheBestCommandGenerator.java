@@ -9,7 +9,6 @@ import static utils.Direction.UP;
 
 import java.util.Collection;
 
-import play.Logger;
 import utils.Call;
 import utils.Command;
 import utils.Direction;
@@ -36,11 +35,8 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 		// }
 
 		if (isOpened()) {
-			if (thereIsACallAtCurrentFloorMatchingCurrentDirection() && threeLastCommandAreNotNothing()) {
-				return storeCommandInHistory(NOTHING);
-			}
-			if (thereIsACallAtCurrentFloorMatchingCurrentDirection() && threeLastCommandAreNothing()) {
-				Logger.warn("HACK to unlock strange situation ! ...");
+			if (thereIsACallAtCurrentFloorMatchingCurrentDirection()) {
+				return NOTHING;
 			}
 			return close();
 		}
@@ -77,31 +73,31 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 			}
 			return up();
 		}
-		return storeCommandInHistory(NOTHING);
+		return NOTHING;
 	}
 
 	private Command down() {
 		stateManager.decrementFloor();
 		stateManager.setCurrentDirection(DOWN);
-		return storeCommandInHistory(Command.DOWN);
+		return Command.DOWN;
 	}
 
 	private Command up() {
 		stateManager.incrementFloor();
 		stateManager.setCurrentDirection(UP);
-		return storeCommandInHistory(Command.UP);
+		return Command.UP;
 	}
 
 	private Command open(Direction direction) {
 		stateManager.setOpened();
 		waitingCallAndGoRemover.removeAllCallsFromTheCurrentFloor(direction);
 		waitingCallAndGoRemover.removeAllGosFromTheCurrentFloor();
-		return storeCommandInHistory(direction == UP ? OPEN_UP : OPEN_DOWN);
+		return (direction == UP ? OPEN_UP : OPEN_DOWN);
 	}
 
 	private Command close() {
 		stateManager.setClosed();
-		return storeCommandInHistory(CLOSE);
+		return CLOSE;
 	}
 
 	private boolean isAboveMiddleFloor() {
@@ -130,19 +126,6 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 
 	private Direction invertCurrentDirection() {
 		return getCurrentDirection() == DOWN ? UP : DOWN;
-	}
-
-	private boolean threeLastCommandAreNothing() {
-		return stateManager.areThreeLastCommandEqualTo(NOTHING);
-	}
-
-	private boolean threeLastCommandAreNotNothing() {
-		return !threeLastCommandAreNothing();
-	}
-
-	private Command storeCommandInHistory(Command command) {
-		stateManager.storeCommandInHistory(command);
-		return command;
 	}
 
 	private boolean thereIsAGoUpstairs() {
