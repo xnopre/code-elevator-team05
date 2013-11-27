@@ -4,20 +4,24 @@ import generators.BetterWaitingForTheBestCommandGenerator;
 import generators.CommandGenerator;
 import play.Logger;
 import play.mvc.Controller;
-import utils.Command;
 import utils.Direction;
 import utils.ElevatorState;
 import utils.FloorBoundaries;
 import utils.StateManager;
 import utils.WaitingCallAndGoRemover;
+import controllers.utils.AllRequestsProcessor;
 
 public class ElevatorController extends Controller {
 
 	private static final Object monitor = new Object();
 
 	private static final StateManager stateManager = new StateManager(new FloorBoundaries(0, 19));
+
 	private static final WaitingCallAndGoRemover waitingCallAndGoRemover = new WaitingCallAndGoRemover(stateManager);
+
 	private static final CommandGenerator elevatorCommandGenerator = new BetterWaitingForTheBestCommandGenerator(stateManager, waitingCallAndGoRemover);
+
+	private static final AllRequestsProcessor allRequestsProcessor = new AllRequestsProcessor(stateManager, waitingCallAndGoRemover, elevatorCommandGenerator);
 
 	public static void index() {
 		synchronized (monitor) {
@@ -29,7 +33,7 @@ public class ElevatorController extends Controller {
 		synchronized (monitor) {
 			Logger.info("Request received 'reset' : lowerFloor=" + lowerFloor + ", higherFloor=" + higherFloor + ", cabinSize=" + cabinSize + ", cabinCount="
 					+ cabinCount + ", cause=" + cause);
-			stateManager.reset(lowerFloor, higherFloor, cabinSize);
+			allRequestsProcessor.reset(lowerFloor, higherFloor, cabinSize, cabinCount);
 			ok();
 		}
 	}
@@ -37,50 +41,23 @@ public class ElevatorController extends Controller {
 	public static void call(int atFloor, Direction to) {
 		synchronized (monitor) {
 			Logger.info("Request received 'call' atFloor %d to %s", atFloor, to);
-			stateManager.storeWaitingCall(atFloor, to);
+			allRequestsProcessor.call(atFloor, to);
 			ok();
 		}
 	}
 
-	public static void nextCommand() {
-		synchronized (monitor) {
-			Logger.info("Request received 'nextCommand'");
-			Command nextCommand = getNextCommand();
-			renderText(nextCommand);
-		}
-	}
-
-	private static Command getNextCommand() {
-		final long time0 = System.currentTimeMillis();
-		Command nextCommand = elevatorCommandGenerator.nextCommand();
-		final long duration = System.currentTimeMillis() - time0;
-		Logger.info("NextCommand " + nextCommand + " calculated in " + duration + " ms. New current state = " + stateManager.getCurrentState());
-		return nextCommand;
-	}
-
 	public static void nextCommands() {
 		synchronized (monitor) {
-			Command nextCommand = getNextCommand();
-			final String nextCommands = nextCommand + "\n" + Command.NOTHING;
-			Logger.info("NextCommands :  " + encodeCr(nextCommands));
+			final String nextCommands = allRequestsProcessor.nextCommands();
+			Logger.info("NextCommands : " + encodeCr(nextCommands));
 			renderText(nextCommands);
 		}
-	}
-
-	private static String encodeCr(String cmd) {
-		return cmd.replaceAll("\n", "<CR>");
 	}
 
 	public static void go(int cabin, int floorToGo) {
 		synchronized (monitor) {
 			Logger.info("Request received go(" + floorToGo + ")");
-			// try {
-			// waitingCallRemover.removeOneCallFromCurrentFloorToGoAtFloor(floorToGo);
-			// } catch (ElevatorException e) {
-			// Logger.warn("Error processing 'go' : " + e.getMessage());
-			// }
-			stateManager.storeGoRequest(floorToGo);
-			Logger.info("    After go(" + floorToGo + ") : " + stateManager.getCurrentState());
+			allRequestsProcessor.go(cabin, floorToGo);
 			ok();
 		}
 	}
@@ -88,6 +65,7 @@ public class ElevatorController extends Controller {
 	public static void userHasEntered(int cabin) {
 		synchronized (monitor) {
 			Logger.info("Request received 'userHasEntered'");
+			allRequestsProcessor.userHasEntered(cabin);
 			ok();
 		}
 	}
@@ -95,8 +73,7 @@ public class ElevatorController extends Controller {
 	public static void userHasExited(int cabin) {
 		synchronized (monitor) {
 			Logger.info("Request received 'userHasExited'");
-			// stateManager.removeGoRequest(stateManager.getCurrentState().getCurrentFloor());
-			Logger.info("    After 'userHasExited' : " + stateManager.getCurrentState());
+			allRequestsProcessor.userHasEntered(cabin);
 			ok();
 		}
 	}
@@ -109,4 +86,9 @@ public class ElevatorController extends Controller {
 			render(currentState, currentFloorBoundaries, mustSkipExtraWaitingCalls);
 		}
 	}
+
+	private static String encodeCr(String cmd) {
+		return cmd.replaceAll("\n", "<CR>");
+	}
+
 }
