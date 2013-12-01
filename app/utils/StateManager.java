@@ -76,6 +76,10 @@ public class StateManager {
 		return floorBoundaries;
 	}
 
+	public int getCabinCount() {
+		return currentState.getCabinCount();
+	}
+
 	public int getCabinSize() {
 		return cabinSize;
 	}

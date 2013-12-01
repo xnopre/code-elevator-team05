@@ -29,11 +29,18 @@ public class AllRequestsProcessor {
 
 	public String nextCommands() {
 		final long time0 = System.currentTimeMillis();
-		Command nextCommand1 = elevatorCommandGenerator.nextCommand(0);
+		int cabinCount = stateManager.getCabinCount();
+		String nextCommands = "";
+		for (int cabin = 0; cabin < cabinCount; cabin++) {
+			Command nextCommand = elevatorCommandGenerator.nextCommand(cabin);
+			if (cabin > 0) {
+				nextCommands += "\n";
+			}
+			nextCommands += nextCommand;
+		}
 		final long duration = System.currentTimeMillis() - time0;
-		Logger.info("NextCommand " + nextCommand1 + " calculated in " + duration + " ms. New current state = " + stateManager.getCurrentState());
-		Command nextCommand = nextCommand1;
-		return nextCommand + "\n" + Command.NOTHING;
+		Logger.info("NextCommand '" + encodeCr(nextCommands) + "' calculated in " + duration + " ms. New current state = " + stateManager.getCurrentState());
+		return nextCommands;
 	}
 
 	public void go(int cabin, int floorToGo) {
@@ -57,4 +64,7 @@ public class AllRequestsProcessor {
 		Logger.info("    After 'userHasExited' : " + stateManager.getCurrentState());
 	}
 
+	private String encodeCr(String cmds) {
+		return cmds.replaceAll("\n", "<CR>");
+	}
 }
