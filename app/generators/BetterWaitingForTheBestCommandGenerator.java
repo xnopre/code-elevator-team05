@@ -35,7 +35,7 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 		// }
 
 		if (isOpened(cabin)) {
-			if (thereIsACallAtCurrentFloorMatchingCurrentDirection(cabin)) {
+			if (thereIsACallAtCurrentFloorMatchingCurrentDirection(cabin) && isNotCabinFull(cabin)) {
 				return NOTHING;
 			}
 			return close(cabin);
@@ -44,11 +44,13 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 			return open(cabin, getCurrentDirection(cabin));
 		}
 		// if (dontSkipExtraWaitingCalls(cabin)) {
-		if (thereIsACallAtCurrentFloorMatchingCurrentDirection(cabin)) {
-			return open(cabin, getCurrentDirection(cabin));
-		}
-		if (thereIsACallAtCurrentFloorAndNoOtherCallsOrGoMatchingCurrentDirection(cabin)) {
-			return open(cabin, invertCurrentDirection(cabin));
+		if (isNotCabinFull(cabin)) {
+			if (thereIsACallAtCurrentFloorMatchingCurrentDirection(cabin)) {
+				return open(cabin, getCurrentDirection(cabin));
+			}
+			if (thereIsACallAtCurrentFloorAndNoOtherCallsOrGoMatchingCurrentDirection(cabin)) {
+				return open(cabin, invertCurrentDirection(cabin));
+			}
 		}
 		// }
 		if (isCurrentDirectionIs(cabin, UP)) {
@@ -74,6 +76,10 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 			return up(cabin);
 		}
 		return NOTHING;
+	}
+
+	private boolean isNotCabinFull(int cabin) {
+		return !stateManager.isCabinFull(cabin);
 	}
 
 	private Command down(int cabin) {

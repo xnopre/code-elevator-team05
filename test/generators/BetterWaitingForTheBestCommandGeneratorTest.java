@@ -49,6 +49,20 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 	}
 
 	@Test
+	public void must_skip_waiting_calls_at_same_floor_and_close_if_cabine_is_full() {
+		givenAnElevatorOpenedAtFloor(19).withDirection(DOWN).andCabinFull().andWaitingCalls(call(19, DOWN)).build();
+		final Command nextCommand = commandGenerator.nextCommand(0);
+		assertThat(nextCommand).is(CLOSE);
+	}
+
+	@Test
+	public void must_skip_waiting_calls_at_same_floor_and_do_up_if_cabine_is_full() {
+		givenAnElevatorClosedAtFloor(19).withDirection(UP).andCabinFull().andWaitingCalls(call(19, UP)).andGoRequests(20).build();
+		final Command nextCommand = commandGenerator.nextCommand(0);
+		assertThat(nextCommand).is(Command.UP);
+	}
+
+	@Test
 	public void command_is_open_if_call_at_same_floor_with_other_direction_and_no_more_calls_or_go_in_current_direction_down() {
 		givenAnElevatorClosedAtFloor(1).withDirection(DOWN).andWaitingCalls(call(1, UP), call(2, UP)).andGoRequests(2).build();
 		final Command nextCommand = commandGenerator.nextCommand(0);

@@ -26,6 +26,8 @@ public class StateBuilderForTest {
 
 	private int middleFloor;
 
+	private boolean cabinFull;
+
 	public StateBuilderForTest(StateManager mockStateManager, int floor, boolean opened) {
 		this.mockStateManager = mockStateManager;
 		this.floor = floor;
@@ -52,6 +54,11 @@ public class StateBuilderForTest {
 		return this;
 	}
 
+	public StateBuilderForTest andCabinFull() {
+		cabinFull = true;
+		return this;
+	}
+
 	public StateBuilderForTest andMiddleFloorIs(int middleFloor) {
 		this.middleFloor = middleFloor;
 		return this;
@@ -60,6 +67,7 @@ public class StateBuilderForTest {
 	public void build() {
 		createStateAndDoReturnItByStateManager(mockStateManager, floor, opened, direction, calls, floorsToGo, lastCommands);
 		when(mockStateManager.getFloorBoundaries()).thenReturn(mockFloorBoundaries);
+		when(mockStateManager.isCabinFull(0)).thenReturn(cabinFull);
 		when(mockFloorBoundaries.getMiddelFloor()).thenReturn(middleFloor);
 	}
 
