@@ -1,6 +1,8 @@
 package utils;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static utils.Direction.DOWN;
+import static utils.Direction.UP;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,6 +21,7 @@ public class ElevatorState {
 		for (int i = 0; i < cabinCount; i++) {
 			cabinsStates[i] = new CabinState();
 			cabinsStates[i].setMustGoAtMiddleFloor(i == 0);
+			cabinsStates[i].setCurrentDirection(i % 2 == 0 ? UP : DOWN);
 		}
 	}
 

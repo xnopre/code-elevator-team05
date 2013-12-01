@@ -1,6 +1,8 @@
 package utils;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static utils.Direction.DOWN;
+import static utils.Direction.UP;
 
 import org.junit.Test;
 
@@ -27,5 +29,14 @@ public class ElevatorStateTest {
 		assertThat(elevatorState.mustGoAtMiddleFloor(0)).isTrue();
 		assertThat(elevatorState.mustGoAtMiddleFloor(1)).isFalse();
 		assertThat(elevatorState.mustGoAtMiddleFloor(2)).isFalse();
+	}
+
+	@Test
+	public void default_direction_must_be_alternated_between_cabins() {
+		final ElevatorState elevatorState = new ElevatorState(4);
+		assertThat(elevatorState.getCurrentDirection(0)).isEqualTo(UP);
+		assertThat(elevatorState.getCurrentDirection(1)).isEqualTo(DOWN);
+		assertThat(elevatorState.getCurrentDirection(2)).isEqualTo(UP);
+		assertThat(elevatorState.getCurrentDirection(3)).isEqualTo(DOWN);
 	}
 }
