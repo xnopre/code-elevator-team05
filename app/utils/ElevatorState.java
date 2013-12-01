@@ -5,21 +5,20 @@ import static utils.Direction.UP;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class ElevatorState {
 
-	private final int currentFloor;
+	private int currentFloor;
 
 	private final Collection<Call> waitingCalls;
 
 	private final Collection<Integer> goRequests;
 
-	private final boolean opened;
+	private boolean opened;
 
-	private final Direction currentDirection;
+	private Direction currentDirection;
 
 	public ElevatorState() {
 		this(0);
@@ -37,24 +36,60 @@ public class ElevatorState {
 		this.goRequests = newArrayList(goRequests);
 	}
 
+	public void addWaitingCall(int atFloor, Direction to) {
+		waitingCalls.add(new Call(atFloor, to));
+	}
+
+	public void removeWaitingCall(int atFloor, Direction to) {
+		waitingCalls.remove(new Call(atFloor, to));
+	}
+
 	public Collection<Call> getWaitingCalls() {
 		return waitingCalls;
+	}
+
+	public void addGoRequest(int floorToGo) {
+		goRequests.add(floorToGo);
+	}
+
+	public void removeGoRequest(int floorToGo) {
+		goRequests.remove(floorToGo);
 	}
 
 	public Collection<Integer> getGoRequests() {
 		return goRequests;
 	}
 
+	public void incrementFloor() {
+		currentFloor += 1;
+	}
+
+	public void decrementFloor() {
+		currentFloor -= 1;
+	}
+
 	public int getCurrentFloor() {
 		return currentFloor;
+	}
+
+	public void setOpened() {
+		opened = true;
 	}
 
 	public boolean isOpened() {
 		return opened;
 	}
 
+	public void setClosed() {
+		opened = false;
+	}
+
 	public boolean isClosed() {
 		return !opened;
+	}
+
+	public void setCurrentDirection(Direction newDirection) {
+		currentDirection = newDirection;
 	}
 
 	public Direction getCurrentDirection() {
@@ -116,79 +151,80 @@ public class ElevatorState {
 		return ToStringBuilder.reflectionToString(this);
 	}
 
-	public static class Builder {
-
-		private final ElevatorState initialState;
-		private int incr = 0;
-		private boolean opened;
-		private final List<Call> currentWaitingCalls;
-		private final List<Integer> currentGoRequests;
-		private Direction currentDirection;
-
-		private Builder(ElevatorState state) {
-			this.initialState = state;
-			this.opened = state.isOpened();
-			this.currentDirection = state.getCurrentDirection();
-			currentWaitingCalls = newArrayList(state.getWaitingCalls());
-			currentGoRequests = newArrayList(state.getGoRequests());
-		}
-
-		public static Builder from(ElevatorState state) {
-			return new Builder(state);
-		}
-
-		public Builder addWaitingCall(int atFloor, Direction to) {
-			currentWaitingCalls.add(new Call(atFloor, to));
-			return this;
-		}
-
-		public Builder removeWaitingCall(int atFloor, Direction to) {
-			currentWaitingCalls.remove(new Call(atFloor, to));
-			return this;
-		}
-
-		public Builder addGoRequest(int floorToGo) {
-			currentGoRequests.add(floorToGo);
-			return this;
-		}
-
-		public Builder removeGoRequest(int floorToGo) {
-			final int index = currentGoRequests.indexOf(floorToGo);
-			if (index != -1) {
-				currentGoRequests.remove(index);
-			}
-			return this;
-		}
-
-		public Builder incrementFloor() {
-			incr += 1;
-			return this;
-		}
-
-		public Builder decrementFloor() {
-			incr -= 1;
-			return this;
-		}
-
-		public Builder setClosed() {
-			opened = false;
-			return this;
-		}
-
-		public Builder setOpened() {
-			opened = true;
-			return this;
-		}
-
-		public Builder setCurrentDirection(Direction currentDirection) {
-			this.currentDirection = currentDirection;
-			return this;
-		}
-
-		public ElevatorState get() {
-			return new ElevatorState(initialState.getCurrentFloor() + incr, opened, currentDirection, currentWaitingCalls, currentGoRequests);
-		}
-
-	}
+	// public static class Builder {
+	//
+	// private final ElevatorState initialState;
+	// private int incr = 0;
+	// private boolean opened;
+	// private final List<Call> currentWaitingCalls;
+	// private final List<Integer> currentGoRequests;
+	// private Direction currentDirection;
+	//
+	// private Builder(ElevatorState state) {
+	// this.initialState = state;
+	// this.opened = state.isOpened();
+	// this.currentDirection = state.getCurrentDirection();
+	// currentWaitingCalls = newArrayList(state.getWaitingCalls());
+	// currentGoRequests = newArrayList(state.getGoRequests());
+	// }
+	//
+	// public static Builder from(ElevatorState state) {
+	// return new Builder(state);
+	// }
+	//
+	// public Builder addWaitingCall(int atFloor, Direction to) {
+	// currentWaitingCalls.add(new Call(atFloor, to));
+	// return this;
+	// }
+	//
+	// public Builder removeWaitingCall(int atFloor, Direction to) {
+	// currentWaitingCalls.remove(new Call(atFloor, to));
+	// return this;
+	// }
+	//
+	// public Builder addGoRequest(int floorToGo) {
+	// currentGoRequests.add(floorToGo);
+	// return this;
+	// }
+	//
+	// public Builder removeGoRequest(int floorToGo) {
+	// final int index = currentGoRequests.indexOf(floorToGo);
+	// if (index != -1) {
+	// currentGoRequests.remove(index);
+	// }
+	// return this;
+	// }
+	//
+	// public Builder incrementFloor() {
+	// incr += 1;
+	// return this;
+	// }
+	//
+	// public Builder decrementFloor() {
+	// incr -= 1;
+	// return this;
+	// }
+	//
+	// public Builder setClosed() {
+	// opened = false;
+	// return this;
+	// }
+	//
+	// public Builder setOpened() {
+	// opened = true;
+	// return this;
+	// }
+	//
+	// public Builder setCurrentDirection(Direction currentDirection) {
+	// this.currentDirection = currentDirection;
+	// return this;
+	// }
+	//
+	// public ElevatorState get() {
+	// return new ElevatorState(initialState.getCurrentFloor() + incr, opened,
+	// currentDirection, currentWaitingCalls, currentGoRequests);
+	// }
+	//
+	// }
 
 }

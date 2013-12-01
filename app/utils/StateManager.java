@@ -22,19 +22,19 @@ public class StateManager {
 	}
 
 	public void storeWaitingCall(int atFloor, Direction to) {
-		currentState = ElevatorState.Builder.from(currentState).addWaitingCall(atFloor, to).get();
+		currentState.addWaitingCall(atFloor, to);
 	}
 
 	public void removeWaitingCall(int atFloor, Direction to) {
-		currentState = ElevatorState.Builder.from(currentState).removeWaitingCall(atFloor, to).get();
+		currentState.removeWaitingCall(atFloor, to);
 	}
 
 	public void storeGoRequest(int floorToGo) {
-		currentState = ElevatorState.Builder.from(currentState).addGoRequest(floorToGo).get();
+		currentState.addGoRequest(floorToGo);
 	}
 
 	public void removeGoRequest(int floorToGo) {
-		currentState = ElevatorState.Builder.from(currentState).removeGoRequest(floorToGo).get();
+		currentState.removeGoRequest(floorToGo);
 	}
 
 	public ElevatorState getCurrentState() {
@@ -42,15 +42,17 @@ public class StateManager {
 	}
 
 	public void incrementFloor() {
-		if (isAtLastFloor())
+		if (isAtLastFloor()) {
 			throw new UnreachableFloorException();
-		currentState = ElevatorState.Builder.from(currentState).incrementFloor().get();
+		}
+		currentState.incrementFloor();
 	}
 
 	public void decrementFloor() {
-		if (isAtFirstFloor())
+		if (isAtFirstFloor()) {
 			throw new UnreachableFloorException();
-		currentState = ElevatorState.Builder.from(currentState).decrementFloor().get();
+		}
+		currentState.decrementFloor();
 	}
 
 	public boolean isAtFirstFloor() {
@@ -62,15 +64,15 @@ public class StateManager {
 	}
 
 	public void setOpened() {
-		currentState = ElevatorState.Builder.from(currentState).setOpened().get();
+		currentState.setOpened();
 	}
 
 	public void setClosed() {
-		currentState = ElevatorState.Builder.from(currentState).setClosed().get();
+		currentState.setClosed();
 	}
 
 	public void setCurrentDirection(Direction currentDirection) {
-		currentState = ElevatorState.Builder.from(currentState).setCurrentDirection(currentDirection).get();
+		currentState.setCurrentDirection(currentDirection);
 	}
 
 	public FloorBoundaries getFloorBoundaries() {

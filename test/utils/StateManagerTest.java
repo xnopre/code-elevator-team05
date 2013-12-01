@@ -37,19 +37,6 @@ public class StateManagerTest {
 	}
 
 	@Test
-	public void initial_state_must_be_initial_state() {
-		assertThat(stateManager.getCurrentState()).isEqualTo(new ElevatorState());
-	}
-
-	@Test
-	public void ensure_that_storing_a_call_change_intial_state() {
-		ElevatorState initialState = stateManager.getCurrentState();
-		stateManager.storeWaitingCall(3, DOWN);
-
-		assertThat(stateManager.getCurrentState()).isNotEqualTo(initialState);
-	}
-
-	@Test
 	public void ensure_reset_command_restore_initial_state() {
 		stateManager.storeWaitingCall(3, DOWN);
 
