@@ -18,6 +18,7 @@ public class ElevatorState {
 		cabinsStates = new CabinState[cabinCount];
 		for (int i = 0; i < cabinCount; i++) {
 			cabinsStates[i] = new CabinState();
+			cabinsStates[i].setMustGoAtMiddleFloor(i == 0);
 		}
 	}
 
@@ -87,6 +88,10 @@ public class ElevatorState {
 
 	public Direction getCurrentDirection(int cabin) {
 		return cabinsStates[cabin].getCurrentDirection();
+	}
+
+	public boolean mustGoAtMiddleFloor(int cabin) {
+		return cabinsStates[cabin].mustGoAtMiddleFloor();
 	}
 
 	@Override

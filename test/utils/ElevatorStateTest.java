@@ -1,5 +1,8 @@
 package utils;
 
+import static org.fest.assertions.Assertions.assertThat;
+
+import org.junit.Test;
 
 public class ElevatorStateTest {
 
@@ -18,4 +21,11 @@ public class ElevatorStateTest {
 	// "[currentFloor=0,waitingCalls=[ElevatorCall[floor=1, direction=UP], ElevatorCall[floor=9, direction=DOWN]],goRequests=[7, 8],opened=true,currentDirection=UP]");
 	// }
 
+	@Test
+	public void mustGoAtMiddleFloor_must_be_set_only_on_first_cabin() {
+		final ElevatorState elevatorState = new ElevatorState(3);
+		assertThat(elevatorState.mustGoAtMiddleFloor(0)).isTrue();
+		assertThat(elevatorState.mustGoAtMiddleFloor(1)).isFalse();
+		assertThat(elevatorState.mustGoAtMiddleFloor(2)).isFalse();
+	}
 }

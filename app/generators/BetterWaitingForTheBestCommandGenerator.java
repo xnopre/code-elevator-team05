@@ -69,7 +69,7 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 				return up(cabin);
 			}
 		}
-		if (isNotAtMiddleFloor(cabin)) {
+		if (mustGoAtMiddleFloor(cabin) && isNotAtMiddleFloor(cabin)) {
 			if (isAboveMiddleFloor(cabin)) {
 				return down(cabin);
 			}
@@ -112,6 +112,10 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 
 	private boolean isNotAtMiddleFloor(int cabin) {
 		return getCurrentFloor(cabin) != getMiddelFloor();
+	}
+
+	private boolean mustGoAtMiddleFloor(int cabin) {
+		return stateManager.mustGoAtMiddleFloor(cabin);
 	}
 
 	private int getMiddelFloor() {

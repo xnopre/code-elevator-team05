@@ -28,6 +28,8 @@ public class StateBuilderForTest {
 
 	private boolean cabinFull;
 
+	private boolean cabinMustGoAtMiddleFloor;
+
 	public StateBuilderForTest(StateManager mockStateManager, int floor, boolean opened) {
 		this.mockStateManager = mockStateManager;
 		this.floor = floor;
@@ -59,6 +61,16 @@ public class StateBuilderForTest {
 		return this;
 	}
 
+	public StateBuilderForTest andCabinMustGoAtMiddleFloor() {
+		cabinMustGoAtMiddleFloor = true;
+		return this;
+	}
+
+	public StateBuilderForTest andCabinMustNotGoAtMiddleFloor() {
+		cabinMustGoAtMiddleFloor = false;
+		return this;
+	}
+
 	public StateBuilderForTest andMiddleFloorIs(int middleFloor) {
 		this.middleFloor = middleFloor;
 		return this;
@@ -68,6 +80,7 @@ public class StateBuilderForTest {
 		createStateAndDoReturnItByStateManager(mockStateManager, floor, opened, direction, calls, floorsToGo, lastCommands);
 		when(mockStateManager.getFloorBoundaries()).thenReturn(mockFloorBoundaries);
 		when(mockStateManager.isCabinFull(0)).thenReturn(cabinFull);
+		when(mockStateManager.mustGoAtMiddleFloor(0)).thenReturn(cabinMustGoAtMiddleFloor);
 		when(mockFloorBoundaries.getMiddelFloor()).thenReturn(middleFloor);
 	}
 

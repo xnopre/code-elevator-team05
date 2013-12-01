@@ -158,8 +158,8 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 	}
 
 	@Test
-	public void command_is_up_if_no_waiting_calls_and_no_go_requests_and_is_not_at_middle_floor() {
-		givenAnElevatorClosedAtFloor(2).withDirection(DOWN).andNoWaitingCalls().andMiddleFloorIs(3).build();
+	public void command_is_up_if_no_waiting_calls_and_no_go_requests_and_is_not_at_middle_floor_and_must_go() {
+		givenAnElevatorClosedAtFloor(2).withDirection(DOWN).andNoWaitingCalls().andCabinMustGoAtMiddleFloor().andMiddleFloorIs(3).build();
 		final Command nextCommand = commandGenerator.nextCommand(0);
 		assertThat(nextCommand).is(Command.UP);
 		assertThatCurrentFloorIsIncremented(0);
@@ -167,8 +167,15 @@ public class BetterWaitingForTheBestCommandGeneratorTest {
 	}
 
 	@Test
+	public void command_is_up_if_no_waiting_calls_and_no_go_requests_and_is_not_at_middle_floor_and_must_not_go() {
+		givenAnElevatorClosedAtFloor(2).withDirection(DOWN).andNoWaitingCalls().andCabinMustNotGoAtMiddleFloor().andMiddleFloorIs(3).build();
+		final Command nextCommand = commandGenerator.nextCommand(0);
+		assertThat(nextCommand).is(NOTHING);
+	}
+
+	@Test
 	public void command_is_down_if_no_waiting_calls_and_no_go_requests_and_is_not_at_middle_floor() {
-		givenAnElevatorClosedAtFloor(6).withDirection(DOWN).andNoWaitingCalls().andMiddleFloorIs(3).build();
+		givenAnElevatorClosedAtFloor(6).withDirection(DOWN).andNoWaitingCalls().andCabinMustGoAtMiddleFloor().andMiddleFloorIs(3).build();
 		final Command nextCommand = commandGenerator.nextCommand(0);
 		assertThat(nextCommand).is(Command.DOWN);
 		assertThatCurrentFloorIsDecremented(0);

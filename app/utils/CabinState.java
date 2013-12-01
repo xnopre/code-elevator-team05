@@ -14,6 +14,8 @@ public class CabinState {
 
 	private Direction currentDirection;
 
+	private boolean mustGoAtMiddleFloor;
+
 	public CabinState() {
 		goRequests = newArrayList();
 	}
@@ -60,6 +62,14 @@ public class CabinState {
 
 	public Collection<Integer> getGoRequests() {
 		return goRequests;
+	}
+
+	public boolean mustGoAtMiddleFloor() {
+		return mustGoAtMiddleFloor;
+	}
+
+	public void setMustGoAtMiddleFloor(boolean mustGoAtMiddleFloor) {
+		this.mustGoAtMiddleFloor = mustGoAtMiddleFloor;
 	}
 
 	@Override

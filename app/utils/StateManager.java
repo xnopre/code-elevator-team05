@@ -88,6 +88,10 @@ public class StateManager {
 		return thereIsAsManyPassengersAsCabinSize(cabin);
 	}
 
+	public boolean mustGoAtMiddleFloor(int cabin) {
+		return currentState.mustGoAtMiddleFloor(cabin);
+	}
+
 	// privates ------------------------------------
 
 	private boolean thereIsAsManyPassengersAsCabinSize(int cabin) {
