@@ -1,6 +1,7 @@
 package utils;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static utils.Direction.UP;
 
 import java.util.Collection;
 
@@ -12,7 +13,7 @@ public class CabinState {
 
 	private boolean opened = false;
 
-	private Direction currentDirection;
+	private Direction currentDirection = UP;
 
 	private boolean mustGoAtMiddleFloor;
 
