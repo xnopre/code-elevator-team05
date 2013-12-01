@@ -1,0 +1,33 @@
+#{extends 'main.html' /}
+#{set title:'State' /}
+
+currentFloorBoundaries=${currentFloorBoundaries.toString()}
+<br/>
+
+Etat courant :
+<ul>
+	<li>Appels en attente (floor - direction): ${currentState.waitingCalls.size()}</li>
+	<ul>
+		#{list items:currentState.waitingCalls, as:'call' }
+	        <li>${call.floor} - ${call.direction}</li>
+		#{/list}
+	</ul>
+</ul>
+	
+<ul>
+	#{list items:currentState.cabinsStates, as:'cabinState' }
+        <li>Cabine ${cabinState_index-1} :</li>
+		<ul>
+			<li>Etage courant : ${cabinState.currentFloor}</li>
+			<li>${cabinState.opened ? "Ouvert" : "Fermé"}</li>
+			<li>Direction courante : ${cabinState.currentDirection}</li>
+			<li>Go en cours (floor): ${cabinState.goRequests.size()}</li>
+			<ul>
+				#{list items:cabinState.goRequests, as:'go' }
+			        ${go}${go_isLast ? '' : ','}
+				#{/list}
+			</ul>
+		</ul>
+	#{/list}
+</ul>
+<i>${currentState.toString()}</i>
