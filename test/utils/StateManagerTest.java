@@ -10,7 +10,6 @@ import org.junit.Test;
 
 public class StateManagerTest {
 
-	private final FloorBoundaries floorBoundaries = new FloorBoundaries(0, 5);
 	private final StateManager stateManager = new StateManager(0, 5, 30, 1);
 
 	@Test
