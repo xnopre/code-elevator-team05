@@ -1,5 +1,6 @@
 package utils;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -44,9 +45,12 @@ public class WaitingCallAndGoRemover {
 			}
 		});
 
+		ArrayList<Call> callsToRemove = new ArrayList<Call>();
 		final Iterator<Call> iterator = matchedCalls.iterator();
 		while (iterator.hasNext()) {
-			final Call call = iterator.next();
+			callsToRemove.add(iterator.next());
+		}
+		for (Call call : callsToRemove) {
 			statemanager.removeWaitingCall(call.floor, call.direction);
 		}
 	}
