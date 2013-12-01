@@ -1,39 +1,28 @@
 package utils;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static utils.Direction.UP;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class ElevatorState {
 
-	private int currentFloor;
-
 	private final Collection<Call> waitingCalls;
 
-	private final Collection<Integer> goRequests;
+	private final CabinState[] cabinsStates;
 
-	private boolean opened;
-
-	private Direction currentDirection;
-
-	public ElevatorState() {
-		this(0);
+	public ElevatorState(int cabinCount) {
+		this.waitingCalls = newArrayList();
+		cabinsStates = new CabinState[cabinCount];
+		for (int i = 0; i < cabinCount; i++) {
+			cabinsStates[i] = new CabinState();
+		}
 	}
 
-	public ElevatorState(int currentFloor) {
-		this(currentFloor, false, UP, new ArrayList<Call>(), new ArrayList<Integer>());
-	}
-
-	public ElevatorState(int currentFloor, boolean opened, Direction currentDirection, Collection<Call> waitingCalls, Collection<Integer> goRequests) {
-		this.currentFloor = currentFloor;
-		this.opened = opened;
-		this.currentDirection = currentDirection;
-		this.waitingCalls = newArrayList(waitingCalls);
-		this.goRequests = newArrayList(goRequests);
+	public int getCabinCount() {
+		return cabinsStates.length;
 	}
 
 	public void addWaitingCall(int atFloor, Direction to) {
@@ -48,62 +37,63 @@ public class ElevatorState {
 		return waitingCalls;
 	}
 
-	public void addGoRequest(int floorToGo) {
-		goRequests.add(floorToGo);
+	public void addGoRequest(int cabin, int floorToGo) {
+		cabinsStates[cabin].addGoRequest(floorToGo);
 	}
 
-	public void removeGoRequest(int floorToGo) {
-		goRequests.remove(floorToGo);
+	public void removeGoRequest(int cabin, int floorToGo) {
+		cabinsStates[cabin].removeGoRequest(floorToGo);
 	}
 
-	public Collection<Integer> getGoRequests() {
-		return goRequests;
+	public Collection<Integer> getGoRequests(int cabin) {
+		return cabinsStates[cabin].getGoRequests();
 	}
 
-	public void incrementFloor() {
-		currentFloor += 1;
+	public void incrementFloor(int cabin) {
+		cabinsStates[cabin].incrementFloor();
 	}
 
-	public void decrementFloor() {
-		currentFloor -= 1;
+	public void decrementFloor(int cabin) {
+		cabinsStates[cabin].decrementFloor();
 	}
 
-	public int getCurrentFloor() {
-		return currentFloor;
+	public void setCurrentFloor(int cabin, int currentFloor) {
+		cabinsStates[cabin].setCurrentFloor(currentFloor);
 	}
 
-	public void setOpened() {
-		opened = true;
+	public int getCurrentFloor(int cabin) {
+		return cabinsStates[cabin].getCurrentFloor();
 	}
 
-	public boolean isOpened() {
-		return opened;
+	public void setOpened(int cabin) {
+		cabinsStates[cabin].setOpened(true);
 	}
 
-	public void setClosed() {
-		opened = false;
+	public boolean isOpened(int cabin) {
+		return cabinsStates[cabin].isOpened();
 	}
 
-	public boolean isClosed() {
-		return !opened;
+	public void setClosed(int cabin) {
+		cabinsStates[cabin].setOpened(false);
 	}
 
-	public void setCurrentDirection(Direction newDirection) {
-		currentDirection = newDirection;
+	public boolean isClosed(int cabin) {
+		return !cabinsStates[cabin].isOpened();
 	}
 
-	public Direction getCurrentDirection() {
-		return currentDirection;
+	public void setCurrentDirection(int cabin, Direction newDirection) {
+		cabinsStates[cabin].setCurrentDirection(newDirection);
+	}
+
+	public Direction getCurrentDirection(int cabin) {
+		return cabinsStates[cabin].getCurrentDirection();
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((currentDirection == null) ? 0 : currentDirection.hashCode());
-		result = prime * result + currentFloor;
-		result = prime * result + ((goRequests == null) ? 0 : goRequests.hashCode());
-		result = prime * result + (opened ? 1231 : 1237);
+		result = prime * result + Arrays.hashCode(cabinsStates);
 		result = prime * result + ((waitingCalls == null) ? 0 : waitingCalls.hashCode());
 		return result;
 	}
@@ -120,20 +110,7 @@ public class ElevatorState {
 			return false;
 		}
 		ElevatorState other = (ElevatorState) obj;
-		if (currentDirection != other.currentDirection) {
-			return false;
-		}
-		if (currentFloor != other.currentFloor) {
-			return false;
-		}
-		if (goRequests == null) {
-			if (other.goRequests != null) {
-				return false;
-			}
-		} else if (!goRequests.equals(other.goRequests)) {
-			return false;
-		}
-		if (opened != other.opened) {
+		if (!Arrays.equals(cabinsStates, other.cabinsStates)) {
 			return false;
 		}
 		if (waitingCalls == null) {

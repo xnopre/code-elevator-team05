@@ -26,7 +26,7 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 	}
 
 	@Override
-	public Command nextCommand() {
+	public Command nextCommand(int cabin) {
 
 		// // Hack du jour (13 & 14/11/2013)
 		// if (stateManager.isCabinFull()) {
@@ -34,103 +34,103 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 		// RuntimeException("Hey, the cabin is full, I'm the fucking hack of the day (13 & 14 november) ;-)");
 		// }
 
-		if (isOpened()) {
-			if (thereIsACallAtCurrentFloorMatchingCurrentDirection()) {
+		if (isOpened(cabin)) {
+			if (thereIsACallAtCurrentFloorMatchingCurrentDirection(cabin)) {
 				return NOTHING;
 			}
-			return close();
+			return close(cabin);
 		}
-		if (thereIsAGoAtCurrentFloor()) {
-			return open(getCurrentDirection());
+		if (thereIsAGoAtCurrentFloor(cabin)) {
+			return open(cabin, getCurrentDirection(cabin));
 		}
-		if (dontSkipExtraWaitingCalls()) {
-			if (thereIsACallAtCurrentFloorMatchingCurrentDirection()) {
-				return open(getCurrentDirection());
-			}
-			if (thereIsACallAtCurrentFloorAndNoOtherCallsOrGoMatchingCurrentDirection()) {
-				return open(invertCurrentDirection());
-			}
+		// if (dontSkipExtraWaitingCalls(cabin)) {
+		if (thereIsACallAtCurrentFloorMatchingCurrentDirection(cabin)) {
+			return open(cabin, getCurrentDirection(cabin));
 		}
-		if (isCurrentDirectionIs(UP)) {
-			if (thereIsAGoUpstairs() || thereIsACallUpstairs()) {
-				return up();
-			}
-			if (thereIsAGoDownstairs() || thereIsACallDownstairs()) {
-				return down();
-			}
+		if (thereIsACallAtCurrentFloorAndNoOtherCallsOrGoMatchingCurrentDirection(cabin)) {
+			return open(cabin, invertCurrentDirection(cabin));
 		}
-		if (isCurrentDirectionIs(DOWN)) {
-			if (thereIsAGoDownstairs() || thereIsACallDownstairs()) {
-				return down();
+		// }
+		if (isCurrentDirectionIs(cabin, UP)) {
+			if (thereIsAGoUpstairs(cabin) || thereIsACallUpstairs(cabin)) {
+				return up(cabin);
 			}
-			if (thereIsAGoUpstairs() || thereIsACallUpstairs()) {
-				return up();
+			if (thereIsAGoDownstairs(cabin) || thereIsACallDownstairs(cabin)) {
+				return down(cabin);
 			}
 		}
-		if (isNotAtMiddleFloor()) {
-			if (isAboveMiddleFloor()) {
-				return down();
+		if (isCurrentDirectionIs(cabin, DOWN)) {
+			if (thereIsAGoDownstairs(cabin) || thereIsACallDownstairs(cabin)) {
+				return down(cabin);
 			}
-			return up();
+			if (thereIsAGoUpstairs(cabin) || thereIsACallUpstairs(cabin)) {
+				return up(cabin);
+			}
+		}
+		if (isNotAtMiddleFloor(cabin)) {
+			if (isAboveMiddleFloor(cabin)) {
+				return down(cabin);
+			}
+			return up(cabin);
 		}
 		return NOTHING;
 	}
 
-	private Command down() {
-		stateManager.decrementFloor();
-		stateManager.setCurrentDirection(DOWN);
+	private Command down(int cabin) {
+		stateManager.decrementFloor(cabin);
+		stateManager.setCurrentDirection(cabin, DOWN);
 		return Command.DOWN;
 	}
 
-	private Command up() {
-		stateManager.incrementFloor();
-		stateManager.setCurrentDirection(UP);
+	private Command up(int cabin) {
+		stateManager.incrementFloor(cabin);
+		stateManager.setCurrentDirection(cabin, UP);
 		return Command.UP;
 	}
 
-	private Command open(Direction direction) {
-		stateManager.setOpened();
+	private Command open(int cabin, Direction direction) {
+		stateManager.setOpened(cabin);
 		waitingCallAndGoRemover.removeAllCallsFromTheCurrentFloor(direction);
-		waitingCallAndGoRemover.removeAllGosFromTheCurrentFloor();
+		waitingCallAndGoRemover.removeAllGosFromTheCurrentFloor(cabin);
 		return (direction == UP ? OPEN_UP : OPEN_DOWN);
 	}
 
-	private Command close() {
-		stateManager.setClosed();
+	private Command close(int cabin) {
+		stateManager.setClosed(cabin);
 		return CLOSE;
 	}
 
-	private boolean isAboveMiddleFloor() {
-		return getCurrentFloor() > getMiddelFloor();
+	private boolean isAboveMiddleFloor(int cabin) {
+		return getCurrentFloor(cabin) > getMiddelFloor();
 	}
 
-	private boolean isNotAtMiddleFloor() {
-		return getCurrentFloor() != getMiddelFloor();
+	private boolean isNotAtMiddleFloor(int cabin) {
+		return getCurrentFloor(cabin) != getMiddelFloor();
 	}
 
 	private int getMiddelFloor() {
 		return stateManager.getFloorBoundaries().getMiddelFloor();
 	}
 
-	private int getCurrentFloor() {
-		return stateManager.getCurrentState().getCurrentFloor();
+	private int getCurrentFloor(int cabin) {
+		return stateManager.getCurrentState().getCurrentFloor(cabin);
 	}
 
-	private boolean isCurrentDirectionIs(Direction direction) {
-		return getCurrentDirection() == direction;
+	private boolean isCurrentDirectionIs(int cabin, Direction direction) {
+		return getCurrentDirection(cabin) == direction;
 	}
 
-	private Direction getCurrentDirection() {
-		return stateManager.getCurrentState().getCurrentDirection();
+	private Direction getCurrentDirection(int cabin) {
+		return stateManager.getCurrentState().getCurrentDirection(cabin);
 	}
 
-	private Direction invertCurrentDirection() {
-		return getCurrentDirection() == DOWN ? UP : DOWN;
+	private Direction invertCurrentDirection(int cabin) {
+		return getCurrentDirection(cabin) == DOWN ? UP : DOWN;
 	}
 
-	private boolean thereIsAGoUpstairs() {
-		final int currentFloor = stateManager.getCurrentState().getCurrentFloor();
-		for (Integer goRequest : stateManager.getCurrentState().getGoRequests()) {
+	private boolean thereIsAGoUpstairs(int cabin) {
+		final int currentFloor = stateManager.getCurrentState().getCurrentFloor(cabin);
+		for (Integer goRequest : stateManager.getCurrentState().getGoRequests(cabin)) {
 			if (goRequest > currentFloor) {
 				return true;
 			}
@@ -138,8 +138,8 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 		return false;
 	}
 
-	private boolean thereIsACallUpstairs() {
-		final int currentFloor = stateManager.getCurrentState().getCurrentFloor();
+	private boolean thereIsACallUpstairs(int cabin) {
+		final int currentFloor = stateManager.getCurrentState().getCurrentFloor(cabin);
 		for (Call call : stateManager.getCurrentState().getWaitingCalls()) {
 			if (call.floor > currentFloor) {
 				return true;
@@ -148,9 +148,9 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 		return false;
 	}
 
-	private boolean thereIsAGoDownstairs() {
-		final int currentFloor = stateManager.getCurrentState().getCurrentFloor();
-		for (Integer goRequest : stateManager.getCurrentState().getGoRequests()) {
+	private boolean thereIsAGoDownstairs(int cabin) {
+		final int currentFloor = stateManager.getCurrentState().getCurrentFloor(cabin);
+		for (Integer goRequest : stateManager.getCurrentState().getGoRequests(cabin)) {
 			if (goRequest < currentFloor) {
 				return true;
 			}
@@ -158,8 +158,8 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 		return false;
 	}
 
-	private boolean thereIsACallDownstairs() {
-		final int currentFloor = stateManager.getCurrentState().getCurrentFloor();
+	private boolean thereIsACallDownstairs(int cabin) {
+		final int currentFloor = stateManager.getCurrentState().getCurrentFloor(cabin);
 		for (Call call : stateManager.getCurrentState().getWaitingCalls()) {
 			if (call.floor < currentFloor) {
 				return true;
@@ -168,69 +168,65 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 		return false;
 	}
 
-	private boolean isOpened() {
-		return stateManager.getCurrentState().isOpened();
+	private boolean isOpened(int cabin) {
+		return stateManager.getCurrentState().isOpened(cabin);
 	}
 
-	private boolean thereIsACallAtCurrentFloorMatchingCurrentDirection() {
+	private boolean thereIsACallAtCurrentFloorMatchingCurrentDirection(int cabin) {
 		final Collection<Call> waitingCalls = stateManager.getCurrentState().getWaitingCalls();
 		for (Call call : waitingCalls) {
-			if (isSameFloorThantCurrentFloor(call) && isSameDirectionThanCurrentDirection(call)) {
+			if (isSameFloorThantCurrentFloor(cabin, call) && isSameDirectionThanCurrentDirection(cabin, call)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private boolean thereIsACallAtCurrentFloorAndNoOtherCallsOrGoMatchingCurrentDirection() {
+	private boolean thereIsACallAtCurrentFloorAndNoOtherCallsOrGoMatchingCurrentDirection(int cabin) {
 		boolean thereIsACallAtCurrentFloor = false;
 		boolean thereIsACallAtAnotherFloorMatchingCurrentDirection = false;
 		boolean thereIsAGoAtAnotherFloorMatchingCurrentDirection = false;
 		for (Call call : stateManager.getCurrentState().getWaitingCalls()) {
-			if (isSameFloorThantCurrentFloor(call)) {
+			if (isSameFloorThantCurrentFloor(cabin, call)) {
 				thereIsACallAtCurrentFloor = true;
-			} else if (needSameDirectionThanCurrentDirection(call)) {
+			} else if (needSameDirectionThanCurrentDirection(cabin, call)) {
 				thereIsACallAtAnotherFloorMatchingCurrentDirection = true;
 			}
 		}
-		for (Integer goRequest : stateManager.getCurrentState().getGoRequests()) {
-			if (isNotSameFloorThantCurrentFloor(goRequest) && needSameDirectionThanCurrentDirection(goRequest)) {
+		for (Integer goRequest : stateManager.getCurrentState().getGoRequests(cabin)) {
+			if (isNotSameFloorThantCurrentFloor(cabin, goRequest) && needSameDirectionThanCurrentDirection(cabin, goRequest)) {
 				thereIsAGoAtAnotherFloorMatchingCurrentDirection = true;
 			}
 		}
 		return thereIsACallAtCurrentFloor && !thereIsACallAtAnotherFloorMatchingCurrentDirection && !thereIsAGoAtAnotherFloorMatchingCurrentDirection;
 	}
 
-	private boolean needSameDirectionThanCurrentDirection(Integer goRequest) {
-		return evaluateDirectionFromCurrentFloorTo(goRequest) == getCurrentDirection();
+	private boolean needSameDirectionThanCurrentDirection(int cabin, Integer goRequest) {
+		return evaluateDirectionFromCurrentFloorTo(cabin, goRequest) == getCurrentDirection(cabin);
 	}
 
-	private boolean needSameDirectionThanCurrentDirection(Call call) {
-		return evaluateDirectionFromCurrentFloorTo(call.floor) == getCurrentDirection();
+	private boolean needSameDirectionThanCurrentDirection(int cabin, Call call) {
+		return evaluateDirectionFromCurrentFloorTo(cabin, call.floor) == getCurrentDirection(cabin);
 	}
 
-	private Direction evaluateDirectionFromCurrentFloorTo(int floor) {
-		return floor > stateManager.getCurrentState().getCurrentFloor() ? UP : DOWN;
+	private Direction evaluateDirectionFromCurrentFloorTo(int cabin, int floor) {
+		return floor > stateManager.getCurrentState().getCurrentFloor(cabin) ? UP : DOWN;
 	}
 
-	private boolean isSameDirectionThanCurrentDirection(Call call) {
-		return call.direction == getCurrentDirection();
+	private boolean isSameDirectionThanCurrentDirection(int cabin, Call call) {
+		return call.direction == getCurrentDirection(cabin);
 	}
 
-	private boolean isNotSameFloorThantCurrentFloor(Integer goRequest) {
-		return goRequest != stateManager.getCurrentState().getCurrentFloor();
+	private boolean isNotSameFloorThantCurrentFloor(int cabin, Integer goRequest) {
+		return goRequest != stateManager.getCurrentState().getCurrentFloor(cabin);
 	}
 
-	private boolean isSameFloorThantCurrentFloor(Call call) {
-		return call.floor == stateManager.getCurrentState().getCurrentFloor();
+	private boolean isSameFloorThantCurrentFloor(int cabin, Call call) {
+		return call.floor == stateManager.getCurrentState().getCurrentFloor(cabin);
 	}
 
-	private boolean thereIsAGoAtCurrentFloor() {
-		return stateManager.getCurrentState().getGoRequests().contains(stateManager.getCurrentState().getCurrentFloor());
-	}
-
-	private boolean dontSkipExtraWaitingCalls() {
-		return !stateManager.mustSkipExtraWaitingCalls();
+	private boolean thereIsAGoAtCurrentFloor(int cabin) {
+		return stateManager.getCurrentState().getGoRequests(cabin).contains(stateManager.getCurrentState().getCurrentFloor(cabin));
 	}
 
 }

@@ -46,10 +46,10 @@ public class WaitingCallAndGoRemoverTest {
 
 		stateBuilderFactory.givenAnElevatorOpenedAtFloor(3).andGoRequests(1, 2, 3, 5, 4, 3).build();
 
-		waitingCallAndGoRemover.removeAllGosFromTheCurrentFloor();
+		waitingCallAndGoRemover.removeAllGosFromTheCurrentFloor(0);
 
-		verify(mockStateManager, times(2)).removeGoRequest(3);
-		verify(mockStateManager, times(2)).removeGoRequest(anyInt());
+		verify(mockStateManager, times(2)).removeGoRequest(0, 3);
+		verify(mockStateManager, times(2)).removeGoRequest(anyInt(), anyInt());
 	}
 
 }

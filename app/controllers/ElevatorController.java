@@ -15,7 +15,7 @@ public class ElevatorController extends Controller {
 
 	private static final Object monitor = new Object();
 
-	private static final StateManager stateManager = new StateManager(new FloorBoundaries(0, 19));
+	private static final StateManager stateManager = new StateManager(0, 19, 30, 1);
 
 	private static final WaitingCallAndGoRemover waitingCallAndGoRemover = new WaitingCallAndGoRemover(stateManager);
 
@@ -82,8 +82,7 @@ public class ElevatorController extends Controller {
 		synchronized (monitor) {
 			final ElevatorState currentState = stateManager.getCurrentState();
 			final FloorBoundaries currentFloorBoundaries = stateManager.getFloorBoundaries();
-			final boolean mustSkipExtraWaitingCalls = stateManager.mustSkipExtraWaitingCalls();
-			render(currentState, currentFloorBoundaries, mustSkipExtraWaitingCalls);
+			render(currentState, currentFloorBoundaries);
 		}
 	}
 

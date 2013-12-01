@@ -26,7 +26,21 @@ public class WaitingCallAndGoRemover {
 			}
 
 			private boolean callWasMadeFromCurrentFloor(Call call) {
-				return call.floor == statemanager.getCurrentState().getCurrentFloor() && call.direction == direction;
+				return isSameAsCurrentFloor(call) && isSameDirection(call);
+			}
+
+			private boolean isSameDirection(Call call) {
+				return call.direction == direction;
+			}
+
+			private boolean isSameAsCurrentFloor(Call call) {
+				int cabinCount = statemanager.getCurrentState().getCabinCount();
+				for (int cabin = 0; cabin < cabinCount; cabin++) {
+					if (call.floor == statemanager.getCurrentState().getCurrentFloor(cabin)) {
+						return true;
+					}
+				}
+				return false;
 			}
 		});
 
@@ -37,8 +51,8 @@ public class WaitingCallAndGoRemover {
 		}
 	}
 
-	public void removeAllGosFromTheCurrentFloor() {
-		final Collection<Integer> matchedGos = Collections2.filter(statemanager.getCurrentState().getGoRequests(), new Predicate<Integer>() {
+	public void removeAllGosFromTheCurrentFloor(final int cabin) {
+		final Collection<Integer> matchedGos = Collections2.filter(statemanager.getCurrentState().getGoRequests(cabin), new Predicate<Integer>() {
 
 			@Override
 			public boolean apply(@Nullable Integer go) {
@@ -46,14 +60,14 @@ public class WaitingCallAndGoRemover {
 			}
 
 			private boolean goWasMadeForCurrentFloor(Integer go) {
-				return go == statemanager.getCurrentState().getCurrentFloor();
+				return go == statemanager.getCurrentState().getCurrentFloor(cabin);
 			}
 		});
 
 		final Iterator<Integer> iterator = matchedGos.iterator();
 		while (iterator.hasNext()) {
 			final Integer go = iterator.next();
-			statemanager.removeGoRequest(go);
+			statemanager.removeGoRequest(cabin, go);
 		}
 	}
 }

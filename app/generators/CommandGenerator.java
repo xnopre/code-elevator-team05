@@ -4,6 +4,6 @@ import utils.Command;
 
 public interface CommandGenerator {
 
-	Command nextCommand();
+	Command nextCommand(int cabin);
 
 }

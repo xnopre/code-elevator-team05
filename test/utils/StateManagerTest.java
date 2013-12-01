@@ -1,8 +1,6 @@
 package utils;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static utils.Direction.DOWN;
 import static utils.Direction.UP;
 
@@ -13,7 +11,7 @@ import org.junit.Test;
 public class StateManagerTest {
 
 	private final FloorBoundaries floorBoundaries = new FloorBoundaries(0, 5);
-	private final StateManager stateManager = new StateManager(floorBoundaries);
+	private final StateManager stateManager = new StateManager(0, 5, 30, 1);
 
 	@Test
 	public void call_must_store_last_call() {
@@ -42,7 +40,7 @@ public class StateManagerTest {
 
 		stateManager.reset(-4, 8, 5, 2);
 
-		final ElevatorState expectedState = new ElevatorState(0);
+		final ElevatorState expectedState = new ElevatorState(2);
 		assertThat(stateManager.getCurrentState()).isEqualTo(expectedState);
 		assertThat(stateManager.getFloorBoundaries()).isEqualTo(new FloorBoundaries(-4, 8));
 		assertThat(stateManager.getCabinSize()).isEqualTo(5);
@@ -50,47 +48,47 @@ public class StateManagerTest {
 
 	@Test
 	public void ensure_floor_is_Incremented() {
-		stateManager.incrementFloor();
-		assertThat(stateManager.getCurrentState().getCurrentFloor()).isEqualTo(1);
+		stateManager.incrementFloor(0);
+		assertThat(stateManager.getCurrentState().getCurrentFloor(0)).isEqualTo(1);
 	}
 
 	@Test(expected = UnreachableFloorException.class)
 	public void ensure_cant_go_down_first_floor() {
-		stateManager.decrementFloor();
+		stateManager.decrementFloor(0);
 	}
 
 	@Test(expected = UnreachableFloorException.class)
 	public void ensure_cant_go_up_last_floor() {
 		for (int i = 0; i < 19; i++) {
-			stateManager.incrementFloor();
+			stateManager.incrementFloor(0);
 		}
-		stateManager.incrementFloor();
+		stateManager.incrementFloor(0);
 	}
 
 	@Test
-	public void ensure_floor_is_Decremented() {
-		stateManager.incrementFloor();
+	public void ensure_floor_is_decremented() {
+		stateManager.incrementFloor(0);
 
-		stateManager.decrementFloor();
-		assertThat(stateManager.getCurrentState().getCurrentFloor()).isEqualTo(0);
+		stateManager.decrementFloor(0);
+		assertThat(stateManager.getCurrentState().getCurrentFloor(0)).isEqualTo(0);
 	}
 
 	@Test
 	public void ensure_that_opened_state_is_stored() {
-		stateManager.setClosed();
-		stateManager.setOpened();
+		stateManager.setClosed(0);
+		stateManager.setOpened(0);
 		stateManager.storeWaitingCall(3, DOWN);
-		assertThat(stateManager.getCurrentState().isOpened()).isTrue();
-		assertThat(stateManager.getCurrentState().isClosed()).isFalse();
+		assertThat(stateManager.getCurrentState().isOpened(0)).isTrue();
+		assertThat(stateManager.getCurrentState().isClosed(0)).isFalse();
 	}
 
 	@Test
 	public void ensure_that_closed_state_is_stored() {
-		stateManager.setOpened();
-		stateManager.setClosed();
+		stateManager.setOpened(0);
+		stateManager.setClosed(0);
 		stateManager.storeWaitingCall(3, DOWN);
-		assertThat(stateManager.getCurrentState().isOpened()).isFalse();
-		assertThat(stateManager.getCurrentState().isClosed()).isTrue();
+		assertThat(stateManager.getCurrentState().isOpened(0)).isFalse();
+		assertThat(stateManager.getCurrentState().isClosed(0)).isTrue();
 	}
 
 	@Test
@@ -105,79 +103,49 @@ public class StateManagerTest {
 
 	@Test
 	public void ensure_go_requests_are_stored() {
-		assertThat(stateManager.getCurrentState().getGoRequests()).isEmpty();
+		assertThat(stateManager.getCurrentState().getGoRequests(0)).isEmpty();
 
-		stateManager.storeGoRequest(3);
-		stateManager.storeGoRequest(5);
+		stateManager.storeGoRequest(0, 3);
+		stateManager.storeGoRequest(0, 5);
 
-		assertThat(stateManager.getCurrentState().getGoRequests()).containsOnly(3, 5);
+		assertThat(stateManager.getCurrentState().getGoRequests(0)).containsOnly(3, 5);
 	}
 
 	@Test
 	public void ensure_go_request_is_removed() {
-		assertThat(stateManager.getCurrentState().getGoRequests()).isEmpty();
-		stateManager.storeGoRequest(7);
-		stateManager.storeGoRequest(3);
-		stateManager.storeGoRequest(5);
+		assertThat(stateManager.getCurrentState().getGoRequests(0)).isEmpty();
+		stateManager.storeGoRequest(0, 7);
+		stateManager.storeGoRequest(0, 3);
+		stateManager.storeGoRequest(0, 5);
 
-		stateManager.removeGoRequest(3);
+		stateManager.removeGoRequest(0, 3);
 
-		assertThat(stateManager.getCurrentState().getGoRequests()).containsOnly(7, 5);
+		assertThat(stateManager.getCurrentState().getGoRequests(0)).containsOnly(7, 5);
 	}
 
 	@Test
 	public void ensure_no_problem_if_request_to_remove_unstored_request_floor() {
-		assertThat(stateManager.getCurrentState().getGoRequests()).isEmpty();
-		stateManager.storeGoRequest(7);
-		stateManager.storeGoRequest(5);
+		assertThat(stateManager.getCurrentState().getGoRequests(0)).isEmpty();
+		stateManager.storeGoRequest(0, 7);
+		stateManager.storeGoRequest(0, 5);
 
-		stateManager.removeGoRequest(3);
+		stateManager.removeGoRequest(0, 3);
 
-		assertThat(stateManager.getCurrentState().getGoRequests()).containsOnly(7, 5);
+		assertThat(stateManager.getCurrentState().getGoRequests(0)).containsOnly(7, 5);
 	}
 
 	@Test
 	public void must_store_current_direction_up() {
-		stateManager.setCurrentDirection(DOWN);
-		stateManager.setCurrentDirection(UP);
-		assertThat(stateManager.getCurrentState().getCurrentDirection()).isEqualTo(UP);
+		stateManager.setCurrentDirection(0, DOWN);
+		stateManager.setCurrentDirection(0, UP);
+		assertThat(stateManager.getCurrentState().getCurrentDirection(0)).isEqualTo(UP);
 	}
 
 	@Test
 	public void must_store_current_direction_down() {
-		stateManager.setCurrentDirection(UP);
-		stateManager.setCurrentDirection(DOWN);
-		assertThat(stateManager.getCurrentState().getCurrentDirection()).isEqualTo(DOWN);
+		stateManager.setCurrentDirection(0, UP);
+		stateManager.setCurrentDirection(0, DOWN);
+		assertThat(stateManager.getCurrentState().getCurrentDirection(0)).isEqualTo(DOWN);
 	}
 
-	@Test
-	public void mustSkipExtraWaitingCalls_must_return_false_if_go_request_number_less_than_floors_numbers_devided_by_2() {
-		stateManager.reset(0, 5, 99, 2);
-		final int floorsNumber = floorBoundaries.calculateFloorsNumber();
-		final int floorsNumberThreshold = floorsNumber / 2;
-		for (int i = 0; i < floorsNumberThreshold + 1; i++) {
-			stateManager.storeGoRequest(3);
-			stateManager.storeGoRequest(5);
-		}
-		assertFalse(stateManager.mustSkipExtraWaitingCalls());
-	}
-
-	@Test
-	public void mustSkipExtraWaitingCalls_must_return_true_if_cabin_is_full() {
-		stateManager.reset(0, 5, 3, 2);
-		stateManager.storeGoRequest(1);
-		stateManager.storeGoRequest(1);
-		stateManager.storeGoRequest(0);
-		assertTrue(stateManager.mustSkipExtraWaitingCalls());
-	}
-
-	@Test
-	public void mustSkipExtraWaitingCalls_must_return_true_if_go_request_number_more_than_floors_numbers_devided_by_2() {
-		final int floorsNumber = floorBoundaries.calculateFloorsNumber();
-		final int floorsNumberThreshold = floorsNumber / 2;
-		for (int i = 0; i < floorsNumberThreshold + 1; i++) {
-			stateManager.storeGoRequest(3 + i);
-		}
-		assertTrue(stateManager.mustSkipExtraWaitingCalls());
-	}
 }

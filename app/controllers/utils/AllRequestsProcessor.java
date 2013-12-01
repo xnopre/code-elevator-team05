@@ -29,7 +29,7 @@ public class AllRequestsProcessor {
 
 	public String nextCommands() {
 		final long time0 = System.currentTimeMillis();
-		Command nextCommand1 = elevatorCommandGenerator.nextCommand();
+		Command nextCommand1 = elevatorCommandGenerator.nextCommand(0);
 		final long duration = System.currentTimeMillis() - time0;
 		Logger.info("NextCommand " + nextCommand1 + " calculated in " + duration + " ms. New current state = " + stateManager.getCurrentState());
 		Command nextCommand = nextCommand1;
@@ -43,7 +43,7 @@ public class AllRequestsProcessor {
 		// } catch (ElevatorException e) {
 		// Logger.warn("Error processing 'go' : " + e.getMessage());
 		// }
-		stateManager.storeGoRequest(floorToGo);
+		stateManager.storeGoRequest(cabin, floorToGo);
 		Logger.info("    After go(" + floorToGo + ") : " + stateManager.getCurrentState());
 	}
 

@@ -1,11 +1,10 @@
 package utils;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static utils.Direction.UP;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 
 public class StateBuilderForTest {
 
@@ -26,8 +25,6 @@ public class StateBuilderForTest {
 	private final FloorBoundaries mockFloorBoundaries;
 
 	private int middleFloor;
-
-	private boolean mustSkipExtraWaitingCalls;
 
 	public StateBuilderForTest(StateManager mockStateManager, int floor, boolean opened) {
 		this.mockStateManager = mockStateManager;
@@ -60,23 +57,31 @@ public class StateBuilderForTest {
 		return this;
 	}
 
-	public StateBuilderForTest andMustSkipExtraWaitingCalls() {
-		mustSkipExtraWaitingCalls = true;
-		return this;
-	}
-
 	public void build() {
 		createStateAndDoReturnItByStateManager(mockStateManager, floor, opened, direction, calls, floorsToGo, lastCommands);
 		when(mockStateManager.getFloorBoundaries()).thenReturn(mockFloorBoundaries);
-		when(mockStateManager.mustSkipExtraWaitingCalls()).thenReturn(mustSkipExtraWaitingCalls);
 		when(mockFloorBoundaries.getMiddelFloor()).thenReturn(middleFloor);
 	}
 
-	public static void createStateAndDoReturnItByStateManager(StateManager mockStateManager, int floor, boolean opened, Direction direction, Call[] calls,
-			Integer[] floorsToGo, SizeLimitedArrayList lastCommands) {
-		final ElevatorState state = new ElevatorState(floor, opened, direction, calls != null ? newArrayList(calls) : new ArrayList<Call>(),
-				floorsToGo != null ? newArrayList(floorsToGo) : new ArrayList<Integer>());
-		when(mockStateManager.getCurrentState()).thenReturn(state);
+	public static void createStateAndDoReturnItByStateManager(StateManager mockStateManager, int currentFloor, boolean opened, Direction direction,
+			Call[] calls, Integer[] floorsToGo, SizeLimitedArrayList lastCommands) {
+		final ElevatorState elevatorState = new ElevatorState(1);
+		elevatorState.setCurrentFloor(0, currentFloor);
+		if (calls != null) {
+			for (Call call : calls) {
+				elevatorState.addWaitingCall(call.floor, call.direction);
+			}
+		}
+		if (opened) {
+			elevatorState.setOpened(0);
+		} else {
+			elevatorState.setClosed(0);
+		}
+		elevatorState.setCurrentDirection(0, direction);
+		if (floorsToGo != null) {
+			elevatorState.getGoRequests(0).addAll(Arrays.asList(floorsToGo));
+		}
+		when(mockStateManager.getCurrentState()).thenReturn(elevatorState);
 
 	}
 
