@@ -68,9 +68,12 @@ public class WaitingCallAndGoRemover {
 			}
 		});
 
+		ArrayList<Integer> gosToRemove = new ArrayList<Integer>();
 		final Iterator<Integer> iterator = matchedGos.iterator();
 		while (iterator.hasNext()) {
-			final Integer go = iterator.next();
+			gosToRemove.add(iterator.next());
+		}
+		for (Integer go : gosToRemove) {
 			statemanager.removeGoRequest(cabin, go);
 		}
 	}
