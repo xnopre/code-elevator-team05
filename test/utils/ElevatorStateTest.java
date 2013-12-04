@@ -24,11 +24,12 @@ public class ElevatorStateTest {
 	// }
 
 	@Test
-	public void mustGoAtMiddleFloor_must_be_set_only_on_first_cabin() {
-		final ElevatorState elevatorState = new ElevatorState(3);
+	public void mustGoAtMiddleFloor_must_be_alternated_between_cabins() {
+		final ElevatorState elevatorState = new ElevatorState(4);
 		assertThat(elevatorState.mustGoAtMiddleFloor(0)).isTrue();
 		assertThat(elevatorState.mustGoAtMiddleFloor(1)).isFalse();
-		assertThat(elevatorState.mustGoAtMiddleFloor(2)).isFalse();
+		assertThat(elevatorState.mustGoAtMiddleFloor(2)).isTrue();
+		assertThat(elevatorState.mustGoAtMiddleFloor(3)).isFalse();
 	}
 
 	@Test

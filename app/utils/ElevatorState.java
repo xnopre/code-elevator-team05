@@ -20,7 +20,7 @@ public class ElevatorState {
 		cabinsStates = new CabinState[cabinCount];
 		for (int i = 0; i < cabinCount; i++) {
 			cabinsStates[i] = new CabinState();
-			cabinsStates[i].setMustGoAtMiddleFloor(i == 0);
+			cabinsStates[i].setMustGoAtMiddleFloor(i % 2 == 0);
 			cabinsStates[i].setCurrentDirection(i % 2 == 0 ? UP : DOWN);
 		}
 	}
