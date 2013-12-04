@@ -31,7 +31,7 @@ public class AllRequestsProcessor {
 		final long time0 = System.currentTimeMillis();
 		String nextCommands = nextCommands_timed();
 		final long duration = System.currentTimeMillis() - time0;
-		Logger.info("NextCommand '" + encodeCr(nextCommands) + "' calculated in " + duration + " ms. New current state = " + stateManager.getCurrentState());
+		Logger.info("NextCommand '" + encodeCr(nextCommands) + "' calculated in " + duration + " ms");
 		return nextCommands;
 	}
 
