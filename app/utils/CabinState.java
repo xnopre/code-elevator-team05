@@ -15,7 +15,7 @@ public class CabinState {
 
 	private Direction currentDirection = UP;
 
-	private boolean mustGoAtMiddleFloor;
+	private int restingFloor;
 
 	public CabinState() {
 		goRequests = newArrayList();
@@ -65,12 +65,12 @@ public class CabinState {
 		return goRequests;
 	}
 
-	public boolean mustGoAtMiddleFloor() {
-		return mustGoAtMiddleFloor;
+	public int getRestingFloor() {
+		return restingFloor;
 	}
 
-	public void setMustGoAtMiddleFloor(boolean mustGoAtMiddleFloor) {
-		this.mustGoAtMiddleFloor = mustGoAtMiddleFloor;
+	public void setRestingFloor(int restingFloor) {
+		this.restingFloor = restingFloor;
 	}
 
 	@Override

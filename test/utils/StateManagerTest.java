@@ -39,7 +39,7 @@ public class StateManagerTest {
 
 		stateManager.reset(-4, 8, 5, 2);
 
-		final ElevatorState expectedState = new ElevatorState(2);
+		final ElevatorState expectedState = new ElevatorState(2, -4, 8);
 		assertThat(stateManager.getCurrentState()).isEqualTo(expectedState);
 		assertThat(stateManager.getFloorBoundaries()).isEqualTo(new FloorBoundaries(-4, 8));
 		assertThat(stateManager.getCabinSize()).isEqualTo(5);

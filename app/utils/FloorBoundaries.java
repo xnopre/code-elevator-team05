@@ -25,10 +25,6 @@ public class FloorBoundaries {
 		return _isAtLastFloor(floor);
 	}
 
-	public int getMiddelFloor() {
-		return floorRange.lowerEndpoint() + (floorRange.upperEndpoint() - floorRange.lowerEndpoint()) / 2;
-	}
-
 	public int calculateFloorsNumber() {
 		return floorRange.upperEndpoint() - floorRange.lowerEndpoint() + 1;
 	}

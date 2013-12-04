@@ -69,8 +69,8 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 				return up(cabin);
 			}
 		}
-		if (mustGoAtMiddleFloor(cabin) && isNotAtMiddleFloor(cabin)) {
-			if (isAboveMiddleFloor(cabin)) {
+		if (isNotAtRestingFloor(cabin)) {
+			if (isAboveRestingFloor(cabin)) {
 				return down(cabin);
 			}
 			return up(cabin);
@@ -106,20 +106,16 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 		return CLOSE;
 	}
 
-	private boolean isAboveMiddleFloor(int cabin) {
-		return getCurrentFloor(cabin) > getMiddelFloor();
+	private boolean isAboveRestingFloor(int cabin) {
+		return getCurrentFloor(cabin) > getRestingFloor(cabin);
 	}
 
-	private boolean isNotAtMiddleFloor(int cabin) {
-		return getCurrentFloor(cabin) != getMiddelFloor();
+	private boolean isNotAtRestingFloor(int cabin) {
+		return getCurrentFloor(cabin) != getRestingFloor(cabin);
 	}
 
-	private boolean mustGoAtMiddleFloor(int cabin) {
-		return stateManager.mustGoAtMiddleFloor(cabin);
-	}
-
-	private int getMiddelFloor() {
-		return stateManager.getFloorBoundaries().getMiddelFloor();
+	private int getRestingFloor(int cabin) {
+		return stateManager.getRestingFloor(cabin);
 	}
 
 	private int getCurrentFloor(int cabin) {

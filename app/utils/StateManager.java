@@ -4,8 +4,6 @@ public class StateManager {
 
 	private ElevatorState currentState;
 
-	private final FloorBoundaries floorBoundaries = new FloorBoundaries(0, 5);
-
 	private int cabinSize;
 
 	public StateManager(int lowerFloor, int higherFloor, int cabinSize, int cabinCount) {
@@ -13,8 +11,7 @@ public class StateManager {
 	}
 
 	public void reset(int lowerFloor, int higherFloor, int cabinSize, int cabinCount) {
-		currentState = new ElevatorState(cabinCount);
-		floorBoundaries.setRange(lowerFloor, higherFloor);
+		currentState = new ElevatorState(cabinCount, lowerFloor, higherFloor);
 		this.cabinSize = cabinSize;
 	}
 
@@ -53,11 +50,11 @@ public class StateManager {
 	}
 
 	public boolean isAtFirstFloor(int cabin) {
-		return floorBoundaries.isAtFirstFloor(currentState.getCurrentFloor(cabin));
+		return currentState.isAtFirstFloor(cabin);
 	}
 
 	public boolean isAtLastFloor(int cabin) {
-		return floorBoundaries.isAtLastFloor(currentState.getCurrentFloor(cabin));
+		return currentState.isAtLastFloor(cabin);
 	}
 
 	public void setOpened(int cabin) {
@@ -73,7 +70,7 @@ public class StateManager {
 	}
 
 	public FloorBoundaries getFloorBoundaries() {
-		return floorBoundaries;
+		return currentState.getFloorBoundaries();
 	}
 
 	public int getCabinCount() {
@@ -88,8 +85,8 @@ public class StateManager {
 		return thereIsAsManyPassengersAsCabinSize(cabin);
 	}
 
-	public boolean mustGoAtMiddleFloor(int cabin) {
-		return currentState.mustGoAtMiddleFloor(cabin);
+	public int getRestingFloor(int cabin) {
+		return currentState.getRestingFloor(cabin);
 	}
 
 	// privates ------------------------------------

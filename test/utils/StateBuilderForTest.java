@@ -24,11 +24,9 @@ public class StateBuilderForTest {
 
 	private final FloorBoundaries mockFloorBoundaries;
 
-	private int middleFloor;
+	private int restingFloor;
 
 	private boolean cabinFull;
-
-	private boolean cabinMustGoAtMiddleFloor;
 
 	public StateBuilderForTest(StateManager mockStateManager, int floor, boolean opened) {
 		this.mockStateManager = mockStateManager;
@@ -61,18 +59,8 @@ public class StateBuilderForTest {
 		return this;
 	}
 
-	public StateBuilderForTest andCabinMustGoAtMiddleFloor() {
-		cabinMustGoAtMiddleFloor = true;
-		return this;
-	}
-
-	public StateBuilderForTest andCabinMustNotGoAtMiddleFloor() {
-		cabinMustGoAtMiddleFloor = false;
-		return this;
-	}
-
-	public StateBuilderForTest andMiddleFloorIs(int middleFloor) {
-		this.middleFloor = middleFloor;
+	public StateBuilderForTest andRestingFloorIs(int restingFloor) {
+		this.restingFloor = restingFloor;
 		return this;
 	}
 
@@ -80,13 +68,12 @@ public class StateBuilderForTest {
 		createStateAndDoReturnItByStateManager(mockStateManager, floor, opened, direction, calls, floorsToGo, lastCommands);
 		when(mockStateManager.getFloorBoundaries()).thenReturn(mockFloorBoundaries);
 		when(mockStateManager.isCabinFull(0)).thenReturn(cabinFull);
-		when(mockStateManager.mustGoAtMiddleFloor(0)).thenReturn(cabinMustGoAtMiddleFloor);
-		when(mockFloorBoundaries.getMiddelFloor()).thenReturn(middleFloor);
+		when(mockStateManager.getRestingFloor(0)).thenReturn(restingFloor);
 	}
 
 	public static void createStateAndDoReturnItByStateManager(StateManager mockStateManager, int currentFloor, boolean opened, Direction direction,
 			Call[] calls, Integer[] floorsToGo, SizeLimitedArrayList lastCommands) {
-		final ElevatorState elevatorState = new ElevatorState(1);
+		final ElevatorState elevatorState = new ElevatorState(1, -5, 48);
 		elevatorState.setCurrentFloor(0, currentFloor);
 		if (calls != null) {
 			for (Call call : calls) {

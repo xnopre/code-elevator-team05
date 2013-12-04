@@ -11,18 +11,29 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class ElevatorState {
 
+	private final FloorBoundaries floorBoundaries = new FloorBoundaries(0, 5);
+
 	private final Collection<Call> waitingCalls;
 
 	private final CabinState[] cabinsStates;
 
-	public ElevatorState(int cabinCount) {
+	public ElevatorState(int cabinCount, int lowerFloor, int higherFloor) {
+		floorBoundaries.setRange(lowerFloor, higherFloor);
 		this.waitingCalls = newArrayList();
 		cabinsStates = new CabinState[cabinCount];
-		for (int i = 0; i < cabinCount; i++) {
-			cabinsStates[i] = new CabinState();
-			cabinsStates[i].setMustGoAtMiddleFloor(i % 2 == 0);
-			cabinsStates[i].setCurrentDirection(i % 2 == 0 ? UP : DOWN);
-		}
+		initializeCabinsStates(cabinCount, lowerFloor, higherFloor);
+	}
+
+	public FloorBoundaries getFloorBoundaries() {
+		return floorBoundaries;
+	}
+
+	public boolean isAtFirstFloor(int cabin) {
+		return floorBoundaries.isAtFirstFloor(getCurrentFloor(cabin));
+	}
+
+	public boolean isAtLastFloor(int cabin) {
+		return floorBoundaries.isAtLastFloor(getCurrentFloor(cabin));
 	}
 
 	public int getCabinCount() {
@@ -93,8 +104,8 @@ public class ElevatorState {
 		return cabinsStates[cabin].getCurrentDirection();
 	}
 
-	public boolean mustGoAtMiddleFloor(int cabin) {
-		return cabinsStates[cabin].mustGoAtMiddleFloor();
+	public int getRestingFloor(int cabin) {
+		return cabinsStates[cabin].getRestingFloor();
 	}
 
 	@Override
@@ -136,80 +147,16 @@ public class ElevatorState {
 		return ToStringBuilder.reflectionToString(this);
 	}
 
-	// public static class Builder {
-	//
-	// private final ElevatorState initialState;
-	// private int incr = 0;
-	// private boolean opened;
-	// private final List<Call> currentWaitingCalls;
-	// private final List<Integer> currentGoRequests;
-	// private Direction currentDirection;
-	//
-	// private Builder(ElevatorState state) {
-	// this.initialState = state;
-	// this.opened = state.isOpened();
-	// this.currentDirection = state.getCurrentDirection();
-	// currentWaitingCalls = newArrayList(state.getWaitingCalls());
-	// currentGoRequests = newArrayList(state.getGoRequests());
-	// }
-	//
-	// public static Builder from(ElevatorState state) {
-	// return new Builder(state);
-	// }
-	//
-	// public Builder addWaitingCall(int atFloor, Direction to) {
-	// currentWaitingCalls.add(new Call(atFloor, to));
-	// return this;
-	// }
-	//
-	// public Builder removeWaitingCall(int atFloor, Direction to) {
-	// currentWaitingCalls.remove(new Call(atFloor, to));
-	// return this;
-	// }
-	//
-	// public Builder addGoRequest(int floorToGo) {
-	// currentGoRequests.add(floorToGo);
-	// return this;
-	// }
-	//
-	// public Builder removeGoRequest(int floorToGo) {
-	// final int index = currentGoRequests.indexOf(floorToGo);
-	// if (index != -1) {
-	// currentGoRequests.remove(index);
-	// }
-	// return this;
-	// }
-	//
-	// public Builder incrementFloor() {
-	// incr += 1;
-	// return this;
-	// }
-	//
-	// public Builder decrementFloor() {
-	// incr -= 1;
-	// return this;
-	// }
-	//
-	// public Builder setClosed() {
-	// opened = false;
-	// return this;
-	// }
-	//
-	// public Builder setOpened() {
-	// opened = true;
-	// return this;
-	// }
-	//
-	// public Builder setCurrentDirection(Direction currentDirection) {
-	// this.currentDirection = currentDirection;
-	// return this;
-	// }
-	//
-	// public ElevatorState get() {
-	// return new ElevatorState(initialState.getCurrentFloor() + incr, opened,
-	// currentDirection, currentWaitingCalls, currentGoRequests);
-	// }
-	//
-	// }
+	private void initializeCabinsStates(int cabinCount, int lowerFloor, int higherFloor) {
+		double floorNumberForEachCabin = (higherFloor - lowerFloor) / (double) cabinCount;
+		for (int cabin = 0; cabin < cabinCount; cabin++) {
+			cabinsStates[cabin] = new CabinState();
+			cabinsStates[cabin].setRestingFloor(calculateRestingFloor(lowerFloor, cabin, floorNumberForEachCabin));
+			cabinsStates[cabin].setCurrentDirection(cabin % 2 == 0 ? UP : DOWN);
+		}
+	}
 
+	private int calculateRestingFloor(int lowerFloor, int cabin, double floorNumberForEachCabin) {
+		return lowerFloor + (int) (floorNumberForEachCabin * (cabin + 0.5) + 0.5);
+	}
 }

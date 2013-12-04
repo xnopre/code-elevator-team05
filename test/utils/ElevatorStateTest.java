@@ -8,33 +8,22 @@ import org.junit.Test;
 
 public class ElevatorStateTest {
 
-	// @Test
-	// public void test_toString() {
-	// Collection<Call> waitingCalls = Arrays.asList(new Call(1, UP), new
-	// Call(9, DOWN));
-	// Collection<Integer> goRequests = Arrays.asList(7, 8);
-	// final ElevatorState elevatorState = new ElevatorState(0, true, UP,
-	// waitingCalls, goRequests, 2);
-	// final String elevatorStateStr = elevatorState.toString();
-	// Assertions.assertThat(elevatorStateStr).startsWith("utils.ElevatorState@");
-	// Assertions
-	// .assertThat(elevatorStateStr)
-	// .endsWith(
-	// "[currentFloor=0,waitingCalls=[ElevatorCall[floor=1, direction=UP], ElevatorCall[floor=9, direction=DOWN]],goRequests=[7, 8],opened=true,currentDirection=UP]");
-	// }
-
 	@Test
 	public void mustGoAtMiddleFloor_must_be_alternated_between_cabins() {
-		final ElevatorState elevatorState = new ElevatorState(4);
-		assertThat(elevatorState.mustGoAtMiddleFloor(0)).isTrue();
-		assertThat(elevatorState.mustGoAtMiddleFloor(1)).isFalse();
-		assertThat(elevatorState.mustGoAtMiddleFloor(2)).isTrue();
-		assertThat(elevatorState.mustGoAtMiddleFloor(3)).isFalse();
+		final ElevatorState elevatorState = new ElevatorState(8, -5, 48);
+		assertThat(elevatorState.getRestingFloor(0)).isEqualTo(-2);
+		assertThat(elevatorState.getRestingFloor(1)).isEqualTo(5);
+		assertThat(elevatorState.getRestingFloor(2)).isEqualTo(12);
+		assertThat(elevatorState.getRestingFloor(3)).isEqualTo(18);
+		assertThat(elevatorState.getRestingFloor(4)).isEqualTo(25);
+		assertThat(elevatorState.getRestingFloor(5)).isEqualTo(31);
+		assertThat(elevatorState.getRestingFloor(6)).isEqualTo(38);
+		assertThat(elevatorState.getRestingFloor(7)).isEqualTo(45);
 	}
 
 	@Test
 	public void default_direction_must_be_alternated_between_cabins() {
-		final ElevatorState elevatorState = new ElevatorState(4);
+		final ElevatorState elevatorState = new ElevatorState(4, -5, 48);
 		assertThat(elevatorState.getCurrentDirection(0)).isEqualTo(UP);
 		assertThat(elevatorState.getCurrentDirection(1)).isEqualTo(DOWN);
 		assertThat(elevatorState.getCurrentDirection(2)).isEqualTo(UP);

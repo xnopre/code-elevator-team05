@@ -43,11 +43,6 @@ public class FloorBoundariesTest {
 	}
 
 	@Test
-	public void getMiddelFloor_must_return_middle() {
-		assertEquals(5, boundaries.getMiddelFloor());
-	}
-
-	@Test
 	public void calculateFloorsNumber_must_return_good_floor_number() {
 		assertEquals(7, boundaries.calculateFloorsNumber());
 	}
