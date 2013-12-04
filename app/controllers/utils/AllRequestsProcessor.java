@@ -37,11 +37,7 @@ public class AllRequestsProcessor {
 
 	public void go(int cabin, int floorToGo) {
 		Logger.info("Request received go(" + floorToGo + ")");
-		// try {
-		// waitingCallAndGoRemover.removeOneCallFromCurrentFloorToGoAtFloor(floorToGo);
-		// } catch (ElevatorException e) {
-		// Logger.warn("Error processing 'go' : " + e.getMessage());
-		// }
+		waitingCallAndGoRemover.removeOneCallFromCurrentFloor(cabin, floorToGo);
 		stateManager.storeGoRequest(cabin, floorToGo);
 		Logger.info("    After go(" + floorToGo + ") : " + stateManager.getCurrentState());
 	}
@@ -52,7 +48,7 @@ public class AllRequestsProcessor {
 
 	public void userHasExited(int cabin) {
 		Logger.info("Request received 'userHasExited'");
-		waitingCallAndGoRemover.removeGoRequest(cabin, stateManager.getCurrentState().getCurrentFloor(cabin));
+		waitingCallAndGoRemover.removeOneGoRequest(cabin);
 		Logger.info("    After 'userHasExited' : " + stateManager.getCurrentState());
 	}
 

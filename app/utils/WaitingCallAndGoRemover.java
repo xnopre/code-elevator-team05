@@ -1,5 +1,8 @@
 package utils;
 
+import static utils.Direction.DOWN;
+import static utils.Direction.UP;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -75,10 +78,22 @@ public class WaitingCallAndGoRemover {
 		}
 	}
 
-	public void removeGoRequest(final int cabin, final int floor) {
+	public void removeOneGoRequest(final int cabin) {
+		final int currentFloor = statemanager.getCurrentState().getCurrentFloor(cabin);
 		for (Integer go : statemanager.getCurrentState().getGoRequests(cabin)) {
-			if (go == floor) {
+			if (go == currentFloor) {
 				statemanager.removeGoRequest(cabin, go);
+				break;
+			}
+		}
+	}
+
+	public void removeOneCallFromCurrentFloor(int cabin, int floorToGo) {
+		final int currentFloor = statemanager.getCurrentState().getCurrentFloor(cabin);
+		final Direction directionRequested = (floorToGo > currentFloor ? UP : DOWN);
+		for (Call call : statemanager.getCurrentState().getWaitingCalls()) {
+			if (call.floor == currentFloor && call.direction == directionRequested) {
+				statemanager.removeWaitingCall(call.floor, call.direction);
 				break;
 			}
 		}

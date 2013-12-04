@@ -22,23 +22,25 @@ public class WaitingCallAndGoRemoverTest {
 	@Test
 	public void ensure_remove_good_waiting_calls_for_direction_up() {
 
-		stateBuilderFactory.givenAnElevatorOpenedAtFloor(3).withDirection(UP).andWaitingCalls(call(3, DOWN), call(3, UP), call(4, UP), call(1, UP)).build();
+		stateBuilderFactory.givenAnElevatorOpenedAtFloor(3).withDirection(UP)
+				.andWaitingCalls(call(3, UP), call(3, DOWN), call(3, UP), call(4, UP), call(1, UP)).build();
 
 		waitingCallAndGoRemover.removeAllCallsFromTheCurrentFloor(UP);
 
-		verify(mockStateManager).removeWaitingCall(3, UP);
-		verify(mockStateManager, times(1)).removeWaitingCall(anyInt(), any(Direction.class));
+		verify(mockStateManager, times(2)).removeWaitingCall(3, UP);
+		verify(mockStateManager, times(2)).removeWaitingCall(anyInt(), any(Direction.class));
 	}
 
 	@Test
 	public void ensure_remove_good_waiting_calls_for_direction_down() {
 
-		stateBuilderFactory.givenAnElevatorOpenedAtFloor(3).withDirection(DOWN).andWaitingCalls(call(3, DOWN), call(3, UP), call(4, UP), call(1, UP)).build();
+		stateBuilderFactory.givenAnElevatorOpenedAtFloor(3).withDirection(DOWN)
+				.andWaitingCalls(call(3, DOWN), call(3, UP), call(4, UP), call(3, DOWN), call(1, UP)).build();
 
 		waitingCallAndGoRemover.removeAllCallsFromTheCurrentFloor(DOWN);
 
-		verify(mockStateManager).removeWaitingCall(3, DOWN);
-		verify(mockStateManager, times(1)).removeWaitingCall(anyInt(), any(Direction.class));
+		verify(mockStateManager, times(2)).removeWaitingCall(3, DOWN);
+		verify(mockStateManager, times(2)).removeWaitingCall(anyInt(), any(Direction.class));
 	}
 
 	@Test
@@ -53,14 +55,35 @@ public class WaitingCallAndGoRemoverTest {
 	}
 
 	@Test
-	public void ensure_removeGoRequest_remove_good_data() {
+	public void ensure_removeGoRequest_remove_only_one_go() {
 		stateBuilderFactory.givenAnElevatorOpenedAtFloor(3).andGoRequests(1, 2, 3, 5, 4, 3).build();
 
-		waitingCallAndGoRemover.removeGoRequest(0, 3);
+		waitingCallAndGoRemover.removeOneGoRequest(0);
 
 		verify(mockStateManager, times(1)).removeGoRequest(0, 3);
 		verify(mockStateManager, times(1)).removeGoRequest(anyInt(), anyInt());
+	}
 
+	@Test
+	public void ensure_removeOneCallFromCurrentFloor_remove_only_one_call_for_direction_up() {
+		stateBuilderFactory.givenAnElevatorOpenedAtFloor(3).withDirection(UP)
+				.andWaitingCalls(call(3, DOWN), call(3, UP), call(4, UP), call(3, UP), call(1, UP)).build();
+
+		waitingCallAndGoRemover.removeOneCallFromCurrentFloor(0, 5);
+
+		verify(mockStateManager, times(1)).removeWaitingCall(3, UP);
+		verify(mockStateManager, times(1)).removeWaitingCall(anyInt(), any(Direction.class));
+	}
+
+	@Test
+	public void ensure_removeOneCallFromCurrentFloor_remove_only_one_call_for_direction_down() {
+		stateBuilderFactory.givenAnElevatorOpenedAtFloor(3).withDirection(DOWN)
+				.andWaitingCalls(call(3, DOWN), call(3, UP), call(4, UP), call(3, DOWN), call(1, UP)).build();
+
+		waitingCallAndGoRemover.removeOneCallFromCurrentFloor(0, 2);
+
+		verify(mockStateManager, times(1)).removeWaitingCall(3, DOWN);
+		verify(mockStateManager, times(1)).removeWaitingCall(anyInt(), any(Direction.class));
 	}
 
 }
