@@ -48,9 +48,7 @@ public class ElevatorController extends Controller {
 
 	public static void nextCommands() {
 		synchronized (monitor) {
-			final String nextCommands = allRequestsProcessor.nextCommands();
-			Logger.info("NextCommands : " + encodeCr(nextCommands));
-			renderText(nextCommands);
+			renderText(allRequestsProcessor.nextCommands());
 		}
 	}
 
@@ -84,10 +82,6 @@ public class ElevatorController extends Controller {
 			final FloorBoundaries currentFloorBoundaries = stateManager.getFloorBoundaries();
 			render(currentState, currentFloorBoundaries);
 		}
-	}
-
-	private static String encodeCr(String cmd) {
-		return cmd.replaceAll("\n", "<CR>");
 	}
 
 }
