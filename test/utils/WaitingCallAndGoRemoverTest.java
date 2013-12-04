@@ -52,4 +52,15 @@ public class WaitingCallAndGoRemoverTest {
 		verify(mockStateManager, times(2)).removeGoRequest(anyInt(), anyInt());
 	}
 
+	@Test
+	public void ensure_removeGoRequest_remove_good_data() {
+		stateBuilderFactory.givenAnElevatorOpenedAtFloor(3).andGoRequests(1, 2, 3, 5, 4, 3).build();
+
+		waitingCallAndGoRemover.removeGoRequest(0, 3);
+
+		verify(mockStateManager, times(1)).removeGoRequest(0, 3);
+		verify(mockStateManager, times(1)).removeGoRequest(anyInt(), anyInt());
+
+	}
+
 }

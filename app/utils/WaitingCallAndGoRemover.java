@@ -18,9 +18,7 @@ public class WaitingCallAndGoRemover {
 	}
 
 	public void removeAllCallsFromTheCurrentFloor(final Direction direction) {
-
 		final Collection<Call> matchedCalls = Collections2.filter(statemanager.getCurrentState().getWaitingCalls(), new Predicate<Call>() {
-
 			@Override
 			public boolean apply(@Nullable Call call) {
 				return callWasMadeFromCurrentFloor(call);
@@ -57,7 +55,6 @@ public class WaitingCallAndGoRemover {
 
 	public void removeAllGosFromTheCurrentFloor(final int cabin) {
 		final Collection<Integer> matchedGos = Collections2.filter(statemanager.getCurrentState().getGoRequests(cabin), new Predicate<Integer>() {
-
 			@Override
 			public boolean apply(@Nullable Integer go) {
 				return goWasMadeForCurrentFloor(go);
@@ -75,6 +72,15 @@ public class WaitingCallAndGoRemover {
 		}
 		for (Integer go : gosToRemove) {
 			statemanager.removeGoRequest(cabin, go);
+		}
+	}
+
+	public void removeGoRequest(final int cabin, final int floor) {
+		for (Integer go : statemanager.getCurrentState().getGoRequests(cabin)) {
+			if (go == floor) {
+				statemanager.removeGoRequest(cabin, go);
+				break;
+			}
 		}
 	}
 }
