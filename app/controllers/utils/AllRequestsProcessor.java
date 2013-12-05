@@ -37,19 +37,21 @@ public class AllRequestsProcessor {
 
 	public void go(int cabin, int floorToGo) {
 		Logger.info("Request received go(" + floorToGo + ")");
-		waitingCallAndGoRemover.removeOneCallFromCurrentFloor(cabin, floorToGo);
+		// waitingCallAndGoRemover.removeOneCallFromCurrentFloor(cabin,
+		// floorToGo);
 		stateManager.storeGoRequest(cabin, floorToGo);
 		Logger.info("    After go(" + floorToGo + ") : " + stateManager.getCurrentState());
 	}
 
 	public void userHasEntered(int cabin) {
-		Logger.info("Request received 'userHasEntered'");
+		Logger.info("Request received 'userHasEntered' for cabin " + cabin);
 	}
 
 	public void userHasExited(int cabin) {
-		Logger.info("Request received 'userHasExited'");
-		waitingCallAndGoRemover.removeOneGoRequest(cabin);
-		Logger.info("    After 'userHasExited' : " + stateManager.getCurrentState());
+		Logger.info("Request received 'userHasExited' for cabin " + cabin);
+		// waitingCallAndGoRemover.removeOneGoRequest(cabin);
+		// Logger.info("    After 'userHasExited' : " +
+		// stateManager.getCurrentState());
 	}
 
 	private String nextCommands_timed() {

@@ -96,8 +96,8 @@ public class BetterWaitingForTheBestCommandGenerator implements CommandGenerator
 
 	private Command open(int cabin, Direction direction) {
 		stateManager.setOpened(cabin);
-		// waitingCallAndGoRemover.removeAllCallsFromTheCurrentFloor(direction);
-		// waitingCallAndGoRemover.removeAllGosFromTheCurrentFloor(cabin);
+		waitingCallAndGoRemover.removeAllCallsFromTheCurrentFloor(direction);
+		waitingCallAndGoRemover.removeAllGosFromTheCurrentFloor(cabin);
 		return (direction == UP ? OPEN_UP : OPEN_DOWN);
 	}
 
